@@ -1,0 +1,715 @@
+@charset "utf-8";
+
+/* 팝업공통 */
+
+.swal2-html-container {
+    padding: 0;
+    text-align: inherit;
+    font-size: 1.4rem;
+    color: initial;
+}
+
+.swal2-container.swal2-backdrop-show,
+.swal2-container.swal2-noanimation {
+    background: rgba(0, 0, 0, 0.7) !important;
+}
+
+
+/* 팝업 헤더 */
+.popup_header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.popup_header h2 {
+    color: #FFF3CE;
+    font-size: 2.4rem;
+}
+
+.popup_header > i {
+    content: '';
+    background: url('../img/popup/icon_notice_little 2.png') no-repeat center / contain;
+    width: 3rem;
+    height: 3rem;
+}
+
+
+/* 팝업 바디 */
+.queen_swal, .swal2-html-container, .queen_popup, .popup_body {
+    overflow: visible !important;
+}
+
+.queen_popup {
+    position: relative;
+}
+
+.popup_body {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+
+/* 팝업 바디 유형1 */
+
+.pbody_con01 {
+  aspect-ratio:620 / 660;
+  background: url('../img/popup/game_pbox01.png') no-repeat center / 100% 100%;
+}
+
+.pbody_con01::before {
+    content: '';
+    position: absolute;
+    width: 35%;
+    top: 0;
+    right: 5%;
+    aspect-ratio: 1 / 1;
+    transform: translateY(-55%);
+}
+
+.game_body::before {
+    background: url(../img/game_setting.png) no-repeat center / contain;
+}
+
+.Gbody_wrap {
+  display: flex;
+  flex-direction: column;
+  padding: 8%;
+}
+
+.Gbody_wrap > div {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 2px dashed #825930;
+    padding: 1.5rem 0;
+}
+
+.Gbody_wrap > div:first-child {
+    padding-top: 0;
+}
+
+.Gbody_wrap > div:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.Gtype_tit {
+    padding: 0 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.Gtype_wrap ul {
+    display: flex;
+    flex-wrap:wrap;
+    gap: 0.5rem;
+}
+
+.Gtype_wrap ul > li {
+    position: relative;
+    flex: 1 1 calc(50% - 0.25rem);
+}
+
+.Gtype_wrap ul > li input[type="checkbox"],
+.Gtype_wrap ul > li input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.Gtype_wrap ul > li label {
+    font-family: 'Cafe24Danjeonghae';
+    width: 100%;
+    aspect-ratio: 261 / 69;
+    background: url('../img/popup/skin_box 1.png') no-repeat center / 100% 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #442215;
+    cursor: pointer;
+}
+
+/* 선택됐을 때 */
+.Gtype_wrap ul > li input[type="checkbox"]:checked + label {
+    color: #fff;
+    background: url('../img/popup/skin_box_select 2.png') no-repeat center / 100% 100%;
+}
+
+/* 팝업 설명 */
+
+p.Gsub_tit {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.Gsub_tit::before {
+    content: '';
+    background: url('../img/popup/icon_notice_little 2.png') no-repeat center / contain;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+
+/* 퍼즐지도 */
+
+.puzzle_wrap ul > li {
+    flex: 1 1 calc((100% - 1rem) / 3);
+}
+
+.puzzle_wrap ul > li label.t5x5_img {
+    background: url('../img/popup/puzzle_5x5.png') no-repeat center / 100% 100%;
+    aspect-ratio: 162 / 105;
+}
+
+.puzzle_wrap ul > li label.t7x7_img {
+    background: url('../img/popup/puzzle_7x7.png') no-repeat center / 100% 100%;
+    aspect-ratio: 162 / 105;
+}
+
+.puzzle_wrap ul > li label.t9x9_img {
+    background: url('../img/popup/puzzle_7x7.png') no-repeat center / 100% 100%;
+    aspect-ratio: 162 / 105;
+}
+
+
+.Gtype_wrap ul > li input[type="radio"]:checked + label {
+    color: #fff;
+    background: url('../img/popup/puzzle_9x9.png') no-repeat center / 100% 100%;
+}
+
+
+/* 난이도 */
+
+.level_wrap ul > li {
+    flex: 1 1 calc((100% - 1.5rem) / 4);
+}
+
+.level_wrap ul > li label {
+    aspect-ratio: 125 / 70;
+    background: url('../img/popup/level_box.png') no-repeat center / 100% 100%;
+    color: #FFE7C6;
+}
+
+.level_wrap ul > li input[type="radio"]:checked + label {
+    color: #fff;
+    background: url('../img/popup/level_box_red.png') no-repeat center / 100% 100%;
+}
+
+
+
+/* 확인 & 닫기 버튼 */
+
+.popup_send {
+    position: relative;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.popup_sendwrap {
+    width: 100%;
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.popup_send button {
+    font-family: 'Cafe24Danjeonghae';
+    width: 100%;
+    aspect-ratio: 300 / 100;
+    color: #FFE7C6;
+}
+
+.popup_send button.blue_btn {
+    background: url('../img/button/game_blue.png') no-repeat center / 100% 100%;
+}
+
+.popup_send button.gray_btn {
+    background: url('../img/button/game_gray.png') no-repeat center / 100% 100%;
+}
+
+.popup_send button.red_btn {
+    background: url('../img/button/game_red.png') no-repeat center / 100% 100%;
+}
+
+.popup_send button.brown_btn {
+    background: url('../img/button/game_brown.png') no-repeat center / 100% 100%;
+}
+
+
+/* 확인 & 닫기 버튼 종료 */
+
+
+
+
+
+
+/* ==================================================
+   배틀시작 팝업
+================================================== */
+
+.battle_body::before {
+    background: url(../img/battle_setting.png) no-repeat center / contain;
+}
+
+.Gtype_tit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Gtype_tit p.Gsub_tit {
+    margin-top: 0;
+}
+
+
+/* 배틀설정 */
+
+.battle_wrap .Ginput_ul > li span.gs_input {
+    width: 40%;
+}
+
+.battle_wrap .Ginput_ul > li span.gs_coinpt {
+    background: url(../img/box/26_box.png) no-repeat center / 100% 100%;
+    aspect-ratio: 260 / 60;
+    width: 40%;
+    height: 3rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+.battle_wrap .Ginput_ul > li span.gs_coinpt::before { 
+    content: '';
+    background: url(../img/point.png) no-repeat center / contain;
+    min-width: 25%;
+    min-height: 100%;
+    margin-right: 0.5rem;
+}
+
+/* 초대하기 설정 */
+.popup_body_02 {
+  position: relative;
+  width: 100%;
+  aspect-ratio:620 / 190;
+  background: url('../img/popup/game_pbox02.png') no-repeat center / 100% 100%;
+  overflow: visible;
+}
+
+/* 인풋 */
+.Ginput_ul > li {
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.Ginput_ul > li span.gs_tit {
+    font-family: 'Cafe24Danjeonghae';
+    font-size: 1.3rem;
+    color: #666;
+    width: 20%;
+}
+
+.Ginput_ul > li span.gs_input {
+    width: 60%;
+}
+
+.Ginput_ul > li span.gs_btns {
+    width: 20%;
+}
+
+.Ginput_ul > li input[type="text"] {
+    background: #F8F0DF;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+    border-radius: 6rem;
+    width: 100%;
+    height: 3rem;
+    padding: 0 1rem;
+}
+
+
+/* ==================================================
+   게임 완료 팝업
+================================================== */
+
+/* 팝업 바디 유형2 */
+
+
+
+ 
+/* ==================================================
+   게임 완료 팝업 - 솔로 플레이
+================================================== */
+
+.pbody_con02 {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: url('../img/popup/game_cbox01.png') no-repeat center / 100% 100%;
+}
+
+.pbody_con02::before{
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, -70%);
+    width: 100%;
+    aspect-ratio: 54 / 37;
+}
+
+.P_excellent::before {
+    background: url(../img/popup/excellent.png) no-repeat center / contain;
+}
+
+
+
+/* 팝업 닫기 버튼 */
+
+.popup_closeIcon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-50%, -100%);
+    background: url(../img/popup/btn_close_01.png) no-repeat center / 100% 100%;
+    aspect-ratio: 1 / 1;
+    width: 12%;
+    z-index: 99;
+}
+
+/* 양피지 안쪽 영역 */
+.Pbody_wrap {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 55%;
+    /* aspect-ratio: 339 / 250; */
+    padding: 4%;
+    background: rgba(0,0,0,0.1);
+    border: 4px solid rgba(255,255,255,0.7);
+    border-radius: 2rem;
+}
+
+.Pbody_wrap .complete_info {
+    font-family: 'Cafe24Danjeonghae';
+    display: flex;
+    flex-direction: column;
+    color: #FFF7E0;
+}
+
+.Pbody_wrap .complete_info > li {
+    padding: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 2px dashed rgba(255,255,255,0.7);
+}
+
+.Pbody_wrap .complete_info > li:last-child {
+    border-bottom: none;
+}
+
+.Pbody_wrap .complete_info > li > em {
+    background: #5e361b;
+    border-radius: 3rem;
+    padding: 0.5rem 1rem;
+    flex-grow: 1;
+    text-align: end;
+    box-shadow: inset 0 4px 5px rgba(0, 0, 0, 0.2), 
+                inset 0 -4px 4px rgba(0, 0, 0, 0.2);
+    flex: 1.2;
+}
+
+
+
+
+/* ==================================================
+   게임 완료 팝업 - 배틀게임 승리
+================================================== */
+
+
+.P_bttleWin::before {
+    background: url(../img/popup/winner.png) no-repeat center / contain;
+}
+
+.Pbody_wrap .complete_info > li > span.nick_name {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+    flex: 1;
+    flex-shrink: 0;
+}
+
+
+/* ==================================================
+   게임 완료 팝업 - 배틀게임 패배
+================================================== */
+
+.P_bttlelose::before {
+    background: url(../img/popup/lose.png) no-repeat center / contain;
+}
+
+
+
+/* ==================================================
+   게임 배틀준비 팝업 - 배틀시작 준비
+================================================== */
+
+.Bbody_wrap {
+    display: flex;
+    flex-direction: column;
+    padding: 6%;
+}
+
+.battle_ready {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Cafe24Danjeonghae';
+}
+
+/* 이미지 */
+.battle_ready > li.btr_c2 {
+    display: flex;
+    align-items: center;
+}
+
+.battle_ready > li.btr_c2::before {
+    content: '';
+    position: absolute;
+    width: 50%;
+    aspect-ratio: 1 / 1;
+    background: url(../img/battle_setting.png) no-repeat center / contain;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.battle_ready > li.btr_c2 > i {
+    position: relative;
+    width: 30%;
+    aspect-ratio: 17 / 36;
+    background: url(../img/popup/battle_VS.png) no-repeat center / contain;     
+}
+
+.battle_ready > li.btr_c2 > span {
+    color: #FFF7E0;
+    font-size: 2rem;
+    text-shadow: 0 0 30px #FF9500;
+    flex: 1;
+}
+
+.battle_ready > li.btr_c2 > span:first-child {
+    text-align: right;
+}
+
+.battle_ready > li.btr_c2 > span:last-child {
+    text-align: left;
+}
+
+.battle_ready > li.btr_c3 {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.battle_ready > li.btr_c3 > span {
+    background: #FFF3CE;
+    border-radius: 3rem;
+    color: #333;
+    padding: 1rem 3rem;
+}
+
+.battle_ready > li.btr_c4 {
+    text-align: center;
+    font-size: 10rem;
+    color: #FFF3CE;
+    text-shadow: 0 0 30px #FF9500;
+}
+
+/* ==================================================
+   게임 배틀준비 팝업 - 배틀시작 준비 종료
+================================================== */
+
+
+
+/* ==================================================
+   게임 게임포인트 팝업 - 포인트 획득
+================================================== */
+
+/* .point_ready > li.ptr_c1 {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 61 / 47;
+    background: url(../img/popup/coin_pointal.png) no-repeat center / contain;
+} */
+
+/* ==================================================
+   게임 게임포인트 팝업 - 포인트 획득 종료
+================================================== */
+
+
+/* ==================================================
+   회원전용 알림 팝업 
+================================================== */
+
+.Ctype_wrap {
+    font-family: 'Cafe24Danjeonghae';
+    text-align: center;
+    gap: 0.5rem;
+}
+
+.pbody_con03 {
+    aspect-ratio: 62 / 30;
+    background: url(../img/popup/game_pbox03.png) no-repeat center / 100% 100%;
+}
+
+/* ==================================================
+   종료 
+================================================== */
+
+
+
+
+/* ==================================================
+   약관팝업  이용약관&개인정보 수집동의
+================================================== */
+
+.agree_body {
+    background: #fff;
+    border-radius: 2rem;
+    padding: 2rem;
+}
+
+.agree_body .popup_tit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.p_closebtn::after {
+    content: '\2715';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 600;
+}
+
+.popup_list_wrap {
+    position: relative;
+    margin: 10px 0;
+}
+
+.pop_areeheig {
+    height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+    border: 1px solid #666;
+    border-radius: 1rem;
+}
+
+.pop_areeheig em {
+    font-weight: 600;
+}
+
+/* ==================================================
+   종료
+================================================== */
+
+
+
+/* ==================================================
+   기본 - 완료 팝업
+================================================== */
+
+.pop_alimcont {
+    padding: 2rem 1rem;
+    border: 1px solid #666;
+    border-radius: 1rem;
+}
+
+.popup_send.popup_okbtn button.red_okbtn {
+    background: url(../img/button/game_red30x7.png) no-repeat center / 100% 100%;
+    aspect-ratio: 30 / 7;
+    width: 70%;
+}
+
+
+/* ==================================================
+   배송지 등록 팝업
+================================================== */
+
+.popup_subtits {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+/* 입력폼 공통 */
+.storage_cell_common ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.storage_cell_common ul li:last-child {
+    margin-bottom: 0;
+}
+
+.storage_cell_common input, .storage_cell_common select {
+    border-radius: 2.5rem;
+}
+
+.storage_cell_common ul li span.scc_first {
+    width: 30%;
+    align-self: flex-start;
+    min-height: 3.4rem;
+    display: flex;
+    align-items: center;
+}
+
+.storage_cell_common ul li span.scc_second {
+    flex-grow: 1;
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.scc_address input:nth-of-type(1) {
+    width: calc(60% - 0.5rem)
+}
+
+.scc_address button {
+    width: 40%;
+    font-size: 1rem;
+}
+
+.storage_cell_common ul li span.scc_phonenumber {
+    flex-wrap: nowrap;
+}
+
+.scc_phonenumber > select,
+.scc_phonenumber > input {
+    width: calc(100% / 3);
+}
+
+
+
+
+
+
+

@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>SMTNT</title>
+    <link href="css/reset.css" rel="stylesheet" type="text/css">
+    <link href="css/common.css" rel="stylesheet" type="text/css">
+    <link href="css/swiper-bundle.min.css" rel="stylesheet" type="text/css">
+    <link href="css/main.css" rel="stylesheet" type="text/css">
+    <link href="css/sub.css" rel="stylesheet" type="text/css">
+    <link href="css/mobile.css" rel="stylesheet" type="text/css">
+    <!-- sweetalert2 팝업 -->
+    <link href="css/sweetalert2.min.css" rel="stylesheet" type="text/css">
+    <link href="css/sweetalert2_custom.css" rel="stylesheet" type="text/css">
+    <!-- 프리텐다드 폰트적용 -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- 제이쿼리 플러그인 -->
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <!-- 스와이프 슬라이드 -->
+    <script src="js/swiper-bundle.min.js"></script>
+    <!-- Lenis 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- sweetalert2 팝업 라이브러리 -->
+    <script src="js/sweetalert2.min.js"></script>
+    <!-- 메인 스크립트 -->
+    <script src="js/script.js" defer></script>
+
+    <!-- 뷰포트 -->
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=0.4, maximum-scale=2, user-scalable=yes">
+</head>
+
+<body>
+
+    <div id="wrap">
+        <header id="header">
+            <div class="header_inner">
+
+                <h1 class="logo">
+                    <a href="#">
+                        <img src="img/LOGO.svg" alt="SMTNT">
+                    </a>
+                </h1>
+
+                <nav class="gnb">
+                    <ul class="gnb_list">
+
+                        <li class="gnb_item">
+                            <a href="#" class="gnb_link">about us</a>
+
+                            <ul class="depth2 ">
+                                <li class="depth2_item">
+                                    <a href="#" class="depth2_link">회사소개</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="gnb_item">
+                            <a href="#" class="gnb_link">service</a>
+
+                            <ul class="depth2">
+                                <li class="depth2_item">
+                                    <a href="#" class="depth2_link">문자서비스</a>
+                                </li>
+                                <li class="depth2_item">
+                                    <a href="#" class="depth2_link">산타의연못</a>
+                                </li>
+                                <li class="depth2_item">
+                                    <a href="#" class="depth2_link">MOVA</a>
+                                </li>
+                                <li class="depth2_item">
+                                    <a href="#" class="depth2_link">낱말의여왕</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="gnb_item">
+                            <a href="#" class="gnb_link">news</a>
+
+                            <ul class="depth2">
+                                <li class="depth2_item">
+                                    <a href="#" class="depth2_link">언론보도</a>
+                                </li>
+                                <li class="depth2_item">
+                                    <a href="#" class="depth2_link">공지사항</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="gnb_item">
+                            <a href="#" class="gnb_link">contact us</a>
+
+                            <ul class="depth2">
+                                <li class="depth2_item">
+                                    <a href="#" class="depth2_link">프로젝트 의뢰</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </nav>
+
+                <div class="family_site">
+
+                    <button type="button" class="family_btn">
+                        패밀리 사이트
+                        <i class="fa-solid fa-angle-down"></i>
+                    </button>
+
+                    <ul class="family_list">
+
+                        <li class="family_item">
+                            <a href="#" class="family_link">산타의연못</a>
+                        </li>
+
+                        <li class="family_item">
+                            <a href="#" class="family_link">MOVA</a>
+                        </li>
+
+                        <li class="family_item">
+                            <a href="#" class="family_link">낱말의여왕</a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+        </header>
+
+        <main id="main">
+            <section class="main_visual">
+
+                <video class="main_video" autoplay muted loop playsinline>
+                    <source src="video/smtnt_main_visual.mp4" type="video/mp4">
+                </video>
+
+                <div class="main_dim"></div>
+
+                <div class="main_content">
+
+                    <div class="main_copy">
+                        <h2 class="main_title typo_h1">
+                            메시징을 넘어<br>
+                            비즈니스를 연결합니다.
+                        </h2>
+
+                        <p class="main_desc">
+                            축적된 기술력과 풍부한 구축 경험으로
+                            고객의 비즈니스 성장과 디지털 혁신을 지원합니다.
+                        </p>
+                    </div>
+
+                    <div class="main_cube">
+                        <div class="main_cube_face">
+                            <div class="main_service_icon"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- 메인 섹션 끝 -->
+
+
+            <!-- about SMTNT -->
+            <section class="about_section">
+                <div class="about_inner">
+
+                    <div class="about_text">
+                        <p class="about_label typo_h3">About SMTNT</p>
+
+                        <h2 class="about_title typo_h2">
+                            SMTNT는 메시징을 넘어<br>
+                            <span class="about_highlight">기업 커뮤니케이션 플랫폼을 구축합니다.</span>
+                        </h2>
+
+                        <div class="about_desc typo_body">
+                            <p>SMTNT는 단순히 시스템을 구축하는 회사가 아닙니다.</p>
+
+                            <p>
+                                24년 동안 다양한 프로젝트를 수행하며 쌓아온 경험을 바탕으로<br>
+                                웹, 시스템, 메시징, 브랜드까지<br>
+                                비즈니스에 필요한 디지털 환경을 함께 만들어갑니다.
+                            </p>
+
+                            <p>단순히 구축에서 끝나지 않습니다.</p>
+
+                            <p>
+                                안정적으로 운영할 수 있는지,<br>
+                                앞으로의 성장에도 유연하게 대응할 수 있는지까지 고려해<br>
+                                실질적으로 도움이 되는 구조를 설계합니다.
+                            </p>
+
+                            <p>
+                                SMTNT는 기획부터 디자인, 개발, 운영까지<br>
+                                프로젝트의 시작부터 운영까지 함께 고민하는 파트너입니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="about_card_area">
+
+                        <div class="about_card about_card_01">
+                            <img src="img/about_img_01.png" alt="회의 중인 구성원">
+                            <p class="about_card_text typo_body">
+                                디자인부터 개발까지 빠르고<br>
+                                유연한 자체 기술력
+                            </p>
+                        </div>
+
+                        <div class="about_card about_card_02">
+                            <img src="img/about_img_02.png" alt="고객 맞춤 시스템을 설명하는 모습">
+                            <p class="about_card_text typo_body">
+                                고객 환경에 맞춘 최적의<br>
+                                맞춤형 설계/구축 역량
+                            </p>
+                        </div>
+
+                        <div class="about_card about_card_03">
+                            <img src="img/about_img_03.png" alt="운영 데이터를 확인하는 업무 화면">
+                            <p class="about_card_text typo_body">
+                                24년간 축적된 다양한<br>
+                                산업군의 기술/운영 노하우
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+            <!-- about SMTNT 끝 -->
+
+
+            <!-- Business Performance -->
+            <section class="business_section">
+                <div class="business_bg_text business_bg_text_left">
+                    Business
+                </div>
+
+                <div class="business_bg_text business_bg_text_right">
+                    Performance
+                </div>
+
+                <div class="business_inner">
+
+                    <div class="business_card business_card_01">
+                        <div class="business_text">
+                            <strong class="business_number">
+                                <span class="count_number" data-count="24">0</span>
+                                <span class="business_unit">주년</span>
+                            </strong>
+
+                            <p class="business_desc typo_caption">
+                                에스엠티엔티는 2002년 설립되어<br>
+                                약 24년간 운영되고 있습니다.
+                            </p>
+                        </div>
+
+                        <div class="business_icon">
+                            <img src="img/business_icon_01.png" alt="건물 아이콘">
+                        </div>
+                    </div>
+
+                    <div class="business_card business_card_02">
+                        <div class="business_text">
+                            <strong class="business_number">
+                                <span class="count_number" data-count="10">0</span>
+                                <span class="business_unit">M+</span>
+                            </strong>
+
+                            <p class="business_desc typo_caption">
+                                에스엠티엔티의 문자는 오류 없이<br>
+                                안정적으로 발송되고 있습니다.
+                            </p>
+                        </div>
+
+                        <div class="business_icon">
+                            <img src="img/business_icon_02.png" alt="말풍선 아이콘">
+                        </div>
+                    </div>
+
+                    <div class="business_card business_card_03 business_card_tall">
+                        <div class="business_text">
+                            <strong class="business_number">
+                                <span class="count_number" data-count="000">0</span>
+                                <span class="business_unit">+ 개</span>
+                            </strong>
+
+                            <p class="business_desc typo_caption">
+                                에스엠티엔티는 다양한 산업군의<br>
+                                고객사를 확보하고 있습니다.
+                            </p>
+                        </div>
+
+                        <div class="business_icon">
+                            <img src="img/business_icon_03.png" alt="지구본 아이콘">
+                        </div>
+                    </div>
+
+                    <div class="business_card business_card_04">
+                        <div class="business_text">
+                            <strong class="business_number">
+                                <span class="count_number" data-count="000">0</span>
+                                <span class="business_unit">억</span>
+                            </strong>
+
+                            <p class="business_desc typo_caption">
+                                에스엠티엔티는 지난 4년간<br>
+                                평균 000억의 매출을 기록했습니다.
+                            </p>
+                        </div>
+
+                        <div class="business_icon">
+                            <img src="img/business_icon_04.png" alt="그래프 아이콘">
+                        </div>
+                    </div>
+
+                    <div class="business_card business_card_05">
+                        <div class="business_text">
+                            <strong class="business_number">
+                                <span class="count_number" data-count="0">0</span>
+                                <span class="business_unit">년</span>
+                            </strong>
+
+                            <p class="business_desc typo_caption">
+                                에스엠티엔티의<br>
+                                평균 근속 년수는 n년입니다.
+                            </p>
+                        </div>
+
+                        <div class="business_icon">
+                            <img src="img/business_icon_05.png" alt="사원증 아이콘">
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Business Performance 끝 -->
+
+
+            <!-- 솔루션 -->
+
+            <section class="solutions_section">
+
+                <div class="solutions_intro">
+                    <div class="solutions_inner">
+                        <h2 class="solutions_title typo_h2">
+                            <span class="about_highlight">비즈니스 성장을 위한 통합 솔루션</span>
+                        </h2>
+
+                        <p class="solutions_desc typo_body">
+                            SMTNT는 메시징, 보안, 플랫폼 구축, 브랜딩, AI 콘텐츠까지<br>
+                            기업 운영에 필요한 디지털 솔루션을 통합 제공합니다.
+                        </p>
+                    </div>
+                </div>
+
+                <article class="solution_card solution_card_message">
+                    <div class="solutions_inner solution_card_inner">
+                        <div class="solution_text">
+                            <h3 class="solution_title typo_h3_paperozi">기업 메시징</h3>
+
+                            <p class="solution_desc typo_body">
+                                고객과 외부에 필요한 정보를 빠르고 안정적으로<br>
+                                전달할 수 있도록 SMS, LMS, MMS, 알림톡 등<br>
+                                다양한 메시징 서비스를 제공합니다.
+                            </p>
+                        </div>
+
+                        <ul class="solution_tags">
+                            <li class="solution_tag_row">
+                                <span>SMS</span>
+                                <span>알림톡</span>
+                            </li>
+
+                            <li class="solution_tag_row">
+                                <span>LMS</span>
+                                <span>MO 서비스</span>
+                            </li>
+
+                            <li class="solution_tag_row">
+                                <span>MMS</span>
+                                <span>ARS</span>
+                            </li>
+                        </ul>
+
+                        <div class="solution_img">
+                            <img src="img/solution_message.png" alt="메시지 관리자 화면">
+                        </div>
+                    </div>
+                </article>
+
+                <article class="solution_card solution_card_platform">
+                    <div class="solutions_inner solution_card_inner">
+                        <div class="solution_text">
+                            <h3 class="solution_title typo_h3_paperozi">플랫폼 구축</h3>
+
+                            <p class="solution_desc typo_body">
+                                기업의 서비스 운영 방식과 업무 프로세스를<br>
+                                분석하고 고객 환경에 맞춘 업무 흐름을 동시에<br>
+                                실현할 수 있는 디지털 환경을 구축합니다.
+                            </p>
+                        </div>
+
+                        <ul class="solution_tags">
+
+                            <li class="solution_tag_row">
+                                <span>기업 홈페이지 구축</span>
+                                <span>CRM 구축</span>
+                            </li>
+
+                            <li class="solution_tag_row">
+                                <span>웹 플랫폼 개발</span>
+                                <span>ERP 구축</span>
+                            </li>
+
+                            <li class="solution_tag_row">
+                                <span>맞춤형 시스템 개발</span>
+                                <span>API 연동</span>
+                            </li>
+                        </ul>
+
+                        <div class="solution_img">
+                            <img src="img/solution_platform.png" alt="회의실">
+                        </div>
+                    </div>
+                </article>
+
+                <article class="solution_card solution_card_mova">
+                    <div class="solutions_inner solution_card_inner">
+                        <div class="solution_text">
+                            <h3 class="solution_title typo_h3_paperozi">스미싱차단 모바</h3>
+
+                            <p class="solution_desc typo_body">
+                                피싱·스미싱으로부터 사용자를 보호하고 다양한<br>
+                                경로의 위험을 분석하고 차단하며 안전한<br>
+                                모바일 이용 환경을 제공하는 보안 서비스입니다.
+                            </p>
+                        </div>
+
+                        <ul class="solution_tags">
+                            <li class="solution_tag_row">
+                                <span>피싱·스미싱 메시지 차단</span>
+                                <span>가족 알림 서비스</span>
+                            </li>
+
+                            <li class="solution_tag_row">
+                                <span>피싱·스미싱 웹 접속 차단</span>
+                                <span>스마트 자동회신 서비스</span>
+                            </li>
+
+                            <li class="solution_tag_row">
+                                <span>URL, QR 검색 서비스</span>
+                                <span>주차 안심번호 서비스</span>
+                            </li>
+                        </ul>
+
+                        <div class="solution_img">
+                            <img src="img/solution_mova.png" alt="개발 화면 이미지">
+                        </div>
+                    </div>
+                </article>
+
+                <article class="solution_card solution_card_design">
+                    <div class="solutions_inner solution_card_inner">
+                        <div class="solution_text">
+                            <h3 class="solution_title typo_h3_paperozi">디자인</h3>
+
+                            <p class="solution_desc typo_body">
+                                기업의 가치와 정체성을 효과적으로<br>
+                                전달할 수 있도록 브랜드 전략부터 디자인까지<br>
+                                일관된 브랜드 경험을 구축합니다.
+                            </p>
+                        </div>
+
+                        <ul class="solution_tags">
+                            <li class="solution_tag_row">
+                                <span>CI 개발</span>
+                            </li>
+                            <li class="solution_tag_row">
+                                <span>BI 개발</span>
+                            </li>
+
+                            <li class="solution_tag_row">
+                                <span>UI/UX 디자인</span>
+                            </li>
+                        </ul>
+
+                        <div class="solution_img">
+                            <img src="img/solution_design.png" alt="디자인 회의 화면">
+                        </div>
+                    </div>
+                </article>
+
+                <article class="solution_card solution_card_ai">
+                    <div class="solutions_inner solution_card_inner">
+                        <div class="solution_text">
+                            <h3 class="solution_title typo_h3_paperozi">AI 콘텐츠 제작</h3>
+
+                            <p class="solution_desc typo_body">
+                                AI 기술을 활용해 브랜드와 서비스의 메시지를<br>
+                                고객의 목적에 맞게 기획·제작하여 완성도 높은<br>
+                                디지털 콘텐츠를 제공합니다.
+                            </p>
+                        </div>
+
+                        <ul class="solution_tags">
+
+                            <li class="solution_tag_row">
+                                <span>AI 홍보영상 제작</span>
+                                <span>캐릭터 활용 콘텐츠 제작</span>
+                            </li>
+
+                            <li class="solution_tag_row">
+                                <span>SNS 콘텐츠 제작</span>
+                            </li>
+
+                            <li class="solution_tag_row">
+                                <span>브랜드 캐릭터 개발</span>
+                            </li>
+                        </ul>
+
+                        <div class="solution_img">
+                            <img src="img/solution_ai.png" alt="캐릭터가 움직이는 동영상">
+                        </div>
+                    </div>
+                </article>
+
+            </section>
+
+            <!-- 솔루션 끝 -->
+
+
+            <!-- SMTNT를 선택하는 이유 -->
+            <section class="reason_section">
+
+                <div class="reason_intro">
+                    <h2 class="reason_title typo_h2">
+                        SMTNT를 선택하는 이유
+                    </h2>
+
+                    <p class="reason_desc typo_body">
+                        기획부터 운영까지 One-Stop으로 다양한 산업군의 프로젝트와<br>
+                        서비스 운영 경험이 바탕되어<br>
+                        고객 환경에 최적화된 솔루션을 제안합니다.
+                    </p>
+                </div>
+
+                <div class="reason_inner">
+
+                    <article class="reason_card reason_card_01">
+                        <div class="reason_img">
+                            <img src="img/reason_img_01.png" alt="">
+                        </div>
+
+                        <div class="reason_text">
+                            <span class="reason_dot reason_dot_orange"></span>
+                            <h3 class="reason_card_title typo_body">24년간 축적된 실무 경험</h3>
+                            <p class="reason_card_desc typo_caption">
+                                다양한 프로젝트를 진행하며 얻은<br>
+                                경험을 바탕으로 고객에 상황에 맞는<br>
+                                현실적인 해결책을 제안합니다.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="reason_card reason_card_02">
+                        <div class="reason_img">
+                            <img src="img/reason_img_02.png" alt="">
+                        </div>
+
+                        <div class="reason_text">
+                            <span class="reason_dot reason_dot_blue"></span>
+                            <h3 class="reason_card_title typo_body">기획부터 운영까지 One-Stop</h3>
+                            <p class="reason_card_desc typo_caption">
+                                기획, 디자인, 개발, 운영을 자체<br>
+                                수행하여 프로젝트 전 과정을<br>
+                                효율적으로 진행합니다.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="reason_card reason_card_03">
+                        <div class="reason_img">
+                            <img src="img/reason_img_03.png" alt="">
+                        </div>
+
+                        <div class="reason_text">
+                            <span class="reason_dot reason_dot_sky"></span>
+                            <h3 class="reason_card_title typo_body">직접 서비스를 만드는 회사</h3>
+                            <p class="reason_card_desc typo_caption">
+                                직접 서비스를 만들고 운영해본<br>
+                                경험이 있기 때문에 실제 운영 과정에서<br>
+                                필요한 부분까지 함께 고민합니다.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="reason_card reason_card_04">
+                        <div class="reason_img">
+                            <img src="img/reason_img_04.png" alt="">
+                        </div>
+
+                        <div class="reason_text">
+                            <span class="reason_dot reason_dot_orange"></span>
+                            <h3 class="reason_card_title typo_body">빠른 기술지원 체계</h3>
+                            <p class="reason_card_desc typo_caption">
+                                장애 및 운영 이슈 발생 시<br>
+                                신속하고 안정적으로 대응합니다.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="reason_card reason_card_05">
+                        <div class="reason_img">
+                            <img src="img/reason_img_05.png" alt="">
+                        </div>
+
+                        <div class="reason_text">
+                            <span class="reason_dot reason_dot_blue"></span>
+                            <h3 class="reason_card_title typo_body">다양한 구축 경험</h3>
+                            <p class="reason_card_desc typo_caption">
+                                공공기관, 교육, 의료, 유통, 플랫폼 등<br>
+                                다양한 산업군 프로젝트 수행 경험을<br>
+                                보유하고 있습니다.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="reason_card reason_card_06 reason_card_large">
+                        <div class="reason_img">
+                            <img src="img/reason_img_06.png" alt="">
+                        </div>
+
+                        <div class="reason_text">
+                            <span class="reason_dot reason_dot_sky"></span>
+                            <h3 class="reason_card_title typo_body">검증된 서비스 운영 경험</h3>
+                            <p class="reason_card_desc typo_caption">
+                                실제 서비스를 직접 운영하며 쌓은<br>
+                                경험을 바탕으로 안정적인 구조와<br>
+                                운영 방식을 함께 제안합니다.
+                            </p>
+                        </div>
+                    </article>
+
+                </div>
+
+            </section>
+
+            <!-- SMTNT를 선택하는 이유 끝 -->
+
+
+            <!-- 서비스가 만들어지는 과정 -->
+            <section class="process_section">
+                <div class="process_inner">
+
+                    <div class="process_head">
+                        <h2 class="process_title typo_h2">
+                            서비스가 만들어지는 과정
+                        </h2>
+
+                        <p class="process_desc typo_body">
+                            기획부터 운영까지, 모든 단계를 함께합니다.
+                        </p>
+                    </div>
+
+                    <div class="process_timeline">
+
+                        <!-- ① 숫자 + 이름 (라인 위) -->
+                        <ol class="process_items">
+                            <li class="process_item typo_h2 is_active" data-step="0">
+                                <strong class="process_num">1</strong>
+                                <span class="process_name typo_h3_paperozi">상담 및 요구사항 분석</span>
+                            </li>
+                            <li class="process_item typo_h2" data-step="1">
+                                <strong class="process_num">2</strong>
+                                <span class="process_name">서비스 기획</span>
+                            </li>
+                            <li class="process_item typo_h2" data-step="2">
+                                <strong class="process_num">3</strong>
+                                <span class="process_name">UI/UX 디자인</span>
+                            </li>
+                            <li class="process_item typo_h2" data-step="3">
+                                <strong class="process_num">4</strong>
+                                <span class="process_name">개발 및 시스템 연동</span>
+                            </li>
+                            <li class="process_item typo_h2" data-step="4">
+                                <strong class="process_num">5</strong>
+                                <span class="process_name">테스트 및 안정화</span>
+                            </li>
+                            <li class="process_item typo_h2" data-step="5">
+                                <strong class="process_num">6</strong>
+                                <span class="process_name">운영 및 기술지원</span>
+                            </li>
+                        </ol>
+
+
+                        <!-- ② 캔버스 (라인) -->
+                        <canvas id="process_canvas" width="1440" height="120"></canvas>
+
+                        <!-- ③ 설명 텍스트 (라인 아래) -->
+                        <ul class="process_texts">
+                            <li>
+                                <p class="process_text">고객의 목표와 요구사항을<br>파악하고 프로젝트 방향을<br>함께 정의합니다.</p>
+                            </li>
+                            <li>
+                                <p class="process_text">서비스 구조와 기능을<br>설계하고 구현 전략을<br>구체화합니다.</p>
+                            </li>
+                            <li>
+                                <p class="process_text">사용자 중심의 화면을<br>설계하고 직관적인<br>경험을 디자인합니다. </p>
+                            </li>
+                            <li>
+                                <p class="process_text">안정적인 시스템을<br>구축하고 필요한<br>서비스와 연동합니다.</p>
+                            </li>
+
+                            <li>
+                                <p class="process_text">기능과 성능을<br>검증하여 안정적인<br>운영 환경을 만듭니다. </p>
+                            </li>
+
+                            <li>
+                                <p class="process_text">실제 운영 과정까지<br>함께하며 지속적인<br>기술지원을 제공합니다.</p>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 서비스가 만들어지는 과정 끝 -->
+
+
+
+            <!-- Awards & Media -->
+
+            <section class="media_section">
+                <div class="media_inner">
+
+                    <div class="media_left">
+                        <div class="media_head">
+                            <h2 class="media_title typo_h2">Awards & Media</h2>
+
+                            <p class="media_desc typo_body">
+                                SMTNT의 성과는 다양한 곳에서 인정받고 있습니다.<br>
+                                24년간 축적된 기술력과 서비스 운영 경험을 바탕으로 다양한 기관과 업계에서<br>
+                                성과를 인정받고 있으며 언론을 통해 지속적으로 소개되고 있습니다.
+                            </p>
+                        </div>
+
+                        <div class="award_list">
+                            <article class="award_item">
+                                <p class="award_label typo_caption">🏆 수상 내역</p>
+                                <h3 class="award_title typo_button">
+                                    SMTNT '안심번호 모바' 대한민국 굿앱 평가대상 안심번호서비스 부문 수상
+                                </h3>
+
+                                <div class="award_img">
+                                    <img src="img/award_img_01.png" alt="SMTNT '안심번호 모바' 대한민국 굿앱 평가대상 안심번호서비스 부문 수상">
+                                </div>
+
+                                <ul class="award_tags">
+                                    <li>CI 개발</li>
+                                    <li>CI 개발</li>
+                                    <li>CI 개발</li>
+                                </ul>
+                            </article>
+
+                            <article class="award_item">
+                                <p class="award_label typo_caption">🏆 수상 내역</p>
+                                <h3 class="award_title typo_button">
+                                    SMTNT, 이노비즈협회장상 중소기업부문 수상
+                                </h3>
+
+                                <div class="award_img">
+                                    <img src="img/award_img_02.png" alt="SMTNT, 이노비즈협회장상 중소기업부문 수상">
+                                </div>
+
+                                <ul class="award_tags">
+                                    <li>CI 개발</li>
+                                    <li>CI 개발</li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+
+                    <div class="media_right">
+                        <ul class="news_list">
+
+                            <li class="news_item">
+                                <a href="#">
+                                    <div class="news_img">
+                                        <img src="img/news_img_01.png" alt="스미싱 걱정이 만든다…정부, 악성문자 사전 차단 의무화 시동">
+                                    </div>
+
+                                    <div class="news_text">
+                                        <p class="news_label typo_caption">📰 언론 보도</p>
+                                        <h3 class="news_title typo_button">
+                                            스미싱 걱정이 만든다…정부, 악성문자 사전 차단 의무화 시동
+                                        </h3>
+                                        <p class="news_desc typo_caption">
+                                            정부가 문자중계사와 문자재판매사를 대상으로 악성문자사전차단체계 도입을 의무화하는...
+                                        </p>
+                                        <p class="news_date typo_caption">2026-02-09</p>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li class="news_item">
+                                <a href="#">
+                                    <div class="news_img">
+                                        <img src="img/news_img_02.png" alt="문자 오기 전에 막는다…정부 손잡은 SMTNT, 스미싱 보안 기술 주도권">
+                                    </div>
+
+                                    <div class="news_text">
+                                        <p class="news_label typo_caption">📰 언론 보도</p>
+                                        <h3 class="news_title typo_button">
+                                            "문자 오기 전에 막는다"…정부 손잡은 SMTNT, 스미싱 보안 기술 주도권
+                                        </h3>
+                                        <p class="news_desc typo_caption">
+                                            AI 기반 '발송 전 차단' 기술, 정부 시범사업 X-ray로 첫 적용
+                                        </p>
+                                        <p class="news_date typo_caption">2025-04-10</p>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li class="news_item">
+                                <a href="#">
+                                    <div class="news_img">
+                                        <img src="img/news_img_03.png"
+                                            alt="차량·모바일 기반 개인정보보호 서비스 ‘모바’와 추첨식 쇼핑몰 ‘산타의 연못’으로">
+                                    </div>
+
+                                    <div class="news_text">
+                                        <p class="news_label typo_caption">📰 언론 보도</p>
+                                        <h3 class="news_title typo_button">
+                                            차량·모바일 기반 개인정보보호 서비스 ‘모바’와 추첨식 쇼핑몰 ‘산타의 연못’으로
+                                        </h3>
+                                        <p class="news_desc typo_caption">
+                                            하이서울기업인 에스엠티엔티(SMTNT, 대표 김문식)는 기존 문자메시지 중심의 서비스로
+                                            견조한 성장을 달성한 데 이어, ESG 경영 원칙에 따라 사회 공헌에 힘쓰는 기업으로 도약
+                                        </p>
+                                        <p class="news_date typo_caption">2024-12-09</p>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li class="news_item">
+                                <a href="#">
+                                    <div class="news_img">
+                                        <img src="img/news_img_04.png" alt="에스엠티엔티, 쇼핑몰 ‘산타의 연못’ 출시">
+                                    </div>
+
+                                    <div class="news_text">
+                                        <p class="news_label typo_caption">📰 언론 보도</p>
+                                        <h3 class="news_title typo_button">
+                                            에스엠티엔티, 쇼핑몰 ‘산타의 연못’ 출시
+                                        </h3>
+                                        <p class="news_desc typo_caption">
+                                            문자메시지 서비스 ‘원샷’을 운영하는 에스엠티엔티(SMTNT)가 인터넷 쇼핑몰 ‘산타의 연못’
+                                            을 열었다고 17일 밝혔다.
+                                        </p>
+                                        <p class="news_date typo_caption">2023-11-17</p>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li class="news_item">
+                                <a href="#">
+                                    <div class="news_img">
+                                        <img src="img/news_img_05.png" alt="문자왕 김문식 SMTNT 대표의 다르게 생각하기'...아직도 할 것 많아요">
+                                    </div>
+
+                                    <div class="news_text">
+                                        <p class="news_label typo_caption">📰 언론 보도</p>
+                                        <h3 class="news_title typo_button">
+                                            '문자왕' 김문식 SMTNT 대표의 '다르게 생각하기'..."아직도 할 것 많아요"
+                                        </h3>
+                                        <p class="news_desc typo_caption">
+                                            문자메시지 탄생 초기 사업화 구상...'문자왕' 등극 "실패서도 배웠다...본인이 가장 잘하는 것
+                                            찾아라"
+                                        </p>
+                                        <p class="news_date typo_caption">2021-06-20</p>
+                                    </div>
+                                </a>
+                            </li>
+
+                        </ul>
+
+                        <a href="#" class="media_more typo_button">
+                            More <span>→</span>
+                        </a>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Awards & Media 끝-->
+
+
+
+            <!-- Our Partners -->
+
+            <section class="partner_section">
+
+                <div class="partner_head">
+                    <h2 class="partner_title typo_h2">
+                        Our Partners
+                    </h2>
+
+                    <p class="partner_desc typo_body">
+                        다양한 산업군의 고객사와 함께하며<br>축적된 경험과 기술력으로 안정적인 서비스를 제공합니다.
+                    </p>
+                </div>
+
+                <div class="partner_marquee partner_marquee_top">
+
+                    <div class="partner_track_l">
+                        <div class="partner_group">
+                            <img src="img/uPlus.svg" alt="유플러스 로고">
+                            <img src="img/KT.svg" alt="케이티 로고">
+                            <img src="img/SKC&C.svg" alt="SKC&C 로고">
+                            <img src="img/KTenterprise.svg" alt="KT엔터프라이즈 로고">
+                            <img src="img/DAOU.svg" alt="다우기술 로고">
+                            <img src="img/SEJONG.svg" alt="세종텔레콤 로고">
+                            <img src="img/samsung.svg" alt="삼성화재 로고">
+                            <img src="img/nice.svg" alt="나이스 로고">
+                            <img src="img/seoul_uni.svg" alt="서울대학교 로고">
+                            <img src="img/NH.svg" alt="NH투자증권 로고">
+                            <img src="img/hana.svg" alt="하나손해보험 로고">
+                            <img src="img/eLand.svg" alt="이랜드 로고">
+                            <img src="img/hanmi.svg" alt="한미반도체 로고">
+                            <img src="img/lidong.svg" alt="일동제약 로고">
+                            <img src="img/sinhan_ds.svg" alt="신한DS 로고">
+                        </div>
+                    </div>
+
+                    <div class="partner_track_r">
+                        <div class="partner_group">
+                            <img src="img/uPlus.svg" alt="유플러스 로고">
+                            <img src="img/KT.svg" alt="케이티 로고">
+                            <img src="img/SKC&C.svg" alt="SKC&C 로고">
+                            <img src="img/KTenterprise.svg" alt="KT엔터프라이즈 로고">
+                            <img src="img/DAOU.svg" alt="다우기술 로고">
+                            <img src="img/SEJONG.svg" alt="세종텔레콤 로고">
+                            <img src="img/samsung.svg" alt="삼성화재 로고">
+                            <img src="img/nice.svg" alt="나이스 로고">
+                            <img src="img/seoul_uni.svg" alt="서울대학교 로고">
+                            <img src="img/NH.svg" alt="NH투자증권 로고">
+                            <img src="img/hana.svg" alt="하나손해보험 로고">
+                            <img src="img/eLand.svg" alt="이랜드 로고">
+                            <img src="img/hanmi.svg" alt="한미반도체 로고">
+                            <img src="img/lidong.svg" alt="일동제약 로고">
+                            <img src="img/sinhan_ds.svg" alt="신한DS 로고">
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </section>
+
+            <!-- Our Partners 끝 -->
+
+
+
+            <!-- 문의하기 -->
+
+            <section class="contact_section">
+                <div class="contact_inner">
+
+                    <div class="contact_head">
+                        <h2 class="contact_title typo_h2">문의하기</h2>
+
+                        <p class="contact_desc typo_body">
+                            프로젝트에 대해 이야기해보세요.<br>
+                            담당자가 빠르게 연락드립니다.
+                        </p>
+                    </div>
+
+                    <form class="contact_form">
+
+                        <div class="contact_field contact_service">
+                            <p class="contact_label typo_caption">서비스 선택</p>
+
+                            <div class="service_buttons">
+                                <label><input type="checkbox" name="service" value="SMS"><span>SMS</span></label>
+                                <label><input type="checkbox" name="service" value="LMS"><span>LMS</span></label>
+                                <label><input type="checkbox" name="service" value="MMS"><span>MMS</span></label>
+                                <label><input type="checkbox" name="service" value="RCS"><span>RCS</span></label>
+                                <label><input type="checkbox" name="service" value="MO"><span>MO</span></label>
+                                <label><input type="checkbox" name="service" value="WEB SITE"><span>WEB
+                                        SITE</span></label>
+                                <label><input type="checkbox" name="service" value="CI · BI"><span>CI ·
+                                        BI</span></label>
+                                <label><input type="checkbox" name="service" value="CRM"><span>CRM</span></label>
+                                <label><input type="checkbox" name="service" value="ARS"><span>ARS</span></label>
+                                <label><input type="checkbox" name="service" value="산타의연못"><span>산타의연못</span></label>
+                            </div>
+                        </div>
+
+                        <div class="contact_row">
+                            <div class="contact_field">
+                                <label for="user_name" class="contact_label typo_caption">
+                                    성함 <span class="required">*</span>
+                                </label>
+                                <input type="text" id="user_name" name="user_name" placeholder="입력해주세요" required>
+                            </div>
+
+                            <div class="contact_field">
+                                <label for="company_name" class="contact_label typo_caption">
+                                    회사명 <span class="required">*</span>
+                                </label>
+                                <input type="text" id="company_name" name="company_name" placeholder="입력해주세요" required>
+                            </div>
+
+                            <div class="contact_field contact_email">
+                                <label for="email_id" class="contact_label typo_caption">
+                                    이메일 <span class="required">*</span>
+                                </label>
+
+                                <div class="email_group">
+                                    <input type="text" id="email_id" name="email_id" placeholder="입력해주세요" required>
+                                    <span class="email_at">@</span>
+                                    <select name="email_domain" required>
+                                        <option value="">선택하세요</option>
+                                        <option value="naver.com">naver.com</option>
+                                        <option value="gmail.com">gmail.com</option>
+                                        <option value="daum.net">daum.net</option>
+                                        <option value="direct">직접입력</option>
+                                    </select>
+                                    <input type="text" id="email_domain_direct" name="email_domain_direct"
+                                        placeholder="직접 입력">
+
+                                </div>
+                            </div>
+
+                            <div class="contact_field">
+                                <label for="phone" class="contact_label typo_caption">
+                                    휴대폰번호 <span class="required">*</span>
+                                </label>
+                                <input type="tel" id="phone" name="phone" placeholder="입력해주세요" required>
+                            </div>
+                        </div>
+
+                        <div class="contact_field contact_message">
+                            <label for="message" class="contact_label typo_caption">문의내용<span
+                                    class="required">*</span></label>
+                            <textarea id="message" name="message" placeholder="여기에 입력해주세요." required></textarea>
+                        </div>
+
+                        <div class="contact_bottom">
+
+                            <label class="privacy_check">
+                                <input type="checkbox" name="privacy" required>
+                                <span></span>
+                                개인정보 수집 및 취급방침 동의
+                            </label>
+
+                            <a href="privacy.html" target="_blank" rel="noopener noreferrer" class="privacy_link">
+                                보기
+                            </a>
+
+                            <button type="submit" class="contact_submit typo_button">
+                                문의하기
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </section>
+
+            <!-- 문의하기 끝 -->
+
+        </main>
+
+
+        <!-- footer -->
+
+        <footer class="footer">
+
+            <div class="footer_inner">
+
+                <div class="footer_top">
+
+                    <div class="footer_logo_area">
+
+                        <a href="/" class="footer_logo">
+                            <img src="img/logo.svg" alt="SMTNT">
+                        </a>
+
+                        <div class="footer_sns">
+                            <a href="#" class="sns_link">
+                                <img src="img/icon_instagram.svg" alt="Instagram">
+                            </a>
+                            <a href="#" class="sns_link">
+                                <img src="img/icon_Facebook.svg" alt="Facebook">
+                            </a>
+                            <a href="#" class="sns_link">
+                                <img src="img/icon_Youtube.svg" alt="Youtube">
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="footer_contact">
+                        <h3>CONTACT</h3>
+
+                        <p>T 1566.6639</p>
+                        <p>F 02.477.9035</p>
+                        <p>E master@smtnt.com</p>
+                    </div>
+
+                    <div class="footer_address">
+                        <p>서울특별시 강동구 성내로 36, 예원빌딩 6층</p>
+                        <p>에스엠티엔티</p>
+                        <p>Yewon Building, 6th Floor,</p>
+                        <p>36, Seongnae-ro, Gangdong-gu, Seoul, Korea</p>
+                    </div>
+
+                    <a href="#" class="footer_company_btn">
+                        회사소개서
+                    </a>
+
+                </div>
+
+                <div class="footer_line"></div>
+
+                <div class="footer_bottom">
+
+                    <p class="footer_copy">
+                        COPYRIGHT © SMTNT by ONE SHOT.
+                        ALL RIGHTS RESERVED.
+                    </p>
+
+                    <div class="footer_links">
+                        <a href="#">개인정보 처리방침</a>
+                        <a href="#">이용약관</a>
+                        <a href="#">법적고지</a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </footer>
+
+        <!-- footer 끝 -->
+
+
+
+    </div>
+
+</body>
+
+
+</html>

@@ -1,0 +1,161 @@
+@charset "utf-8";
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* 카페24 다정해 폰트 */
+@font-face {
+    font-family: 'Cafe24Danjeonghae';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Danjunghae.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* 잘난체폰트 */
+@font-face {
+    font-family: 'YeogiOttaeJalnan';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+    font-weight: normal;
+    font-display: swap;
+}
+
+
+/* 페이퍼로지폰트 */
+@font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-2ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-3Light.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-4Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-5Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-7Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2');
+    font-weight: 900;
+    font-display: swap;
+}
+
+
+html {
+    font-size: 62.5%;
+    /* 62.5% of 16px browser font size is 10px */
+    /* 16px * 0.625 = 10px */
+    /* 62.5% => 1rem === 10px */
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    /* 1.6 * 10px = 16px */
+    font-family: 'Pretendard Variable', 'Pretendard', 'Cafe24Danjeonghae', 'YeogiOttaeJalnan', sans-serif;
+    font-weight: 400;
+    line-height: 1.285;
+    font-size: 1.6rem;
+    color: #000;
+    width: 100%;
+    height: 100%;
+    overflow: hidden auto;
+    overscroll-behavior: contain;
+}
+
+
+.typo_h1 {
+    font-family: 'Paperozi';
+    font-weight: 700;
+    font-size: 6.4rem;
+    line-height: 8.6rem;
+}
+
+.typo_h2 {
+    font-family: 'Paperozi';
+    font-weight: 600;
+    font-size: 4rem;
+    line-height: 5.2rem;
+}
+
+.typo_h3 {
+    font-family: 'Pretendard Variable';
+    font-weight: 500;
+    font-size: 2.4rem;
+    line-height: 3.6rem;
+}
+
+.typo_h3_paperozi {
+    font-family: 'Paperozi';
+    font-weight: 600;
+    font-size: 2.4rem;
+    line-height: 3.6rem;
+}
+
+.typo_body {
+    font-family: 'Pretendard Variable';
+    font-weight: 400;
+    font-size: 1.8rem;
+    line-height: 3.2rem;
+}
+
+.typo_caption {
+    font-family: 'Pretendard Variable';
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 2.2rem;
+}
+
+.typo_button {
+    font-family: 'Pretendard Variable';
+    font-weight: 500;
+    font-size: 1.6rem;
+}
