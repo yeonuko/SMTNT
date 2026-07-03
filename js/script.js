@@ -1,5 +1,7 @@
 gsap.registerPlugin(ScrollTrigger);
 
+gsap.registerPlugin(ScrollTrigger, Flip);
+
 /* ── Lenis 스무스 스크롤 ── */
 const lenis = new Lenis({
     duration: 1.2,
@@ -32,111 +34,581 @@ lenis.on('scroll', (e) => {
     }
 });
 
-/* ── 패밀리사이트 ── */
-$(function () {
-    $('.family_btn').on('click', function (e) {
+
+/* ── nav 패밀리사이트 Dropdown ── */
+function initFamilySite() {
+    const wrap = document.querySelector(".family_site_wrap");
+    const btn = document.querySelector(".family_site");
+
+    if (!wrap || !btn) return;
+
+    btn.addEventListener("click", (e) => {
         e.stopPropagation();
-        $('.family_site').toggleClass('is_active');
-    });
-    $(document).on('click', function () {
-        $('.family_site').removeClass('is_active');
-    });
-});
-
-
-/* ── DOM 준비 후 전부 실행 ── */
-window.addEventListener("DOMContentLoaded", () => {
-
-    // ScrollTrigger에게 스크롤 proxy를 Lenis로 지정 ← 핵심
-    ScrollTrigger.scrollerProxy(document.body, {
-        scrollTop(value) {
-            if (arguments.length) {
-                lenis.scrollTo(value, {
-                    immediate: true
-                });
-            }
-            return lenis.scroll;
-        },
-        getBoundingClientRect() {
-            return {
-                top: 0,
-                left: 0,
-                width: window.innerWidth,
-                height: window.innerHeight
-            };
-        },
+        wrap.classList.toggle("is_open");
     });
 
-    lenis.on('scroll', () => ScrollTrigger.update());
+    document.addEventListener("click", (e) => {
+        if (!wrap.contains(e.target)) {
+            wrap.classList.remove("is_open");
+        }
+    });
 
-    // ── about 하이라이트 ──
-    const about_highlight = document.querySelector(".about_highlight");
-    const about_title = document.querySelector(".about_title");
-
-    if (about_highlight && about_title) {
-        lenis.on('scroll', () => {
-            const rect = about_title.getBoundingClientRect();
-            const start = window.innerHeight * 0.55;
-            const end = window.innerHeight * 0.2;
-            let progress = (start - rect.top) / (start - end);
-            progress = Math.max(0, Math.min(progress, 1));
-            about_highlight.style.setProperty("--highlight_scale", progress);
-        });
-    }
-
-    // ── Business ──
-    const business_section = document.querySelector(".business_section");
-    if (business_section) {
-        lenis.on('scroll', function () {
-            const rect = business_section.getBoundingClientRect();
-            if (rect.top < window.innerHeight * 0.65) {
-                business_section.classList.add("is_active");
-            } else {
-                business_section.classList.remove("is_active");
-            }
-        });
-    }
-
-
-
-    // ── Reason 카드 ──
-    initReason();
-
-    // ScrollTrigger 전체 새로고침 (Lenis proxy 등록 후 필수)
-    ScrollTrigger.refresh();
-});
-
-
-/* ── reason 카드 이미지 축소 애니메이션 ── */
-function initReason() {
-    const cards = gsap.utils.toArray('.reason_card');
-    if (!cards.length) return;
-
-    cards.forEach((card, index) => {
-        const imgWrap = card.querySelector('.reason_img');
-        if (!imgWrap) return;
-
-        // 같은 행의 첫 번째 카드를 트리거로 사용
-        const rowStart = Math.floor(index / 3) * 3;
-        const triggerCard = cards[rowStart];
-
-        // 열 순서만큼 start를 늦춤 (0, 5%, 10%)
-        const colOffset = (index % 3) * 5;
-
-        gsap.fromTo(imgWrap, {
-            height: '785px'
-        }, {
-            height: '464px',
-            ease: 'none',
-            scrollTrigger: {
-                trigger: triggerCard,
-                start: `top ${50 - colOffset}%`,
-                end: `top ${20 - colOffset}%`,
-                scrub: 1,
-            }
-        });
+    window.addEventListener("scroll", () => {
+        wrap.classList.remove("is_open");
     });
 }
+
+initFamilySite();
+
+
+
+
+/* ── 메인화면 스크롤 ── */
+ScrollTrigger.create({
+    trigger: ".main_visual",
+    start: "top top",
+    end: "bottom bottom",
+    pin: ".main_video",
+    pinSpacing: false
+});
+
+ScrollTrigger.create({
+    trigger: ".main_visual",
+    start: "top top",
+    end: "bottom bottom",
+    pin: ".main_dim",
+    pinSpacing: false
+});
+
+function initMainIntro() {
+    const intro = document.querySelector(".main_intro");
+    const mainDim = document.querySelector(".main_dim");
+    const targetText = document.querySelector(".main_intro_title em");
+
+    if (!intro || !mainDim || !targetText) return;
+
+    const text = targetText.textContent;
+    targetText.innerHTML = "";
+
+    text.split("").forEach((char) => {
+        const span = document.createElement("span");
+
+        span.textContent = char === " " ? "\u00A0" : char;
+        span.style.color = "rgba(255, 255, 255, 0.25)";
+
+        targetText.appendChild(span);
+    });
+
+    const chars = targetText.querySelectorAll("span");
+
+    gsap.timeline({
+            scrollTrigger: {
+                trigger: intro,
+                start: "top center",
+                end: "center center",
+                scrub: true,
+            },
+        })
+        .to(mainDim, {
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            ease: "none",
+        }, 0)
+        .to(chars, {
+            color: "rgba(255, 255, 255, 1)",
+            stagger: 0.08,
+            ease: "none",
+        }, 0);
+}
+
+initMainIntro();
+
+
+
+
+/* ── 운영중인 서비스 가로스크롤 ── */
+function initServiceHorizontal() {
+    const section = document.querySelector(".service_section");
+    const horizontal = document.querySelector(".service_horizontal");
+
+    if (!section || !horizontal) return;
+
+    function getScrollAmount() {
+        return horizontal.scrollWidth - window.innerWidth;
+    }
+
+    gsap.to(horizontal, {
+        x: () => -getScrollAmount(),
+        ease: "none",
+        scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: () => `+=${getScrollAmount()}`,
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+            anticipatePin: 1,
+        }
+    });
+}
+
+initServiceHorizontal();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ── Our Solution Orbit ── */
+/* ── Our Solution Orbit ── */
+function initSolutionOrbit() {
+    const section = document.querySelector(".solution_section");
+    const leftCards = gsap.utils.toArray(".solution_orbit_left .solution_card");
+    const rightCards = gsap.utils.toArray(".solution_orbit_right .solution_card");
+    const words = gsap.utils.toArray(".solution_word");
+
+    if (!section || (!leftCards.length && !rightCards.length) || !words.length) return;
+
+    function setActiveGroup(group) {
+        words.forEach((word) => {
+            word.classList.toggle("is_active", !!group && word.dataset.group === group);
+        });
+    }
+
+    function getOrbitValue(side, angle) {
+        const rad = angle * Math.PI / 180;
+
+        const centerX = side === "left" ?
+            window.innerWidth * -0.08 :
+            window.innerWidth * 1.08;
+
+        const centerY = window.innerHeight * 0.5;
+        const radiusX = window.innerWidth * 0.65;
+        const radiusY = window.innerHeight * 0.72;
+
+        return {
+            x: centerX + Math.cos(rad) * radiusX - window.innerWidth / 2,
+            y: centerY + Math.sin(rad) * radiusY - window.innerHeight / 2
+        };
+    }
+
+    const orbitCards = [];
+    const maxLength = Math.max(leftCards.length, rightCards.length);
+
+    for (let i = 0; i < maxLength; i++) {
+        if (leftCards[i]) orbitCards.push({
+            card: leftCards[i],
+            side: "left"
+        });
+        if (rightCards[i]) orbitCards.push({
+            card: rightCards[i],
+            side: "right"
+        });
+    }
+
+    gsap.set(orbitCards.map(item => item.card), {
+        xPercent: -50,
+        yPercent: -50,
+        opacity: 0
+    });
+
+    setActiveGroup(null);
+
+    const invertTime = 0.12; // 색 반전 타이밍
+    const cardStartTime = 0.32; // 카드 시작 타이밍
+    const cardGap = 0.05; // 카드 간격
+    const cardDuration = 0.28; // 카드 속도
+    const focusDelay = cardDuration * 0.5;
+    const totalTime = cardStartTime + orbitCards.length * cardGap + cardDuration;
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: "+=7500",
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
+
+            onUpdate() {
+                const time = tl.time();
+
+                if (time < cardStartTime + focusDelay) {
+                    setActiveGroup(null);
+                    return;
+                }
+
+                const activeIndex = Math.min(
+                    orbitCards.length - 1,
+                    Math.max(0, Math.floor((time - cardStartTime - focusDelay) / cardGap))
+                );
+
+                setActiveGroup(orbitCards[activeIndex].card.dataset.group);
+            }
+        }
+    });
+
+    tl.set(section, {
+        backgroundColor: "#333333"
+    }, invertTime);
+
+    tl.set([".solution_label", ".solution_desc", ".solution_word"], {
+        color: "#000000"
+    }, invertTime);
+
+    orbitCards.forEach((item, index) => {
+        const card = item.card;
+        const side = item.side;
+        const start = cardStartTime + index * cardGap;
+
+        const startAngle = side === "left" ? -62 : 242;
+        const endAngle = side === "left" ? 72 : 112;
+        const proxy = {
+            angle: startAngle
+        };
+
+        tl.to(proxy, {
+            angle: endAngle,
+            duration: cardDuration,
+            ease: "none",
+
+            onUpdate() {
+                const pos = getOrbitValue(side, proxy.angle);
+
+                gsap.set(card, {
+                    x: pos.x,
+                    y: pos.y
+                });
+            }
+        }, start);
+
+        tl.to(card, {
+            opacity: 1,
+            duration: 0.06,
+            ease: "none"
+        }, start);
+
+        tl.to(card, {
+            opacity: 0,
+            duration: 0.06,
+            ease: "none"
+        }, start + cardDuration - 0.06);
+    });
+
+    tl.to({}, {
+        duration: totalTime
+    }, 0);
+}
+
+initSolutionOrbit();
+
+
+
+
+
+
+/* ── Business Performance Motion Path ── */
+function initPerformanceMotion() {
+    const section = document.querySelector(".performance_section");
+    const path = document.querySelector(".performance_path");
+    const cards = gsap.utils.toArray(".performance_card");
+
+    if (!section || !path || !cards.length) return;
+
+    function updateCards(progress) {
+        const length = path.getTotalLength();
+
+        cards.forEach((card, index) => {
+            const gap = 0.24;
+            const cardProgress = progress * (1 + gap * (cards.length - 1)) - index * gap;
+
+            if (cardProgress < 0 || cardProgress > 1) {
+                gsap.set(card, {
+                    opacity: 0,
+                    pointerEvents: "none"
+                });
+                return;
+            }
+
+            const point = path.getPointAtLength(length * cardProgress);
+
+            /*
+                focus
+                0   = 시작/끝, 멀리 있음
+                1   = 중앙, 가장 가까움
+            */
+            const focus = Math.sin(cardProgress * Math.PI);
+
+            const scale = gsap.utils.interpolate(0.28, 1.15, focus);
+            const opacity = gsap.utils.interpolate(0.12, 1, focus);
+            const blur = gsap.utils.interpolate(24, 0, focus);
+            const zIndex = Math.round(focus * 100);
+
+            gsap.set(card, {
+                x: point.x,
+                y: point.y,
+                xPercent: -50,
+                yPercent: -50,
+                scale: scale,
+                opacity: opacity,
+                zIndex: zIndex,
+                filter: `blur(${blur}px)`,
+                pointerEvents: focus > 0.85 ? "auto" : "none"
+            });
+        });
+    }
+
+    gsap.set(cards, {
+        opacity: 0,
+        scale: 0.28,
+        filter: "blur(24px)",
+        transformOrigin: "50% 50%"
+    });
+
+    ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: "+=5000",
+        pin: true,
+        scrub: 1,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+
+        onUpdate(self) {
+            updateCards(self.progress);
+        },
+
+        onRefresh() {
+            updateCards(0);
+        }
+    });
+}
+
+initPerformanceMotion();
+
+
+
+
+
+
+/* ── Keyword 큰텍스트 벌어지는 ── */
+function initKeywordSplit() {
+    const section = document.querySelector(".keyword_section");
+    const items = gsap.utils.toArray(".keyword_item");
+
+    if (!section || !items.length) return;
+    gsap.set(items, {
+        autoAlpha: 0
+    });
+
+    items.forEach((item) => {
+        const parts = item.querySelectorAll(".keyword_title span");
+        const desc = item.querySelector(".keyword_desc");
+
+        gsap.set(parts, {
+            xPercent: -50,
+            yPercent: -50,
+            x: 0,
+            y: 0
+        });
+
+        gsap.set(desc, {
+            opacity: 0
+        });
+    });
+
+    gsap.set(items[0], {
+        autoAlpha: 1
+    });
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: `+=${items.length * 1200}`,
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1
+        }
+    });
+
+    items.forEach((item, index) => {
+        const isLR = item.classList.contains("keyword_lr");
+
+        const left = item.querySelector(".keyword_left");
+        const right = item.querySelector(".keyword_right");
+        const top = item.querySelector(".keyword_top");
+        const bottom = item.querySelector(".keyword_bottom");
+        const desc = item.querySelector(".keyword_desc");
+        const parts = item.querySelectorAll(".keyword_title span");
+
+        const start = index * 1.2;
+
+        const enterFrom = index % 2 === 0 ? "y" : "x";
+        const enterValue = index % 2 === 0 ? "100vh" : "100vw";
+
+        tl.set(item, {
+            autoAlpha: 1
+        }, start);
+
+        if (index !== 0) {
+            tl.fromTo(item, {
+                [enterFrom]: enterValue
+            }, {
+                [enterFrom]: 0,
+                duration: 0.35,
+                ease: "none"
+            }, start);
+        }
+
+        if (isLR) {
+            tl.to(left, {
+                x: "-18vw",
+                duration: 0.45,
+                ease: "none"
+            }, start + 0.25);
+
+            tl.to(right, {
+                x: "18vw",
+                duration: 0.45,
+                ease: "none"
+            }, start + 0.25);
+        } else {
+            tl.to(top, {
+                y: "-8rem",
+                duration: 0.45,
+                ease: "none"
+            }, start + 0.25);
+
+            tl.to(bottom, {
+                y: "8rem",
+                duration: 0.45,
+                ease: "none"
+            }, start + 0.25);
+        }
+
+        tl.to(desc, {
+            opacity: 1,
+            duration: 0.25,
+            ease: "none"
+        }, start + 0.45);
+
+        if (index !== items.length - 1) {
+            const exitTo = index % 2 === 0 ? "y" : "x";
+            const exitValue = index % 2 === 0 ? "-100vh" : "-100vw";
+
+            tl.to(item, {
+                [exitTo]: exitValue,
+                duration: 0.45,
+                ease: "none"
+            }, start + 0.95);
+
+            tl.set(item, {
+                autoAlpha: 0
+            }, start + 1.4);
+        }
+    });
+}
+
+initKeywordSplit();
+
+
+
+
+
+
+
+
+
+/* ── Scatter Text ── */
+function initScatterText() {
+    const section = document.querySelector(".scatter_section");
+    const words = gsap.utils.toArray(".scatter_word");
+
+    if (!section || !words.length) return;
+
+    function getTargets() {
+        const lines = [1, 2, 3].map((line) => {
+            return words.filter((word) => word.dataset.line === String(line));
+        });
+
+        const gap = window.innerWidth * 0.018;
+        const lineGap = window.innerHeight * 0.13;
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        const targets = new Map();
+
+        lines.forEach((lineWords, lineIndex) => {
+            const totalWidth = lineWords.reduce((sum, word, index) => {
+                return sum + word.offsetWidth + (index === lineWords.length - 1 ? 0 : gap);
+            }, 0);
+
+            let x = centerX - totalWidth / 2;
+            const y = centerY + (lineIndex - 1) * lineGap;
+
+            lineWords.forEach((word) => {
+                const rect = word.getBoundingClientRect();
+
+                const targetLeft = x;
+                const targetTop = y - rect.height / 2;
+
+                targets.set(word, {
+                    x: targetLeft - rect.left,
+                    y: targetTop - rect.top
+                });
+
+                x += word.offsetWidth + gap;
+            });
+        });
+
+        return targets;
+    }
+
+    gsap.set(words, {
+        x: 0,
+        y: 0
+    });
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: "+=2200",
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true
+        }
+    });
+
+    words.forEach((word) => {
+        tl.to(word, {
+            x: () => getTargets().get(word).x,
+            y: () => getTargets().get(word).y,
+            color: word.dataset.word === "connecting" ? "#FF6200" : "#000000",
+            ease: "none"
+        }, 0);
+    });
+}
+
+initScatterText();
+
+
+
+
+
+
+
+
+
 
 
 
@@ -151,7 +623,7 @@ function initReason() {
     const STEPS = 6;
     const CANVAS_W = 1440;
     const CANVAS_H = 120;
-    const DOT_COLOR = '#F5A233';
+    const DOT_COLOR = '#FF6200';
     const LINE_COLOR = 'rgba(255,255,255,4)';
     const BEND_MAX = 46;
     const BASE_Y = 68;
@@ -295,26 +767,44 @@ function initReason() {
 })();
 
 
-/* ===========================
-   Contact Section JS
-   =========================== */
 
-(function () {
 
-    /* 이메일 도메인 직접입력 토글 */
-    const domainSelect = document.querySelector('select[name="email_domain"]');
-    const domainDirect = document.getElementById('email_domain_direct');
 
-    if (domainSelect && domainDirect) {
-        domainSelect.addEventListener('change', function () {
-            if (this.value === 'direct') {
-                domainDirect.classList.add('is_visible');
-                domainDirect.focus();
-            } else {
-                domainDirect.classList.remove('is_visible');
-                domainDirect.value = '';
-            }
-        });
-    }
+/* ── Awards & Media ── */
+function initNewsSection() {
+    const section = document.querySelector(".news_section");
+    const head = document.querySelector(".news_head");
+    const items = gsap.utils.toArray(".news_item");
 
-})();
+    if (!section || !head || !items.length) return;
+
+    gsap.set([head, items], {
+        opacity: 1,
+        y: 0
+    });
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: "top 75%",
+            toggleActions: "play none none none"
+        }
+    });
+
+    tl.from(head, {
+        y: 50,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out"
+    });
+
+    tl.from(items, {
+        y: 70,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power3.out"
+    }, "-=0.25");
+}
+
+initNewsSection();
