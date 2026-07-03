@@ -88,7 +88,6 @@
     font-display: swap;
 }
 
-
 html {
     font-size: 62.5%;
     /* 62.5% of 16px browser font size is 10px */
@@ -158,4 +157,29 @@ body {
     font-family: 'Pretendard Variable';
     font-weight: 500;
     font-size: 1.6rem;
+}
+
+
+
+/* Big Shoulders 폰트 */
+
+.big-shoulders-500 {
+    font-family: "Big Shoulders", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.big-shoulders-700 {
+    font-family: "Big Shoulders", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.big-shoulders-900 {
+    font-family: "Big Shoulders", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 900;
+    font-style: normal;
 }
