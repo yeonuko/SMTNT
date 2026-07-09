@@ -4,10 +4,10 @@ gsap.registerPlugin(ScrollTrigger, Flip);
 
 /* ── Lenis 스무스 스크롤 ── */
 const lenis = new Lenis({
-    duration: 1.2,
+    duration: 0.9,
     easing: (t) => 1 - Math.pow(1 - t, 3),
     smoothWheel: true,
-    wheelMultiplier: 0.8,
+    wheelMultiplier: 0.7,
 });
 
 lenis.on('scroll', ScrollTrigger.update);
@@ -16,6 +16,9 @@ gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
 });
 
+/* Lenis와 같이 쓸 때는 꺼두는 걸 권장: 안 꺼두면 브라우저가 잠깐
+   멈췄다 돌아올 때(영상 디코딩/이미지 로딩 등) GSAP이 밀린 시간을
+   한 번에 따라잡으려 하면서 순간적으로 튀는 현상이 생길 수 있음 */
 gsap.ticker.lagSmoothing(0);
 
 
@@ -147,7 +150,7 @@ function initServiceHorizontal() {
             start: "top top",
             end: () => `+=${getScrollAmount()}`,
             pin: true,
-            scrub: 1,
+            scrub: true,
             invalidateOnRefresh: true,
             anticipatePin: 1
         }
@@ -169,7 +172,7 @@ function initServiceHorizontal() {
                 containerAnimation: horizontalTween,
                 start: "left 95%",
                 end: "left 65%",
-                scrub: 1,
+                scrub: true,
                 invalidateOnRefresh: true
             }
         });
@@ -260,7 +263,7 @@ function initSolutionOrbit() {
             start: "top top",
             end: "+=7500",
             pin: true,
-            scrub: 1,
+            scrub: true,
             anticipatePin: 1,
 
             onUpdate() {
@@ -533,7 +536,7 @@ function initPerformanceMotion() {
         start: "top top",
         end: "+=5000",
         pin: true,
-        scrub: 1,
+        scrub: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
 
@@ -590,7 +593,7 @@ function initKeywordSplit() {
             start: "top top",
             end: `+=${items.length * 1200}`,
             pin: true,
-            scrub: 1,
+            scrub: true,
             anticipatePin: 1
         }
     });
@@ -735,7 +738,7 @@ function initScatterText() {
             trigger: section,
             start: "top top",
             end: "bottom bottom",
-            scrub: 1,
+            scrub: true,
             invalidateOnRefresh: true
         }
     });
@@ -842,7 +845,7 @@ function initCurtainSections() {
                 // 너무 늘어지지 않게 짧게
                 end: "top top",
                 pin: false,
-                scrub: 1,
+                scrub: true,
                 invalidateOnRefresh: true
             }
         });
@@ -968,7 +971,7 @@ initCurtainSections();
             end: `+=${STEPS * 700}`,
             pin: true,
             pinSpacing: true,
-            scrub: 0.8,
+            scrub: true,
             onUpdate(self) {
                 const raw = self.progress * STEPS;
                 const step = Math.min(Math.floor(raw), STEPS - 1);
