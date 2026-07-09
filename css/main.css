@@ -262,7 +262,7 @@ section {
 }
 
 .family_site span::after {
-    right: 0; 
+    right: 0;
     transform: rotate(-45deg);
 }
 
@@ -637,6 +637,68 @@ section {
 }
 
 
+.curtain_section {
+    position: relative;
+    height: 50vh;
+    padding: 0;
+    overflow: hidden;
+    background: #d3d3d3;
+}
+
+.curtain_section {
+    position: relative;
+    height: 55vh;
+    padding: 0;
+    overflow: visible;
+}
+
+.stripes_container {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
+}
+
+.stripe_item {
+    flex: 1;
+    width: 100%;
+    transform: scaleY(0);
+    transform-origin: center bottom;
+    will-change: transform;
+    margin-top: -1px;
+    padding-bottom: 1px;
+}
+
+.stripe_item:first-child {
+    margin-top: 0;
+}
+
+
+/* Service → Solution */
+
+.curtain_gray {
+    background: #d3d3d3;
+}
+
+.curtain_gray .stripe_item {
+    background: #fff;
+}
+
+
+/* Solution → Performance */
+.curtain_c3c3c3 {
+    background: #000;
+}
+
+.curtain_c3c3c3 .stripe_item {
+    background: #c3c3c3;
+}
+
 
 /* ===========================
     Our Solution
@@ -730,12 +792,12 @@ section {
     justify-content: space-between;
     gap: 4rem;
 
-    width: 48rem;
+    width: 50rem;
     min-height: 20rem;
     padding: 3.2rem 3.2rem 3.2rem 3.6rem;
 
     border-radius: 2.4rem;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.7);
     opacity: 0.4;
     color: #fff;
 
@@ -765,7 +827,7 @@ section {
 .solution_card_text p:last-child {
     font-size: 1.8rem;
     line-height: 1.8;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 255, 255, 0.7);
     font-weight: 100;
 }
 
@@ -785,6 +847,62 @@ section {
 
 
 
+.solution_deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.solution_deco_item {
+    position: absolute;
+    will-change: transform;
+}
+
+/* 아주 가까이 떠 있는 요소 */
+.deco_near {
+    width: 30rem;
+    opacity: 1;
+    filter: blur(0);
+    z-index: 3;
+}
+
+/* 중간 거리 */
+.deco_mid {
+    width: 36rem;
+    opacity: 0.6;
+    filter: blur(1px);
+    z-index: 2;
+}
+
+/* 멀리 있는 요소 */
+.deco_far {
+    width: 20rem;
+    opacity: 0.4;
+    filter: blur(2.5px);
+    z-index: 1;
+}
+
+.deco_01 {
+    top: 23%;
+    left: 8%;
+}
+
+.deco_02 {
+    bottom: 22%;
+    left: 12%;
+}
+
+.deco_03 {
+    top: 38%;
+    right: 7%;
+}
+
+
+
+
+
 
 
 /* ===========================
@@ -796,7 +914,7 @@ section {
     height: 100vh;
     padding: 0;
     overflow: hidden;
-    background: #c9c9c9;
+    background: #C3C3C3;
 }
 
 .performance_inner {
@@ -831,7 +949,7 @@ section {
     margin-top: 7rem;
     font-size: 1.6rem;
     line-height: 1.8;
-    color: rgba(0, 0, 0, 0.55);
+    color: rgba(0, 0, 0, 0.8);
 }
 
 
@@ -918,7 +1036,7 @@ section {
     transform: rotate(10deg) translateY(-10rem);
     transform-origin: center;
     transform-box: fill-box;
-    
+
 }
 
 
@@ -939,7 +1057,7 @@ section {
     height: 52rem;
     padding: 5.6rem 4.8rem;
     border-radius: 3.2rem;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     color: #fff;
     opacity: 0;
     transform: translate(-50%, -50%);
@@ -953,13 +1071,16 @@ section {
 
 .performance_number {
     position: relative;
-    display: inline-block;
-    margin-bottom: 8rem;
+    display: inline-flex;
+    align-items: flex-end;
+    /* 핵심 */
+    margin-bottom: 9.6rem;
 
+    font-family: 'Paperozi';
     font-size: 5.6rem;
     line-height: 0.9;
-    font-weight: 500;
-    letter-spacing: -0.06em;
+    font-weight: 600;
+    letter-spacing: 0.0em;
     color: #fff;
 }
 
@@ -967,35 +1088,35 @@ section {
     content: "";
     position: absolute;
     left: -1.2rem;
-    right: -6rem;
-    top: 50%;
+    right: -2.8rem;
+    top: 80%;
     z-index: -1;
-    height: 5.2rem;
+    height: 4rem;
     background: var(--color-primary);
-    transform: translateY(-42%);
+    transform: translateY(-50%);
 }
 
 .performance_number span {
-    margin-left: 1rem;
+    margin-left: 1.2rem;
     font-size: 2.6rem;
     line-height: 1;
-    font-weight: 400;
+    font-weight: 100;
     letter-spacing: -0.04em;
 }
 
 .performance_caption {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     line-height: 1.7;
-    font-weight: 400;
+    font-weight: 300;
     letter-spacing: -0.04em;
     color: #fff;
 }
 
 .performance_img {
     position: absolute;
-    right: 3.8rem;
-    bottom: 4rem;
-    width: 24rem;
+    right: 5rem;
+    bottom: 8rem;
+    width: 14rem;
 }
 
 .performance_img img {
@@ -1137,16 +1258,18 @@ section {
 
 .scatter_section {
     position: relative;
-    height: 100vh;
-    padding: 0;
-    overflow: hidden;
+    height: 250vh;
+    padding-top: 0 !important;
     background: #fff;
+    overflow: visible;
 }
 
 .scatter_inner {
-    position: relative;
+    position: sticky;
+    top: 0;
     width: 100%;
     height: 100vh;
+    overflow: hidden;
 }
 
 .scatter_words {
@@ -1262,7 +1385,7 @@ section {
 }
 
 .process_desc {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 1);
 }
 
 
@@ -1390,7 +1513,7 @@ section {
 .news_section {
     position: relative;
     padding: 16rem 0;
-    background: #050b3f;
+    background: #fff;
 }
 
 .news_inner {
@@ -1407,7 +1530,8 @@ section {
 }
 
 .news_title {
-    color: #fff;
+    font-size: 6.4rem;
+    font-family: "Big Shoulders", sans-serif;
 }
 
 .news_more {
@@ -1416,16 +1540,18 @@ section {
     gap: 1rem;
     height: 4.8rem;
     padding: 0 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    color: #fff;
+    background: none;
+    color: #000;
+    border: 1px solid #000;
     font-size: 1.6rem;
     font-weight: 600;
     transition: 0.3s ease;
 }
 
 .news_more:hover {
-    background: #fff;
-    color: #050b3f;
+    background: #000;
+    border: 1px solid #000;
+    color: #fff;
 }
 
 .news_list {
@@ -1441,6 +1567,7 @@ section {
     background: #fff;
     overflow: hidden;
     transition: 0.35s ease;
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.18);
 }
 
 .news_item:hover {
@@ -1518,7 +1645,7 @@ section {
 .partner_section {
     padding: 26.2rem 0;
     overflow: hidden;
-    background: #f8f8f8;
+    background: #fff;
 }
 
 .partner_head {
@@ -1560,12 +1687,12 @@ section {
 
 .partner_marquee::before {
     left: 0;
-    background: linear-gradient(to right, #f8f8f8 0%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(to right, #fff 0%, rgba(255, 255, 255, 0) 100%);
 }
 
 .partner_marquee::after {
     right: 0;
-    background: linear-gradient(to left, #f8f8f8 0%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(to left, #fff 0%, rgba(255, 255, 255, 0) 100%);
 }
 
 
