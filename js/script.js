@@ -5,7 +5,9 @@ gsap.registerPlugin(ScrollTrigger, Flip);
 /* ── Lenis 스무스 스크롤 ── */
 const lenis = new Lenis({
     duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    easing: (t) => 1 - Math.pow(1 - t, 3),
+    smoothWheel: true,
+    wheelMultiplier: 0.8,
 });
 
 lenis.on('scroll', ScrollTrigger.update);
@@ -129,6 +131,7 @@ initMainIntro();
 function initServiceHorizontal() {
     const section = document.querySelector(".service_section");
     const horizontal = document.querySelector(".service_horizontal");
+    const panels = gsap.utils.toArray(".service_panel:not(.service_intro)");
 
     if (!section || !horizontal) return;
 
@@ -136,7 +139,7 @@ function initServiceHorizontal() {
         return horizontal.scrollWidth - window.innerWidth;
     }
 
-    gsap.to(horizontal, {
+    const horizontalTween = gsap.to(horizontal, {
         x: () => -getScrollAmount(),
         ease: "none",
         scrollTrigger: {
@@ -146,12 +149,35 @@ function initServiceHorizontal() {
             pin: true,
             scrub: 1,
             invalidateOnRefresh: true,
-            anticipatePin: 1,
+            anticipatePin: 1
         }
+    });
+
+    panels.forEach((panel) => {
+        const thumb = panel.querySelector(".service_thumb");
+        const info = panel.querySelector(".service_info");
+
+        gsap.fromTo([thumb, info], {
+            y: 50,
+            opacity: 0.4
+        }, {
+            y: 0,
+            opacity: 1,
+            ease: "none",
+            scrollTrigger: {
+                trigger: panel,
+                containerAnimation: horizontalTween,
+                start: "left 95%",
+                end: "left 65%",
+                scrub: 1,
+                invalidateOnRefresh: true
+            }
+        });
     });
 }
 
 initServiceHorizontal();
+
 
 
 
@@ -310,6 +336,102 @@ function initSolutionOrbit() {
 initSolutionOrbit();
 
 
+/* ── Our Solution Mouse Parallax ── */
+function initSolutionParallax() {
+    const section = document.querySelector(".solution_section");
+    const items = gsap.utils.toArray(".solution_deco_item");
+
+    if (!section || !items.length) return;
+
+    const setters = items.map((item) => {
+        const depth = Number(item.dataset.depth) || 0.5;
+
+        return {
+            item,
+            depth,
+
+            xTo: gsap.quickTo(item, "x", {
+                duration: depth > 1 ? 0.5 : 1.4,
+                ease: "power3.out"
+            }),
+
+            yTo: gsap.quickTo(item, "y", {
+                duration: depth > 1 ? 0.5 : 1.4,
+                ease: "power3.out"
+            }),
+
+            rotateTo: gsap.quickTo(item, "rotate", {
+                duration: 1,
+                ease: "power3.out"
+            })
+        };
+    });
+
+
+    section.addEventListener("mousemove", (e) => {
+        const rect = section.getBoundingClientRect();
+
+        const nx =
+            (e.clientX - rect.left) / rect.width - 0.5;
+        const ny =
+            (e.clientY - rect.top) / rect.height - 0.5;
+        setters.forEach(({
+            depth,
+            xTo,
+            yTo,
+            rotateTo
+        }) => {
+
+            let moveX;
+            let moveY;
+
+
+            /* 가까운 요소 */
+
+            if (depth > 1) {
+                moveX = -nx * 240 * depth;
+                moveY = -ny * 180 * depth;
+            }
+
+
+            /* 중간 요소 */
+            else if (depth > 0.4) {
+                moveX = -nx * 150 * depth;
+                moveY = -ny * 110 * depth;
+            }
+
+
+            /* 먼 요소 */
+            else {
+                moveX = nx * 120;
+                moveY = ny * 90;
+            }
+            xTo(moveX);
+            yTo(moveY);
+            rotateTo(nx * depth * 12);
+
+        });
+    });
+
+
+    section.addEventListener("mouseleave", () => {
+
+        setters.forEach(({
+            xTo,
+            yTo,
+            rotateTo
+        }) => {
+            xTo(0);
+            yTo(0);
+            rotateTo(0);
+        });
+
+    });
+}
+
+initSolutionParallax();
+
+
 
 
 
@@ -327,39 +449,73 @@ function initPerformanceMotion() {
 
         cards.forEach((card, index) => {
             const gap = 0.24;
-            const cardProgress = progress * (1 + gap * (cards.length - 1)) - index * gap;
+
+            const cardProgress =
+                progress * (1 + gap * (cards.length - 1)) -
+                index * gap;
 
             if (cardProgress < 0 || cardProgress > 1) {
                 gsap.set(card, {
                     opacity: 0,
                     pointerEvents: "none"
                 });
+
                 return;
             }
 
             const point = path.getPointAtLength(length * cardProgress);
 
-            /*
-                focus
-                0   = 시작/끝, 멀리 있음
-                1   = 중앙, 가장 가까움
-            */
-            const focus = Math.sin(cardProgress * Math.PI);
 
-            const scale = gsap.utils.interpolate(0.28, 1.15, focus);
-            const opacity = gsap.utils.interpolate(0.12, 1, focus);
-            const blur = gsap.utils.interpolate(24, 0, focus);
-            const zIndex = Math.round(focus * 100);
+            /* 포커스 계산 */
+
+            let focus;
+
+            const focusInEnd = 0.38;
+            const focusOutStart = 0.62;
+
+            if (cardProgress < focusInEnd) {
+
+                focus = cardProgress / focusInEnd;
+
+            } else if (cardProgress <= focusOutStart) {
+
+                focus = 1;
+
+            } else {
+
+                focus =
+                    (1 - cardProgress) /
+                    (1 - focusOutStart);
+            }
+
+
+            const scale =
+                gsap.utils.interpolate(0.28, 1.15, focus);
+
+            const opacity =
+                gsap.utils.interpolate(0.12, 1, focus);
+
+            const blur =
+                gsap.utils.interpolate(24, 0, focus);
+
+            const zIndex =
+                Math.round(focus * 100);
+
 
             gsap.set(card, {
                 x: point.x,
                 y: point.y,
+
                 xPercent: -50,
                 yPercent: -50,
+
                 scale: scale,
                 opacity: opacity,
+
                 zIndex: zIndex,
+
                 filter: `blur(${blur}px)`,
+
                 pointerEvents: focus > 0.85 ? "auto" : "none"
             });
         });
@@ -534,65 +690,61 @@ function initScatterText() {
 
     if (!section || !words.length) return;
 
-    function getTargets() {
-        const lines = [1, 2, 3].map((line) => {
-            return words.filter((word) => word.dataset.line === String(line));
-        });
+    const startScale = 1.6;
+    const endScale = 1;
 
-        const gap = window.innerWidth * 0.018;
-        const lineGap = window.innerHeight * 0.13;
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-
-        const targets = new Map();
-
-        lines.forEach((lineWords, lineIndex) => {
-            const totalWidth = lineWords.reduce((sum, word, index) => {
-                return sum + word.offsetWidth + (index === lineWords.length - 1 ? 0 : gap);
-            }, 0);
-
-            let x = centerX - totalWidth / 2;
-            const y = centerY + (lineIndex - 1) * lineGap;
-
-            lineWords.forEach((word) => {
-                const rect = word.getBoundingClientRect();
-
-                const targetLeft = x;
-                const targetTop = y - rect.height / 2;
-
-                targets.set(word, {
-                    x: targetLeft - rect.left,
-                    y: targetTop - rect.top
-                });
-
-                x += word.offsetWidth + gap;
-            });
-        });
-
-        return targets;
-    }
+    const gap = window.innerWidth * 0.035;
+    const lineGap = window.innerHeight * 0.18;
 
     gsap.set(words, {
         x: 0,
-        y: 0
+        y: 0,
+        scale: startScale,
+        transformOrigin: "center center"
     });
+
+    function getTarget(word) {
+        const line = Number(word.dataset.line);
+        const lineWords = words.filter((item) => Number(item.dataset.line) === line);
+
+        const gap = window.innerWidth * 0.015;
+        const lineGap = window.innerHeight * 0.09;
+
+        const targetStartX = window.innerWidth * 0.13;
+        const targetStartY = window.innerHeight * 0.58;
+
+        let targetLeft = targetStartX;
+
+        lineWords.forEach((item) => {
+            if (item === word) return;
+            if (lineWords.indexOf(item) < lineWords.indexOf(word)) {
+                targetLeft += item.offsetWidth + gap;
+            }
+        });
+
+        const targetTop = targetStartY + (line - 1) * lineGap;
+
+        return {
+            x: targetLeft - word.offsetLeft,
+            y: targetTop - word.offsetTop
+        };
+    }
 
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "+=2200",
-            pin: true,
+            end: "bottom bottom",
             scrub: 1,
-            anticipatePin: 1,
             invalidateOnRefresh: true
         }
     });
 
     words.forEach((word) => {
         tl.to(word, {
-            x: () => getTargets().get(word).x,
-            y: () => getTargets().get(word).y,
+            x: () => getTarget(word).x,
+            y: () => getTarget(word).y,
+            scale: endScale,
             color: word.dataset.word === "connecting" ? "#FF6200" : "#000000",
             ease: "none"
         }, 0);
@@ -607,6 +759,97 @@ initScatterText();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+/* ── Awards & Media ── */
+function initNewsSection() {
+    const section = document.querySelector(".news_section");
+    const head = document.querySelector(".news_head");
+    const items = gsap.utils.toArray(".news_item");
+
+    if (!section || !head || !items.length) return;
+
+    gsap.set([head, items], {
+        opacity: 1,
+        y: 0
+    });
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: "top 75%",
+            toggleActions: "play none none none"
+        }
+    });
+
+    tl.from(head, {
+        y: 50,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out"
+    });
+
+    tl.from(items, {
+        y: 70,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power3.out"
+    }, "-=0.25");
+}
+
+initNewsSection();
+
+
+
+
+
+
+/* ── 커튼 전환 효과 ── */
+function initCurtainSections() {
+    const sections = gsap.utils.toArray(".curtain_section");
+    if (!sections.length) return;
+    sections.forEach((section) => {
+        const stripes = gsap.utils.toArray(section.querySelectorAll(".stripe_item"));
+        if (!stripes.length) return;
+        gsap.set(stripes, {
+            scaleY: 0,
+            transformOrigin: "center bottom"
+        });
+        gsap.to(stripes, {
+            scaleY: 1,
+            ease: "none",
+            stagger: {
+                each: 0.08,
+                from: "end"
+            },
+            scrollTrigger: {
+                trigger: section,
+                // 기존: "top top"
+                // 섹션 상단이 화면 70% 지점에 왔을 때부터 시작
+                start: "top 70%",
+                // 기존: "+=600"
+                // 너무 늘어지지 않게 짧게
+                end: "top top",
+                pin: false,
+                scrub: 1,
+                invalidateOnRefresh: true
+            }
+        });
+    });
+}
+
+initCurtainSections();
 
 
 
@@ -766,45 +1009,7 @@ initScatterText();
 
 })();
 
-
-
-
-
-/* ── Awards & Media ── */
-function initNewsSection() {
-    const section = document.querySelector(".news_section");
-    const head = document.querySelector(".news_head");
-    const items = gsap.utils.toArray(".news_item");
-
-    if (!section || !head || !items.length) return;
-
-    gsap.set([head, items], {
-        opacity: 1,
-        y: 0
-    });
-
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: section,
-            start: "top 75%",
-            toggleActions: "play none none none"
-        }
-    });
-
-    tl.from(head, {
-        y: 50,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out"
-    });
-
-    tl.from(items, {
-        y: 70,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: "power3.out"
-    }, "-=0.25");
-}
-
-initNewsSection();
+window.addEventListener("load", () => {
+    ScrollTrigger.sort();
+    ScrollTrigger.refresh();
+});
