@@ -7,7 +7,7 @@ const lenis = new Lenis({
     duration: 0.9,
     easing: (t) => 1 - Math.pow(1 - t, 3),
     smoothWheel: true,
-    wheelMultiplier: 0.7,
+    wheelMultiplier: 1,
 });
 
 lenis.on('scroll', ScrollTrigger.update);
@@ -20,6 +20,11 @@ gsap.ticker.add((time) => {
    멈췄다 돌아올 때(영상 디코딩/이미지 로딩 등) GSAP이 밀린 시간을
    한 번에 따라잡으려 하면서 순간적으로 튀는 현상이 생길 수 있음 */
 gsap.ticker.lagSmoothing(0);
+
+/* 데스크탑 전용 스크롤 애니메이션 분기
+   → 768px 이상에서만 GSAP pin/scrub 애니메이션 실행,
+     모바일에서는 해당 콜백이 아예 실행되지 않고 일반 스크롤로 동작함 */
+const mm = gsap.matchMedia();
 
 
 /* ── Nav 스크롤 ── */
@@ -40,49 +45,184 @@ lenis.on('scroll', (e) => {
 });
 
 
+
+
+
+
+
+
+
+/* ── 메인 영상 슬라이더 (2초마다 크로스페이드) ── */
+// function initMainVideoSlider() {
+//     const wrap = document.querySelector(".main_video_wrap");
+//     if (!wrap) return;
+
+//     const videos = wrap.querySelectorAll(".main_video");
+//     if (videos.length < 2) return;
+
+//     const DURATION = 2000; // 각 영상 노출 시간 (ms)
+//     const FADE_MS = 1000;  // main_video의 opacity transition 시간과 동일하게
+//     let current = 0;
+
+//     // 처음 활성 영상 빼고는 전부 정지 → 동시 디코딩 부담 최소화
+//     videos.forEach((v, i) => {
+//         if (i !== current) v.pause();
+//     });
+
+//     setInterval(() => {
+//         const prev = videos[current];
+
+//         current = (current + 1) % videos.length;
+//         const next = videos[current];
+
+//         next.currentTime = 0;
+//         next.play();
+
+//         prev.classList.remove("is_active");
+//         next.classList.add("is_active");
+
+//         setTimeout(() => {
+//             prev.pause();
+//         }, FADE_MS);
+//     }, DURATION);
+// }
+
+// initMainVideoSlider();
+
+
+/* ── 메인 타이틀 슬라이더 (등장: 위에서 드롭 / 퇴장: 디졸브) ── */
+function initMainTitleSlider() {
+    const wrap = document.querySelector(".main_title_slider");
+    if (!wrap) return;
+
+    const titles = wrap.querySelectorAll(".main_title");
+    if (titles.length < 2) return;
+
+    const DURATION = 3000; // 각 문구 노출 시간 (ms)
+    const LEAVE_MS = 700; // mainTitleLeave 애니메이션 길이와 동일하게
+    let current = 0;
+
+    setInterval(() => {
+        const prev = titles[current];
+
+        prev.classList.remove("is_active");
+        prev.classList.add("is_leaving");
+
+        setTimeout(() => {
+            prev.classList.remove("is_leaving");
+        }, LEAVE_MS);
+
+        current = (current + 1) % titles.length;
+        titles[current].classList.add("is_active");
+    }, DURATION);
+}
+
+initMainTitleSlider();
+
+
 /* ── nav 패밀리사이트 Dropdown ── */
-function initFamilySite() {
-    const wrap = document.querySelector(".family_site_wrap");
-    const btn = document.querySelector(".family_site");
+// function initFamilySite() {
+//     const wrap = document.querySelector(".family_site_wrap");
+//     const btn = document.querySelector(".family_site");
 
-    if (!wrap || !btn) return;
+//     if (!wrap || !btn) return;
 
-    btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        wrap.classList.toggle("is_open");
+//     btn.addEventListener("click", (e) => {
+//         e.stopPropagation();
+//         wrap.classList.toggle("is_open");
+//     });
+
+//     document.addEventListener("click", (e) => {
+//         if (!wrap.contains(e.target)) {
+//             wrap.classList.remove("is_open");
+//         }
+//     });
+
+//     window.addEventListener("scroll", () => {
+//         wrap.classList.remove("is_open");
+//     });
+// }
+
+// initFamilySite();
+
+
+/* ── 모바일 GNB 토글 ── */
+function initMobileNav() {
+    const header = document.querySelector("#header");
+    const toggle = document.querySelector(".gnb_toggle");
+    const gnbItems = document.querySelectorAll(".gnb_item");
+    const mq = window.matchMedia("(max-width: 767px)");
+
+    if (!header || !toggle) return;
+
+    function closeMenu() {
+        header.classList.remove("menu_open");
+        toggle.setAttribute("aria-expanded", "false");
+        gnbItems.forEach((item) => item.classList.remove("is_open"));
+        lenis.start();
+    }
+
+    function openMenu() {
+        header.classList.add("menu_open");
+        toggle.setAttribute("aria-expanded", "true");
+        lenis.stop();
+    }
+
+    toggle.addEventListener("click", () => {
+        const isOpen = header.classList.contains("menu_open");
+        isOpen ? closeMenu() : openMenu();
     });
 
-    document.addEventListener("click", (e) => {
-        if (!wrap.contains(e.target)) {
-            wrap.classList.remove("is_open");
-        }
+    /* 모바일에서는 gnb_link 탭 → 하위메뉴 아코디언 오픈 (데스크탑은 기존 hover 유지) */
+    gnbItems.forEach((item) => {
+        const link = item.querySelector(".gnb_link");
+        const depth = item.querySelector(".gnb_depth");
+
+        if (!link || !depth) return;
+
+        link.addEventListener("click", (e) => {
+            if (!mq.matches) return;
+
+            e.preventDefault();
+            const isOpen = item.classList.contains("is_open");
+
+            gnbItems.forEach((el) => el.classList.remove("is_open"));
+            if (!isOpen) item.classList.add("is_open");
+        });
     });
 
-    window.addEventListener("scroll", () => {
-        wrap.classList.remove("is_open");
+    /* 뎁스 링크 클릭 시 메뉴 닫기 */
+    document.querySelectorAll(".gnb_depth a").forEach((a) => {
+        a.addEventListener("click", closeMenu);
+    });
+
+    /* 데스크탑 크기로 리사이즈되면 메뉴 상태 초기화 */
+    mq.addEventListener("change", (e) => {
+        if (!e.matches) closeMenu();
+    });
+
+    /* ESC로 닫기 */
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeMenu();
     });
 }
 
-initFamilySite();
+initMobileNav();
 
 
 
 
-/* ── 메인화면 스크롤 ── */
-ScrollTrigger.create({
-    trigger: ".main_visual",
-    start: "top top",
-    end: "bottom bottom",
-    pin: ".main_video",
-    pinSpacing: false
-});
+/* ── 메인화면 스크롤 (데스크탑 전용) ── */
+mm.add("(min-width: 768px)", () => {
+    ScrollTrigger.create({
+        trigger: ".main_visual",
+        start: "top top",
+        end: "bottom bottom",
+        pin: ".main_bg",
+        pinSpacing: false
+    });
 
-ScrollTrigger.create({
-    trigger: ".main_visual",
-    start: "top top",
-    end: "bottom bottom",
-    pin: ".main_dim",
-    pinSpacing: false
+    initMainIntro();
 });
 
 function initMainIntro() {
@@ -115,7 +255,7 @@ function initMainIntro() {
             },
         })
         .to(mainDim, {
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            opacity: 0.8,
             ease: "none",
         }, 0)
         .to(chars, {
@@ -125,7 +265,54 @@ function initMainIntro() {
         }, 0);
 }
 
-initMainIntro();
+
+
+/* ── Vision 강조 문장 스크롤 연동 ── */
+function initVisionHighlight() {
+    const highlights = gsap.utils.toArray(".vision_highlight");
+
+    if (!highlights.length) return;
+
+    highlights.forEach((highlight) => {
+        gsap.fromTo(
+            highlight,
+            {
+                fontWeight: 400
+            },
+            {
+                fontWeight: 800,
+                ease: "none",
+
+                scrollTrigger: {
+                    trigger: highlight,
+                    start: "top 75%",
+                    end: "top 45%",
+                    scrub: true
+                }
+            }
+        );
+
+        gsap.fromTo(
+            highlight,
+            {
+                "--vision-line": 0
+            },
+            {
+                "--vision-line": 1,
+                ease: "none",
+
+                scrollTrigger: {
+                    trigger: highlight,
+                    start: "top 75%",
+                    end: "top 45%",
+                    scrub: true
+                }
+            }
+        );
+    });
+}
+
+initVisionHighlight();
 
 
 
@@ -250,11 +437,11 @@ function initSolutionOrbit() {
 
     setActiveGroup(null);
 
-    const invertTime = 0.12; // 색 반전 타이밍
-    const cardStartTime = 0.32; // 카드 시작 타이밍
+    const invertTime = 0.08; // 색 반전 타이밍
+    const cardStartTime = 0.1; // 카드 시작 타이밍
     const cardGap = 0.05; // 카드 간격
     const cardDuration = 0.28; // 카드 속도
-    const focusDelay = cardDuration * 0.5;
+    const focusDelay = cardDuration * 0.35; // data-group 단어가 더 빨리 바뀌게
     const totalTime = cardStartTime + orbitCards.length * cardGap + cardDuration;
 
     const tl = gsap.timeline({
@@ -339,100 +526,85 @@ function initSolutionOrbit() {
 initSolutionOrbit();
 
 
-/* ── Our Solution Mouse Parallax ── */
-function initSolutionParallax() {
+
+
+
+/* ── Our Solution Floating Deco ── */
+function initSolutionFloating() {
     const section = document.querySelector(".solution_section");
     const items = gsap.utils.toArray(".solution_deco_item");
 
     if (!section || !items.length) return;
 
-    const setters = items.map((item) => {
+    items.forEach((item, index) => {
         const depth = Number(item.dataset.depth) || 0.5;
 
-        return {
-            item,
-            depth,
+        /*
+            depth가 클수록:
+            - 이동 범위가 커짐
+            - 움직임이 조금 더 빠름
+            - 가까이 떠 있는 느낌이 강해짐
+        */
+        const moveX = 18 + depth * 18;
+        const moveY = 22 + depth * 22;
+        const rotateAmount = 2 + depth * 3;
 
-            xTo: gsap.quickTo(item, "x", {
-                duration: depth > 1 ? 0.5 : 1.4,
-                ease: "power3.out"
-            }),
+        const durationX = 6.5 + index * 1.1;
+        const durationY = 5.5 + index * 1.3;
+        const durationRotate = 8 + index * 1.4;
 
-            yTo: gsap.quickTo(item, "y", {
-                duration: depth > 1 ? 0.5 : 1.4,
-                ease: "power3.out"
-            }),
-
-            rotateTo: gsap.quickTo(item, "rotate", {
-                duration: 1,
-                ease: "power3.out"
-            })
-        };
-    });
-
-
-    section.addEventListener("mousemove", (e) => {
-        const rect = section.getBoundingClientRect();
-
-        const nx =
-            (e.clientX - rect.left) / rect.width - 0.5;
-        const ny =
-            (e.clientY - rect.top) / rect.height - 0.5;
-        setters.forEach(({
-            depth,
-            xTo,
-            yTo,
-            rotateTo
-        }) => {
-
-            let moveX;
-            let moveY;
-
-
-            /* 가까운 요소 */
-
-            if (depth > 1) {
-                moveX = -nx * 240 * depth;
-                moveY = -ny * 180 * depth;
-            }
-
-
-            /* 중간 요소 */
-            else if (depth > 0.4) {
-                moveX = -nx * 150 * depth;
-                moveY = -ny * 110 * depth;
-            }
-
-
-            /* 먼 요소 */
-            else {
-                moveX = nx * 120;
-                moveY = ny * 90;
-            }
-            xTo(moveX);
-            yTo(moveY);
-            rotateTo(nx * depth * 12);
-
-        });
-    });
-
-
-    section.addEventListener("mouseleave", () => {
-
-        setters.forEach(({
-            xTo,
-            yTo,
-            rotateTo
-        }) => {
-            xTo(0);
-            yTo(0);
-            rotateTo(0);
+        /*
+            처음부터 요소들이 같은 타이밍으로 움직이지 않도록
+            각각 다른 위치에서 시작
+        */
+        gsap.set(item, {
+            x: index % 2 === 0 ? -moveX * 0.4 : moveX * 0.4,
+            y: index % 2 === 0 ? moveY * 0.25 : -moveY * 0.25,
+            rotation: index % 2 === 0 ? -rotateAmount : rotateAmount
         });
 
+        /*
+            좌우 움직임
+        */
+        gsap.to(item, {
+            x: index % 2 === 0 ? moveX : -moveX,
+            duration: durationX,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+            delay: index * -1.4
+        });
+
+        /*
+            상하 움직임
+        */
+        gsap.to(item, {
+            y: index % 2 === 0 ? -moveY : moveY,
+            duration: durationY,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+            delay: index * -1.8
+        });
+
+        /*
+            아주 느린 회전
+        */
+        gsap.to(item, {
+            rotation: index % 2 === 0 ?
+                rotateAmount :
+                -rotateAmount,
+
+            duration: durationRotate,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+            delay: index * -2
+        });
     });
 }
 
-initSolutionParallax();
+initSolutionFloating();
 
 
 
@@ -557,19 +729,50 @@ initPerformanceMotion();
 
 
 
-/* ── Keyword 큰텍스트 벌어지는 ── */
+/* ── Keyword 큰 텍스트 분리 + 가로 피슝 라인 ── */
 function initKeywordSplit() {
     const section = document.querySelector(".keyword_section");
     const items = gsap.utils.toArray(".keyword_item");
 
     if (!section || !items.length) return;
+
+
+    /* ==============================
+       라인 자동 생성
+    ============================== */
+
+    items.forEach((item) => {
+        const pin = item.querySelector(".keyword_pin");
+
+        if (!pin) return;
+
+        if (!pin.querySelector(".keyword_motion_line")) {
+            const glowLine = document.createElement("span");
+            const mainLine = document.createElement("span");
+
+            glowLine.className = "keyword_motion_line line_glow";
+            mainLine.className = "keyword_motion_line line_main";
+
+            pin.prepend(glowLine);
+            pin.prepend(mainLine);
+        }
+    });
+
+
+    /* ==============================
+       초기 상태
+    ============================== */
+
     gsap.set(items, {
-        autoAlpha: 0
+        autoAlpha: 0,
+        x: 0,
+        y: 0
     });
 
     items.forEach((item) => {
         const parts = item.querySelectorAll(".keyword_title span");
         const desc = item.querySelector(".keyword_desc");
+        const lines = item.querySelectorAll(".keyword_motion_line");
 
         gsap.set(parts, {
             xPercent: -50,
@@ -579,105 +782,257 @@ function initKeywordSplit() {
         });
 
         gsap.set(desc, {
+            opacity: 0,
+            scale: 0.96
+        });
+
+        /* 모든 라인은 가로 */
+        gsap.set(lines, {
+            scaleX: 0,
+            scaleY: 1,
             opacity: 0
         });
     });
+
 
     gsap.set(items[0], {
         autoAlpha: 1
     });
 
+
+    /* ==============================
+       메인 타임라인
+    ============================== */
+
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: `+=${items.length * 1200}`,
+            end: `+=${items.length * 1400}`,
             pin: true,
             scrub: true,
-            anticipatePin: 1
+            anticipatePin: 1,
+            invalidateOnRefresh: true
         }
     });
+
 
     items.forEach((item, index) => {
         const isLR = item.classList.contains("keyword_lr");
 
         const left = item.querySelector(".keyword_left");
         const right = item.querySelector(".keyword_right");
+
         const top = item.querySelector(".keyword_top");
         const bottom = item.querySelector(".keyword_bottom");
+
         const desc = item.querySelector(".keyword_desc");
-        const parts = item.querySelectorAll(".keyword_title span");
 
-        const start = index * 1.2;
+        const mainLine = item.querySelector(".line_main");
+        const glowLine = item.querySelector(".line_glow");
 
-        const enterFrom = index % 2 === 0 ? "y" : "x";
-        const enterValue = index % 2 === 0 ? "100vh" : "100vw";
+
+        const start = index * 1.6;
+
+        const enterDuration =
+            index === 0 ? 0 : 0.38;
+
+
+        /*
+            중앙 도착 후 피슝 시작
+        */
+
+        const focusStart =
+            start +
+            enterDuration +
+            0.18;
+
+
+        const enterAxis =
+            index % 2 === 0 ? "y" : "x";
+
+        const enterValue =
+            index % 2 === 0 ? "100vh" : "100vw";
+
+
+        /* ==============================
+           아이템 등장
+        ============================== */
 
         tl.set(item, {
-            autoAlpha: 1
+            autoAlpha: 1,
+            x: 0,
+            y: 0
         }, start);
 
+
         if (index !== 0) {
-            tl.fromTo(item, {
-                [enterFrom]: enterValue
-            }, {
-                [enterFrom]: 0,
-                duration: 0.35,
-                ease: "none"
-            }, start);
+            tl.fromTo(
+                item,
+
+                {
+                    [enterAxis]: enterValue
+                },
+
+                {
+                    [enterAxis]: 0,
+                    duration: enterDuration,
+                    ease: "none"
+                },
+
+                start
+            );
         }
 
+
+        /* ==============================
+           가로 피슝 라인
+        ============================== */
+
+        tl.fromTo(
+            glowLine,
+
+            {
+                scaleX: 0.02,
+                opacity: 0,
+                filter: "blur(12px)"
+            },
+
+            {
+                scaleX: 1,
+                opacity: 0.9,
+                filter: "blur(6px)",
+                duration: 0.12,
+                ease: "power4.out"
+            },
+
+            focusStart
+        );
+
+
+        tl.fromTo(
+            mainLine,
+
+            {
+                scaleX: 0,
+                opacity: 0
+            },
+
+            {
+                scaleX: 1,
+                opacity: 1,
+                duration: 0.1,
+                ease: "power4.out"
+            },
+
+            focusStart + 0.02
+        );
+
+
+        /* ==============================
+           텍스트 분리
+        ============================== */
+
         if (isLR) {
+
             tl.to(left, {
                 x: "-18vw",
                 duration: 0.45,
-                ease: "none"
-            }, start + 0.25);
+                ease: "power2.out"
+            }, focusStart + 0.06);
+
 
             tl.to(right, {
                 x: "18vw",
                 duration: 0.45,
-                ease: "none"
-            }, start + 0.25);
+                ease: "power2.out"
+            }, focusStart + 0.06);
+
         } else {
+
             tl.to(top, {
                 y: "-8rem",
                 duration: 0.45,
-                ease: "none"
-            }, start + 0.25);
+                ease: "power2.out"
+            }, focusStart + 0.06);
+
 
             tl.to(bottom, {
                 y: "8rem",
                 duration: 0.45,
-                ease: "none"
-            }, start + 0.25);
+                ease: "power2.out"
+            }, focusStart + 0.06);
         }
+
+
+        /* ==============================
+           설명 등장
+        ============================== */
 
         tl.to(desc, {
             opacity: 1,
-            duration: 0.25,
-            ease: "none"
-        }, start + 0.45);
+            scale: 1,
+            duration: 0.24,
+            ease: "power2.out"
+        }, focusStart + 0.22);
+
+
+        /* ==============================
+           라인 소멸
+        ============================== */
+
+        tl.to(mainLine, {
+            scaleX: 1.15,
+            opacity: 0,
+            duration: 0.18,
+            ease: "power2.in"
+        }, focusStart + 0.15);
+
+
+        tl.to(glowLine, {
+            scaleX: 1.25,
+            opacity: 0,
+            filter: "blur(14px)",
+            duration: 0.24,
+            ease: "power2.out"
+        }, focusStart + 0.14);
+
+
+        /* ==============================
+           다음 키워드로 퇴장
+        ============================== */
 
         if (index !== items.length - 1) {
-            const exitTo = index % 2 === 0 ? "y" : "x";
-            const exitValue = index % 2 === 0 ? "-100vh" : "-100vw";
+
+            const exitAxis =
+                index % 2 === 0 ? "y" : "x";
+
+            const exitValue =
+                index % 2 === 0 ?
+                "-100vh" :
+                "-100vw";
+
+
+            const exitStart =
+                focusStart + 0.95;
+
 
             tl.to(item, {
-                [exitTo]: exitValue,
+                [exitAxis]: exitValue,
                 duration: 0.45,
                 ease: "none"
-            }, start + 0.95);
+            }, exitStart);
+
 
             tl.set(item, {
                 autoAlpha: 0
-            }, start + 1.4);
+            }, exitStart + 0.45);
         }
     });
 }
 
-initKeywordSplit();
 
+initKeywordSplit();
 
 
 
@@ -693,11 +1048,10 @@ function initScatterText() {
 
     if (!section || !words.length) return;
 
+    const bg = section.querySelector(".scatter_bg");
+
     const startScale = 1.6;
     const endScale = 1;
-
-    const gap = window.innerWidth * 0.035;
-    const lineGap = window.innerHeight * 0.18;
 
     gsap.set(words, {
         x: 0,
@@ -706,9 +1060,18 @@ function initScatterText() {
         transformOrigin: "center center"
     });
 
+    if (bg) {
+        gsap.set(bg, {
+            opacity: 0
+        });
+    }
+
     function getTarget(word) {
         const line = Number(word.dataset.line);
-        const lineWords = words.filter((item) => Number(item.dataset.line) === line);
+
+        const lineWords = words.filter(
+            item => Number(item.dataset.line) === line
+        );
 
         const gap = window.innerWidth * 0.015;
         const lineGap = window.innerHeight * 0.09;
@@ -719,13 +1082,14 @@ function initScatterText() {
         let targetLeft = targetStartX;
 
         lineWords.forEach((item) => {
-            if (item === word) return;
             if (lineWords.indexOf(item) < lineWords.indexOf(word)) {
                 targetLeft += item.offsetWidth + gap;
             }
         });
 
-        const targetTop = targetStartY + (line - 1) * lineGap;
+        const targetTop =
+            targetStartY +
+            (line - 1) * lineGap;
 
         return {
             x: targetLeft - word.offsetLeft,
@@ -737,7 +1101,7 @@ function initScatterText() {
         scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "bottom bottom",
+            end: "top+=800 top",
             scrub: true,
             invalidateOnRefresh: true
         }
@@ -748,15 +1112,23 @@ function initScatterText() {
             x: () => getTarget(word).x,
             y: () => getTarget(word).y,
             scale: endScale,
-            color: word.dataset.word === "connecting" ? "#FF6200" : "#000000",
+            color: word.dataset.word === "connecting" ?
+                "#FF6200" : "#000000",
+            duration: 1,
             ease: "none"
         }, 0);
     });
+
+    if (bg) {
+        tl.to(bg, {
+            opacity: 1,
+            duration: 0.3,
+            ease: "none"
+        }, 0.5); //배경 나타나는 타이밍
+    }
 }
 
 initScatterText();
-
-
 
 
 
@@ -1016,3 +1388,168 @@ window.addEventListener("load", () => {
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
 });
+
+
+
+
+
+/* ── 문의하기 팝업 ── */
+(() => {
+    const popup = document.querySelector(".contact_popup");
+    if (!popup) return;
+
+    const panel = popup.querySelector(".contact_popup_panel");
+    const form = popup.querySelector(".contact_form");
+    const openTriggers = document.querySelectorAll('a[href="#contact"]');
+    const closeTriggers = popup.querySelectorAll("[data-popup-close]");
+
+    const openPopup = () => {
+        popup.classList.add("is_active");
+        document.body.style.overflow = "hidden";
+        if (typeof lenis !== "undefined") lenis.stop();
+    };
+
+    const closePopup = () => {
+        popup.classList.remove("is_active");
+        document.body.style.overflow = "";
+        if (typeof lenis !== "undefined") lenis.start();
+    };
+
+    openTriggers.forEach((trigger) => {
+        trigger.addEventListener("click", (e) => {
+            e.preventDefault();
+            openPopup();
+        });
+    });
+
+    closeTriggers.forEach((trigger) => {
+        trigger.addEventListener("click", closePopup);
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && popup.classList.contains("is_active")) closePopup();
+    });
+
+    if (panel) {
+        panel.addEventListener("click", (e) => e.stopPropagation());
+    }
+
+    /* 서비스 선택 태그: 중복 선택 가능 */
+    const tagButtons = popup.querySelectorAll(".contact_tag");
+    const serviceInput = popup.querySelector("#contact_service");
+
+    const syncServiceInput = () => {
+        const selected = [...tagButtons]
+            .filter((b) => b.classList.contains("is_active"))
+            .map((b) => b.dataset.value);
+        serviceInput.value = selected.join(", ");
+    };
+
+    tagButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            btn.classList.toggle("is_active");
+            syncServiceInput();
+        });
+    });
+
+    /* 이메일 도메인: 직접 입력 전환 */
+    const domainWrap = popup.querySelector(".contact_email_domain");
+    const domainSelect = popup.querySelector("#contact_email_domain");
+    const domainCustom = popup.querySelector("#contact_email_domain_custom");
+
+    if (domainSelect) {
+        domainSelect.addEventListener("change", () => {
+            if (domainSelect.value === "direct") {
+                domainWrap.classList.add("is_custom");
+                domainCustom.value = "";
+                domainCustom.focus();
+            } else {
+                domainWrap.classList.remove("is_custom");
+            }
+        });
+    }
+
+    /* 휴대폰번호: 숫자만 입력 + 자동 하이픈 */
+    const phoneInput = popup.querySelector("#contact_phone");
+
+    if (phoneInput) {
+        phoneInput.addEventListener("input", () => {
+            const digits = phoneInput.value.replace(/\D/g, "").slice(0, 11);
+            let formatted = digits;
+
+            if (digits.length > 7) {
+                formatted = `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+            } else if (digits.length > 3) {
+                formatted = `${digits.slice(0, 3)}-${digits.slice(3)}`;
+            }
+
+            phoneInput.value = formatted;
+        });
+    }
+
+
+    /* 제출 */
+    if (form) {
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const requiredFields = form.querySelectorAll("[required]");
+            let isValid = true;
+
+            requiredFields.forEach((field) => {
+                if (field.type === "checkbox" ? !field.checked : !field.value.trim()) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                if (typeof Swal !== "undefined") {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "필수 항목을 확인해주세요",
+                        confirmButtonColor: "#FF6200",
+                    });
+                } else {
+                    alert("필수 항목을 확인해주세요.");
+                }
+                return;
+            }
+
+            const emailDomain = domainWrap.classList.contains("is_custom") ?
+                domainCustom.value :
+                domainSelect.value;
+
+            const payload = {
+                service: serviceInput.value,
+                name: form.name.value,
+                company: form.company.value,
+                email: `${form.email_id.value}@${emailDomain}`,
+                phone: form.phone.value,
+                message: form.message.value,
+            };
+
+            // TODO: 실제 전송 API 연동 위치
+            console.log("contact form submit", payload);
+
+            if (typeof Swal !== "undefined") {
+                Swal.fire({
+                    icon: "success",
+                    title: "문의가 접수되었습니다",
+                    text: "담당자가 빠르게 연락드리겠습니다.",
+                    confirmButtonColor: "#FF6200",
+                }).then(() => {
+                    form.reset();
+                    tagButtons.forEach((b) => b.classList.remove("is_active"));
+                    domainWrap.classList.remove("is_custom");
+                    closePopup();
+                });
+            } else {
+                alert("문의가 접수되었습니다.");
+                form.reset();
+                tagButtons.forEach((b) => b.classList.remove("is_active"));
+                domainWrap.classList.remove("is_custom");
+                closePopup();
+            }
+        });
+    }
+})();
