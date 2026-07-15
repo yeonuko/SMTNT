@@ -61,7 +61,8 @@ section {
 .process_inner,
 .media_inner,
 .contact_inner,
-.footer_inner {
+.footer_inner,
+.vision_inner {
     width: 100%;
     max-width: 1440px;
     margin: 0 auto;
@@ -125,7 +126,7 @@ section {
 .gnb {
     position: absolute;
     top: 0;
-    left: 50%;
+    left: 65%;
     transform: translateX(-50%);
     height: 100%;
 }
@@ -217,6 +218,18 @@ section {
     text-underline-offset: 0.4rem;
 }
 
+/* 
+.header_right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.gnb_toggle {
+    display: none;
+    /* 모바일(mobile.css)에서 노출 
+}
+
 .family_site_wrap {
     position: relative;
 }
@@ -305,7 +318,7 @@ section {
 .family_site_list a:hover {
     color: #ff5a00;
     font-weight: 800;
-}
+} */
 
 
 
@@ -318,21 +331,45 @@ section {
     overflow: hidden;
 }
 
-.main_video {
+.main_bg {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100vh;
-    object-fit: cover;
     z-index: 1;
+}
+
+.main_video_wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.main_video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.main_video.is_active {
+    opacity: 1;
 }
 
 .main_dim {
     position: absolute;
     inset: 0;
     width: 100%;
-    height: 100vh;
-    background: rgba(0, 0, 0, .4);
+    height: 100%;
+    background:
+        radial-gradient(circle at 50% 42%,
+            rgba(255, 255, 255, 0.1),
+            transparent 38%),
+        #000;
+    opacity: 0.4;
     z-index: 2;
 }
 
@@ -353,10 +390,96 @@ section {
     color: #fff;
 }
 
+.main_title_slider {
+    position: relative;
+    width: 100%;
+    height: 17.2rem;
+    /* typo_h1 line-height(8.6rem) × 2줄 기준. 문구 줄 수가 달라지면 값 조정 */
+}
+
+.main_meta {
+    position: absolute;
+    top: 12rem;
+    z-index: 20;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    font-size: 1.2rem;
+    line-height: 1.4;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.main_meta_left {
+    left: 12rem;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.main_meta_right {
+    right: 12rem;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.main_meta span:first-child {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+}
+
 .main_title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     font-size: 6.4rem;
     line-height: 1.25;
     font-weight: 800;
+    opacity: 0;
+    transform: translateY(-3rem);
+    filter: blur(6px);
+    pointer-events: none;
+}
+
+.main_title.is_active {
+    animation: mainTitleEnter 0.9s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+    pointer-events: auto;
+}
+
+.main_title.is_leaving {
+    animation: mainTitleLeave 0.7s ease forwards;
+    pointer-events: none;
+}
+
+@keyframes mainTitleEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-3rem);
+        filter: blur(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes mainTitleLeave {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(0);
+        filter: blur(6px);
+    }
 }
 
 .main_title span {
@@ -491,6 +614,239 @@ section {
 }
 
 
+.scroll_guide {
+    position: absolute;
+    left: 50%;
+    bottom: 3.5rem;
+    z-index: 20;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.main_bottom {
+    position: absolute;
+    left: 0;
+    bottom: 3.5rem;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    padding: 0 12rem;
+
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.main_bottom a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    transition: color 0.2s ease;
+}
+
+.main_bottom a:hover {
+    color: #fff;
+}
+
+.main_bottom a+a {
+    margin-left: 0.6em;
+}
+
+.scroll_guide_text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: #fff;
+}
+
+.scroll_guide_arrow {
+    position: relative;
+    width: 1px;
+    height: 4rem;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.scroll_guide_arrow span {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    animation: scrollGuideMove 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollGuideMove {
+    0% {
+        transform: translateY(0);
+    }
+
+    70%,
+    100% {
+        transform: translateY(200%);
+    }
+}
+
+
+
+
+/* ===========================
+    Vision
+=========================== */
+
+.vision_section {
+    background: #fff;
+}
+
+.vision_inner {
+    display: grid;
+    grid-template-columns: 70rem 1fr;
+    column-gap: 12rem;
+    align-items: start;
+}
+
+/* 왼쪽 고정 영역 */
+
+.vision_sticky {
+    position: sticky;
+    top: 0;
+    height: 74vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.vision_label {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    margin-bottom: 2.4rem;
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: var(--color-primary);
+}
+
+.vision_label em {
+    display: block;
+    width: 12rem;
+    height: 1px;
+    background: var(--color-primary);
+}
+
+.vision_title {
+    color: #111;
+    word-break: keep-all;
+}
+
+/* 오른쪽 스크롤 영역 */
+
+.vision_scroll {
+    padding: 6rem 0 20rem;
+}
+
+.vision_block {
+    margin-bottom: 14rem;
+}
+
+.vision_block:last-of-type {
+    margin-bottom: 0;
+}
+
+.vision_text {
+    margin-top: 3.2rem;
+    font-size: 2.2rem;
+    line-height: 3.8rem;
+}
+
+.vision_signature {
+    display: block;
+    margin-top: 6rem;
+    text-align: right;
+    font-size: 1.6rem;
+    color: #333;
+}
+
+.vision_keyword_list {
+    margin-top: 14rem;
+}
+
+.vision_keyword {
+    margin-bottom: 8rem;
+}
+
+.vision_keyword:last-child {
+    margin-bottom: 0;
+}
+
+.vision_keyword_head {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    margin-bottom: 1.6rem;
+    font-family: "Big Shoulders", sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+}
+
+.vision_keyword_num {
+    color: var(--color-primary);
+}
+
+.vision_keyword_line {
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin-bottom: 2rem;
+    background: #ddd;
+}
+
+
+.vision_highlight {
+    position: relative;
+    display: inline;
+    z-index: 1;
+    font-weight: 400;
+    transition: font-weight 0.5s ease;
+}
+
+.vision_highlight::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0.08em;
+    z-index: -1;
+
+    width: 100%;
+    height: 0.22em;
+    background: var(--color-primary);
+
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vision_keyword.is_active .vision_highlight {
+    font-weight: 800;
+}
+
+.vision_keyword.is_active .vision_highlight::after {
+    transform: scaleX(1);
+}
+
+
+
+
 /* ===========================
     운영중인 서비스
 =========================== */
@@ -541,8 +897,8 @@ section {
 
 .service_panel {
     position: relative;
-    width: 90rem;
-    height: 100vh;
+    width: 80rem;
+    height: 94vh;
     padding: 14rem 4.8rem 8rem;
     border-left: 1px solid #e9e9e9;
     flex-shrink: 0;
@@ -550,7 +906,7 @@ section {
 
 .service_thumb {
     width: 100%;
-    height: 54rem;
+    height: 48rem;
     border-radius: 1.2rem;
     overflow: hidden;
     background: #f8f8f8;
@@ -786,21 +1142,17 @@ section {
     position: absolute;
     top: 50%;
     left: 50%;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 4rem;
-
-    width: 50rem;
-    min-height: 20rem;
-    padding: 3.2rem 3.2rem 3.2rem 3.6rem;
-
+    width: 53rem;
+    min-height: 35rem;
+    padding: 4.2rem 5.2rem;
     border-radius: 2.4rem;
     background: rgba(0, 0, 0, 0.7);
     opacity: 0.4;
     color: #fff;
-
     transform: translate(-50%, -50%);
     will-change: transform, opacity;
 }
@@ -1251,6 +1603,77 @@ section {
 }
 
 
+/* ===========================
+   Keyword Motion Line
+=========================== */
+
+.keyword_motion_line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+
+    display: block;
+
+    pointer-events: none;
+    will-change: transform, opacity, filter;
+}
+
+
+/* 좌우 분리 키워드 */
+.keyword_motion_line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+
+    display: block;
+    width: 140vw;
+    height: 1px;
+
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0) 18%,
+            rgba(255, 255, 255, 0.15) 36%,
+            rgba(255, 255, 255, 1) 50%,
+            rgba(255, 255, 255, 0.15) 64%,
+            rgba(255, 255, 255, 0) 82%,
+            transparent 100%);
+
+    transform: translate(-50%, -50%) scaleX(0);
+    transform-origin: center;
+
+    pointer-events: none;
+    will-change: transform, opacity, filter;
+}
+
+.keyword_motion_line.line_glow {
+    height: 8px;
+    filter: blur(7px);
+}
+
+
+
+/* 잔상 */
+
+.keyword_motion_line.line_sub {
+    filter: blur(5px);
+    opacity: 0;
+}
+
+.keyword_lr .keyword_motion_line.line_sub {
+    height: 5px;
+}
+
+
+.keyword_title,
+.keyword_desc {
+    z-index: 2;
+}
+
+.keyword_pin {
+    overflow: hidden;
+}
 
 /* ===========================
     Scatter Text
@@ -1272,10 +1695,36 @@ section {
     overflow: hidden;
 }
 
+.scatter_bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    will-change: opacity;
+}
+
+
+.scatter_bg img {
+    display: block;
+    width: auto;
+    height: 100%;
+}
+
+.scatter_bg video {
+    display: block;
+    width: auto;
+    height: 100%;
+    opacity: 0.2;
+}
+
 .scatter_words {
     position: relative;
     width: 100%;
     height: 100vh;
+    z-index: 2;
 }
 
 .scatter_word {
@@ -1801,8 +2250,331 @@ section {
     transform: translateX(.6rem);
 }
 
+/* ===========================
+    문의하기 팝업
+=========================== */
 
-/* Form */
+.contact_popup {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.contact_popup.is_active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.contact_popup_dim {
+    position: absolute;
+    inset: 0;
+    background: rgba(17, 17, 17, 0.6);
+}
+
+.contact_popup_panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 128rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--color-bg);
+    border-radius: 2.4rem;
+    padding: 7rem;
+    transform: translateY(2.4rem);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+.contact_popup_panel::-webkit-scrollbar {
+    width: 0.6rem;
+}
+
+.contact_popup_panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.contact_popup_panel::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 10rem;
+}
+
+.contact_popup_panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.28);
+}
+
+.contact_popup.is_active .contact_popup_panel {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.contact_popup_close {
+    position: absolute;
+    top: 3.2rem;
+    right: 3.2rem;
+    width: 4rem;
+    height: 4rem;
+}
+
+.contact_popup_close span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2rem;
+    height: 1px;
+    background: #191919;
+}
+
+.contact_popup_close span:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.contact_popup_close span:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.contact_popup_head {
+    margin-bottom: 4rem;
+    text-align: center;
+}
+
+.contact_popup_title {
+    margin-bottom: 2.4rem;
+    font-size: 6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #191919;
+}
+
+.contact_popup_desc {
+    font-size: 1.6rem;
+    line-height: 1.7;
+    color: #666;
+}
+
+/* Field 공통 */
+
+.contact_field {
+    margin-bottom: 4.8rem;
+}
+
+.contact_field:last-of-type {
+    margin-bottom: 0;
+}
+
+.contact_field_label {
+    display: block;
+    margin-bottom: 1.6rem;
+    padding: 0 0 0 1rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #191919;
+}
+
+.contact_field_label em {
+    margin-left: 0.2rem;
+    color: var(--color-primary);
+    font-style: normal;
+}
+
+.contact_field input[type="text"],
+.contact_field textarea {
+    width: 100%;
+    height: 5rem;
+    padding: 0 2rem;
+    background: #fff;
+    border-radius: 1.2rem;
+    font-size: 1.6rem;
+    color: #191919;
+}
+
+.contact_field input[type="text"]::placeholder,
+.contact_field textarea::placeholder {
+    color: #aaa;
+}
+
+.contact_field textarea {
+    height: 16rem;
+    padding: 1.8rem 2rem;
+    line-height: 1.6;
+    resize: none;
+}
+
+/* 서비스 선택 태그 */
+
+.contact_tag_list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.2rem;
+}
+
+.contact_tag {
+    padding: 1.2rem 2.8rem;
+    background: #fff;
+    border-radius: 1rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: #191919;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.contact_tag.is_active {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+/* 4단 입력 라인 */
+
+.contact_row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr 1.2fr;
+    gap: 3.2rem;
+}
+
+/* 이메일 필드 */
+
+.contact_email_wrap {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.contact_email_wrap input[type="text"] {
+    flex: 1;
+    min-width: 0;
+}
+
+.contact_email_at {
+    flex-shrink: 0;
+    font-size: 1.6rem;
+    color: #666;
+}
+
+.contact_email_domain {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+.contact_email_domain select {
+    width: 100%;
+    height: 5rem;
+    padding: 0 4rem 0 2rem;
+    background: #fff;
+    border-radius: 1.2rem;
+    font-size: 1.6rem;
+    color: #191919;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.contact_email_domain::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 2rem;
+    width: 1rem;
+    height: 1rem;
+    border-right: 1.5px solid #666;
+    border-bottom: 1.5px solid #666;
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+}
+
+.contact_email_domain_custom {
+    display: none;
+    position: absolute;
+    inset: 0;
+}
+
+.contact_email_domain.is_custom select {
+    visibility: hidden;
+}
+
+.contact_email_domain.is_custom .contact_email_domain_custom {
+    display: block;
+}
+
+.contact_email_domain.is_custom::after {
+    display: none;
+}
+
+/* 하단: 동의 체크박스 + 제출 */
+
+.contact_bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2.4rem;
+}
+
+.contact_agree {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: 1.6rem;
+    color: #191919;
+    cursor: pointer;
+}
+
+.contact_agree input[type="checkbox"] {
+    display: none;
+}
+
+.contact_agree_box {
+    position: relative;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 1.5px solid var(--color-primary);
+    border-radius: 0.4rem;
+    flex-shrink: 0;
+}
+
+.contact_agree_box::after {
+    content: "";
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    width: 1.1rem;
+    height: 0.6rem;
+    border-left: 1.5px solid var(--color-primary);
+    border-bottom: 1.5px solid var(--color-primary);
+    transform: translate(-50%, -50%) rotate(-45deg);
+    opacity: 0;
+}
+
+.contact_agree input:checked+.contact_agree_box::after {
+    opacity: 1;
+}
+
+.contact_submit_btn {
+    padding: 1.8rem 5.6rem;
+    background: var(--color-primary);
+    border-radius: 3rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #fff;
+    transition: background 0.25s ease;
+}
+
+.contact_submit_btn:hover {
+    background: #111;
+}
+
+
+
 
 
 
@@ -1863,6 +2635,7 @@ section {
 }
 
 .footer_title {
+    font-family: "Big Shoulders", sans-serif;
     margin-bottom: 2.4rem;
     font-size: 2rem;
     font-weight: 600;
