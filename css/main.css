@@ -45,8 +45,11 @@
     Layout
 ========================= */
 #wrap {
+    position: relative;
+    z-index: 1;
     width: 100%;
     min-height: 100vh;
+    background: #fff;
 }
 
 #main {
@@ -2692,14 +2695,6 @@ section {
     검은 푸터 높이만큼 문서 맨 아래 공간을 확보한다.
     이 공간이 있어야 고정된 푸터 전체를 끝까지 볼 수 있다.
 */
-
-
-#wrap {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    background: #fff;
-}
 
 
 /* Our Partners가 푸터보다 위에서 덮도록 설정 */
