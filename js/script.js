@@ -52,44 +52,6 @@ lenis.on('scroll', (e) => {
 
 
 
-/* ── 메인 영상 슬라이더 (2초마다 크로스페이드) ── */
-// function initMainVideoSlider() {
-//     const wrap = document.querySelector(".main_video_wrap");
-//     if (!wrap) return;
-
-//     const videos = wrap.querySelectorAll(".main_video");
-//     if (videos.length < 2) return;
-
-//     const DURATION = 2000; // 각 영상 노출 시간 (ms)
-//     const FADE_MS = 1000;  // main_video의 opacity transition 시간과 동일하게
-//     let current = 0;
-
-//     // 처음 활성 영상 빼고는 전부 정지 → 동시 디코딩 부담 최소화
-//     videos.forEach((v, i) => {
-//         if (i !== current) v.pause();
-//     });
-
-//     setInterval(() => {
-//         const prev = videos[current];
-
-//         current = (current + 1) % videos.length;
-//         const next = videos[current];
-
-//         next.currentTime = 0;
-//         next.play();
-
-//         prev.classList.remove("is_active");
-//         next.classList.add("is_active");
-
-//         setTimeout(() => {
-//             prev.pause();
-//         }, FADE_MS);
-//     }, DURATION);
-// }
-
-// initMainVideoSlider();
-
-
 /* ── 메인 타이틀 슬라이더 (등장: 위에서 드롭 / 퇴장: 디졸브) ── */
 function initMainTitleSlider() {
     const wrap = document.querySelector(".main_title_slider");
@@ -120,30 +82,68 @@ function initMainTitleSlider() {
 initMainTitleSlider();
 
 
-/* ── nav 패밀리사이트 Dropdown ── */
-// function initFamilySite() {
-//     const wrap = document.querySelector(".family_site_wrap");
-//     const btn = document.querySelector(".family_site");
 
-//     if (!wrap || !btn) return;
 
-//     btn.addEventListener("click", (e) => {
-//         e.stopPropagation();
-//         wrap.classList.toggle("is_open");
-//     });
+/* ── 메인 영상 슬라이더 (영상 2개 순환 재생 + 하단 진행 바, 표시 전용) ── */
+function initMainVideoSlider() {
+    const videos = document.querySelectorAll(".main_video");
+    const bars = document.querySelectorAll(".main_progress_bar i");
+    if (videos.length < 2) return;
 
-//     document.addEventListener("click", (e) => {
-//         if (!wrap.contains(e.target)) {
-//             wrap.classList.remove("is_open");
-//         }
-//     });
+    let current = 0;
 
-//     window.addEventListener("scroll", () => {
-//         wrap.classList.remove("is_open");
-//     });
-// }
+    function setProgress(index, ratio) {
+        if (bars[index]) bars[index].style.transform = `scaleX(${ratio})`;
+    }
 
-// initFamilySite();
+    function playVideo(index) {
+        videos.forEach((video, i) => {
+            video.classList.toggle("is_active", i === index);
+
+            if (i === index) {
+                video.currentTime = 0;
+                video.play();
+            } else {
+                video.pause();
+            }
+        });
+    }
+
+    // timeupdate는 브라우저마다 실행 간격이 들쭉날쭉해서 계단식으로 보임
+    // → requestAnimationFrame으로 매 프레임 진행률을 계산해 부드럽게 채움
+    function tick() {
+        const video = videos[current];
+
+        if (video && video.duration) {
+            setProgress(current, video.currentTime / video.duration);
+        }
+
+        requestAnimationFrame(tick);
+    }
+
+    videos.forEach((video, index) => {
+        video.addEventListener("ended", () => {
+            if (index !== current) return;
+
+            setProgress(index, 0);
+
+            current = (current + 1) % videos.length;
+            setProgress(current, 0);
+            playVideo(current);
+        });
+    });
+
+    playVideo(current);
+    tick();
+}
+
+initMainVideoSlider();
+
+
+
+
+
+
 
 
 /* ── 모바일 GNB 토글 ── */
@@ -428,7 +428,8 @@ function initSolutionOrbit() {
     gsap.set(orbitCards.map(item => item.card), {
         xPercent: -50,
         yPercent: -50,
-        opacity: 0
+        opacity: 0,
+        pointerEvents: "none" 
     });
 
     setActiveGroup(null);
@@ -503,12 +504,14 @@ function initSolutionOrbit() {
 
         tl.to(card, {
             opacity: 1,
+            pointerEvents: "auto",
             duration: 0.06,
             ease: "none"
         }, start);
 
         tl.to(card, {
             opacity: 0,
+            pointerEvents: "none", 
             duration: 0.06,
             ease: "none"
         }, start + cardDuration - 0.06);
@@ -1525,6 +1528,36 @@ function initNewsSlider() {
 }
 
 initNewsSlider();
+
+
+
+/* ── Footer Reveal (하단 고정 + 스크롤에 따라 공개) ── */
+(() => {
+    const footer = document.querySelector(".footer");
+    const spacer = document.querySelector(".footer_spacer");
+    if (!footer || !spacer) return;
+
+    const setFooterHeight = () => {
+        const height = footer.offsetHeight;
+        document.documentElement.style.setProperty("--footer-height", `${height}px`);
+        ScrollTrigger.refresh();
+    };
+
+    setFooterHeight();
+    window.addEventListener("load", setFooterHeight);
+    window.addEventListener("resize", setFooterHeight);
+
+    // footer_spacer가 화면에 실제로 들어왔을 때만 footer를 클릭 가능하게 전환
+    // (다른 곳에서 클릭이 새어 들어가는 걸 막기 위한 안전장치)
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            footer.classList.toggle("is_visible", entry.isIntersecting);
+        });
+    }, { threshold: 0 });
+
+    io.observe(spacer);
+})();
+
 
 
 
