@@ -49,6 +49,16 @@
     min-height: 100vh;
 }
 
+#main {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+
+#main>section {
+    pointer-events: auto;
+}
+
 section {
     padding-top: var(--section-gap);
 }
@@ -218,109 +228,6 @@ section {
     text-underline-offset: 0.4rem;
 }
 
-/* 
-.header_right {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-}
-
-.gnb_toggle {
-    display: none;
-    /* 모바일(mobile.css)에서 노출 
-}
-
-.family_site_wrap {
-    position: relative;
-}
-
-.family_site {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    width: 16rem;
-    height: 4.5rem;
-    padding: 0 2rem;
-    border: 0;
-    border-radius: 999px;
-    background: #333;
-    color: #fff;
-    font-size: 1.5rem;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.family_site span {
-    position: relative;
-    width: 1.6rem;
-    height: 1.6rem;
-}
-
-.family_site span::before,
-.family_site span::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 1rem;
-    height: 0.15rem;
-    border-radius: 999px;
-    background: #fff;
-    transition: transform 0.3s ease;
-}
-
-.family_site span::before {
-    left: 0;
-    transform: rotate(45deg);
-}
-
-.family_site span::after {
-    right: 0;
-    transform: rotate(-45deg);
-}
-
-.family_site_wrap.is_open .family_site span::before {
-    transform: rotate(-45deg);
-}
-
-.family_site_wrap.is_open .family_site span::after {
-    transform: rotate(45deg);
-}
-
-.family_site_list {
-    position: absolute;
-    top: calc(100% + 1.6rem);
-    right: 0;
-    z-index: 20;
-    width: 16rem;
-    padding: 1rem 0;
-    border-radius: 2rem;
-    background: #333;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-0.8rem);
-    transition: 0.3s ease;
-}
-
-.family_site_wrap.is_open .family_site_list {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.family_site_list a {
-    display: block;
-    padding: 1.2rem 2rem;
-    color: #fff;
-    font-size: 1.5rem;
-}
-
-.family_site_list a:hover {
-    color: #ff5a00;
-    font-weight: 800;
-} */
-
-
 
 
 
@@ -353,6 +260,8 @@ section {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease;
 }
 
 .main_video.is_active {
@@ -617,14 +526,12 @@ section {
 .scroll_guide {
     position: absolute;
     left: 50%;
-    bottom: 3.5rem;
+    bottom: 9rem;
     z-index: 20;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.8rem;
-
     transform: translateX(-50%);
     pointer-events: none;
 }
@@ -632,16 +539,13 @@ section {
 .main_bottom {
     position: absolute;
     left: 0;
-    bottom: 3.5rem;
+    bottom: 9rem;
     z-index: 20;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     width: 100%;
     padding: 0 12rem;
-
     font-size: 1.2rem;
     letter-spacing: 0.02em;
     color: rgba(255, 255, 255, 0.6);
@@ -660,6 +564,37 @@ section {
 
 .main_bottom a+a {
     margin-left: 0.6em;
+}
+
+.main_progress {
+    position: absolute;
+    left: 0;
+    bottom: 6rem;
+    z-index: 20;
+    display: flex;
+    gap: 0.8rem;
+    width: 100%;
+    padding: 0 12rem;
+}
+
+.main_progress_bar {
+    position: relative;
+    flex: 1 1 0;
+    height: 2px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.main_progress_bar i {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    height: 100%;
+    background: #fff;
 }
 
 .scroll_guide_text {
@@ -1038,11 +973,11 @@ section {
 /* Service → Solution */
 
 .curtain_gray {
-    background: #d3d3d3;
+    background: #C3C3C3;
 }
 
 .curtain_gray .stripe_item {
-    background: #fff;
+    background: #111;
 }
 
 
@@ -1155,6 +1090,7 @@ section {
     color: #fff;
     transform: translate(-50%, -50%);
     will-change: transform, opacity;
+    pointer-events: auto;
 }
 
 .solution_card_text {
@@ -1179,7 +1115,7 @@ section {
 .solution_card_text p:last-child {
     font-size: 1.8rem;
     line-height: 1.8;
-    color: rgba(255, 255, 255, 0.7);
+    color: #fff;
     font-weight: 100;
 }
 
@@ -1195,8 +1131,12 @@ section {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.solution_card:hover .solution_card_img img {
+    transform: scale(1.1);
+}
 
 
 .solution_deco {
@@ -1988,6 +1928,7 @@ section {
     gap: 2rem;
 }
 
+
 .news_label {
     font-size: 2.4rem;
     font-weight: 500;
@@ -2354,8 +2295,7 @@ section {
 
 .contact_cta_section {
     position: relative;
-    padding: 20rem 0;
-    background: #F8F8F8;
+    padding: 12rem 0 19rem;
 }
 
 .contact_cta_inner {
@@ -2368,20 +2308,19 @@ section {
 .contact_cta_title {
     margin-bottom: 5rem;
     font-family: "Big Shoulders", sans-serif;
-    font-size: 15rem;
+    font-size: 6.4rem;
     font-weight: 800;
     line-height: 0.9;
     letter-spacing: -0.04em;
-    color: #111;
+    color: #fff;
 }
 
 .contact_cta_desc {
-    margin-bottom: 6rem;
-
-    font-size: 2rem;
+    margin-bottom: 4rem;
+    font-size: 1.8rem;
     font-weight: 400;
     line-height: 1.8;
-    color: #666;
+    color: #fff;
 }
 
 .contact_cta_btn {
@@ -2389,18 +2328,14 @@ section {
     align-items: center;
     justify-content: center;
     gap: 1.2rem;
-
-    min-width: 20rem;
-    height: 6.4rem;
-
-    padding: 0 4rem;
-
+    min-width: 18rem;
+    height: 5rem;
+    /* padding: 0 4rem; */
     background: var(--color-primary);
     color: #fff;
     font-family: 'Paperozi';
-    font-size: 3rem;
+    font-size: 2.6rem;
     font-weight: 700;
-
     transition: all .35s ease;
 }
 
@@ -2411,12 +2346,14 @@ section {
 }
 
 .contact_cta_btn:hover {
-    background: #111;
+    background: #fff;
+    color: #333;
 }
 
 .contact_cta_btn:hover::after {
     transform: translateX(.6rem);
 }
+
 
 /* ===========================
     문의하기 팝업
@@ -2450,12 +2387,12 @@ section {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 128rem;
+    max-width: 126rem;
     max-height: 90vh;
     overflow-y: auto;
     background: var(--color-bg);
     border-radius: 2.4rem;
-    padding: 7rem;
+    padding: 6rem;
     transform: translateY(2.4rem);
     opacity: 0;
     transition: transform 0.4s ease, opacity 0.4s ease;
@@ -2748,117 +2685,292 @@ section {
 
 
 /* ===========================
-    Footer
+   Our Partners → Footer Reveal
+=========================== */
+
+/*
+    검은 푸터 높이만큼 문서 맨 아래 공간을 확보한다.
+    이 공간이 있어야 고정된 푸터 전체를 끝까지 볼 수 있다.
+*/
+
+
+#wrap {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    background: #fff;
+}
+
+
+/* Our Partners가 푸터보다 위에서 덮도록 설정 */
+.partner_section {
+    position: relative;
+    z-index: 2;
+    padding: 18rem 0 20rem;
+    overflow: hidden;
+    background: #fff;
+}
+
+
+
+/* footer가 fixed라 문서 흐름에서 빠지는 만큼, 그 자리를 대신 채워 스크롤 여유를 만든다.
+   높이 값(--footer-height)은 script.js가 footer의 실제 렌더링 높이를 재서 넣어준다. */
+.footer_spacer {
+    height: var(--footer-height, 0px);
+    pointer-events: none;
+}
+
+
+/* ===========================
+   Footer
 =========================== */
 
 .footer {
-    position: relative;
-    padding: 8rem 0 5rem;
-    background: #F8F8F8;
-    color: #111;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 0;
+    width: 100%;
+    height: auto;
+    padding: 0;
+    overflow: hidden;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.38),
+            rgba(0, 0, 0, 0.38)),
+        url("../img/footer_bg.jpg") center / cover no-repeat,
+        #080808;
+    color: #fff;
+    pointer-events: none;
+}
+
+.footer.is_visible {
+    pointer-events: auto;
 }
 
 .footer_inner {
-    max-width: calc(100% - 16rem);
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: none;
+    height: 100%;
+
     margin: 0 auto;
+    padding: 0 7.2rem 4rem;
 }
+
+
+/* ===========================
+   Footer Contact CTA
+=========================== */
+
+.footer_cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    flex: 1;
+    min-height: 38rem;
+
+    text-align: center;
+}
+
+.footer_cta_title {
+    margin-bottom: 2.8rem;
+
+    font-family: "Big Shoulders", sans-serif;
+    font-size: 6.4rem;
+    line-height: 1;
+    font-weight: 700;
+
+    color: #fff;
+}
+
+.footer_cta_desc {
+    margin-bottom: 3.6rem;
+
+    font-size: 1.6rem;
+    line-height: 1.8;
+
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.footer_cta_btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 17rem;
+    height: 5.6rem;
+    padding: 0 3.2rem;
+
+    background: var(--color-primary);
+
+    font-family: "Paperozi", sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease;
+}
+
+.footer_cta_btn:hover {
+    background: #fff;
+    color: #111;
+    transform: translateY(-0.4rem);
+}
+
+
+/* ===========================
+   Footer Information
+=========================== */
 
 .footer_top {
     display: grid;
-    grid-template-columns: 28rem 28rem 1fr 22rem;
+    grid-template-columns:
+        minmax(28rem, 1.5fr) minmax(20rem, 0.75fr) minmax(34rem, 1.1fr) minmax(16rem, 0.55fr);
     gap: 5.6rem;
     align-items: center;
-    padding-bottom: 6rem;
+    padding: 0 0 5rem;
 }
 
 .footer_brand,
 .footer_contact {
-    min-height: 16rem;
-    border-right: 1px solid #111;
+    min-height: 14rem;
+    padding-right: 5rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.footer_logo {
+    display: block;
+    width: 100%;
+    max-width: 40rem;
 }
 
 .footer_logo img {
-    width: 13rem;
+    display: block;
+    width: 100%;
+
+    /*
+        현재 logo_black.svg가 검은색 로고라면
+        검은 푸터에서 흰색으로 보이게 처리
+    */
+    filter: brightness(0) invert(1);
 }
 
 .footer_sns {
     display: flex;
-    gap: 2rem;
-    margin-top: 5.6rem;
+    justify-content: flex-end;
+    gap: 1.8rem;
+
+    margin-top: 3rem;
 }
 
 .footer_sns a {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 5.6rem;
-    height: 5.6rem;
-    border: 1px solid #111;
+    width: 4.8rem;
+    height: 4.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.75);
     border-radius: 50%;
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.footer_sns a:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 .footer_sns img {
-    width: 2.8rem;
-    height: 2.5rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
 }
 
 .footer_title {
-    font-family: "Big Shoulders", sans-serif;
     margin-bottom: 2.4rem;
-    font-size: 2rem;
-    font-weight: 600;
+
+    font-family: "Big Shoulders", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+
+    color: #fff;
 }
 
 .footer_contact_list li {
     display: flex;
-    gap: 2rem;
-    margin-top: 2rem;
-    font-size: 1.8rem;
+    gap: 1.6rem;
+    margin-top: 1.6rem;
+    font-size: 1.6rem;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .footer_contact_list li span:first-child {
-    width: 2rem;
+    width: 1.6rem;
+    flex-shrink: 0;
 }
 
 .footer_address {
-    font-size: 1.8rem;
-    line-height: 1.9;
+    font-size: 1.6rem;
+    line-height: 1.85;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.footer_address p+p {
+    margin-top: 0.8rem;
 }
 
 .footer_download {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
 }
 
 .footer_download_btn {
     display: inline-flex;
     align-items: center;
-    gap: 1.2rem;
-    height: 5.2rem;
-    padding: 0 2.8rem;
-    border-radius: 999px;
+    gap: 1rem;
+    height: 4.5rem;
+    padding: 0 2rem;
     background: var(--color-primary);
+    font-size: 1.6rem;
+    font-weight: 500;
     color: #fff;
-    font-size: 1.8rem;
-    font-weight: 600;
 }
+
+
+/* ===========================
+   Footer Bottom
+=========================== */
 
 .footer_bottom {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding-top: 4rem;
-    border-top: 1px solid #111;
+    justify-content: space-between;
+
+    padding-top: 3.2rem;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.55);
 }
 
 .footer_copy,
 .footer_policy {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .footer_policy {
     display: flex;
-    gap: 1.6rem;
+    align-items: center;
+    gap: 1.4rem;
 }
 
 
