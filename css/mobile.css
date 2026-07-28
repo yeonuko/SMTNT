@@ -1,16 +1,1718 @@
 @charset "utf-8";
 
-/* 작은 모바일 */
-@media (max-width: 360px) {
- 
+/* ==========================================================
+   1440px 이하
+========================================================== */
+@media (max-width: 1440px) {
+    :root {
+        --grid-margin: 8rem;
+    }
+
+    .gnb_link {
+        font-size: 1.8rem;
+    }
+
+    .gnb_item {
+        min-width: 7rem;
+    }
+
+    .main_intro {
+        position: relative;
+        height: auto;
+        min-height: 100vh;
+        padding: 12rem 4rem;
+        overflow: visible;
+    }
+
+    .main_intro_label {
+        position: static;
+        display: block;
+        margin-bottom: 6rem;
+    }
+
+    .main_intro_message {
+        position: static;
+        margin-bottom: 10rem;
+    }
+
+    .main_intro_text {
+        position: static;
+        margin-bottom: 8rem;
+    }
+
+    .main_intro_title {
+        font-size: 5rem;
+        line-height: 1.25;
+        white-space: normal;
+        overflow-wrap: break-word;
+    }
+
+    .main_intro_title br {
+        display: none;
+    }
+
+    .main_intro_title span,
+    .main_intro_title em {
+        display: inline;
+        white-space: normal;
+    }
+
+    .main_intro_desc {
+        position: static;
+        width: auto;
+        margin: 0;
+    }
+
+    .main_intro_desc_left,
+    .main_intro_desc_right {
+        left: auto;
+        right: auto;
+        transform: none;
+    }
+
+    .main_intro_desc_right {
+        padding-top: 4rem;
+    }
+
+    .main_intro_line {
+        display: none;
+    }
 }
 
-/* 일반 모바일 */
+
+/* ==========================================================
+   태블릿 + 모바일 공통
+   1199px 이하
+========================================================== */
+@media (max-width: 1199px) {
+    :root {
+        --grid-margin: 5rem;
+        --grid-gap: 2rem;
+        --section-gap: 14rem;
+
+        --fs_h1: 4.8rem;
+        --lh_h1: 6rem;
+
+        --fs_h2: 3.2rem;
+        --lh_h2: 4.4rem;
+
+        --fs_h3: 2.2rem;
+        --lh_h3: 3.2rem;
+
+        --fs_body: 1.7rem;
+        --lh_body: 2.8rem;
+
+        --fs_caption: 1.3rem;
+        --lh_caption: 2rem;
+    }
+
+    html,
+    body {
+        overflow-x: clip;
+    }
+
+    /* =========================
+       Header
+    ========================= */
+    #header {
+        height: 6.4rem;
+    }
+
+    .header_inner {
+        padding: 0 var(--grid-margin);
+    }
+
+    .header_logo {
+        width: 8rem;
+    }
+
+    .gnb_toggle {
+        display: flex;
+    }
+
+    .gnb {
+        position: fixed;
+        top: 6.4rem;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 6.4rem);
+        overflow-y: auto;
+        background: rgba(0, 0, 0, 0.95);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: none;
+        transition:
+            opacity 0.3s ease,
+            visibility 0.3s ease;
+    }
+
+    #header.menu_open .gnb {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .gnb_list {
+        flex-direction: column;
+        gap: 0;
+        height: auto;
+        padding: 3.2rem var(--grid-margin);
+    }
+
+    .gnb_item {
+        height: auto;
+        min-width: 0;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .gnb_link {
+        display: block;
+        width: 100%;
+        height: auto;
+        padding: 1.8rem 0;
+        font-size: 2.4rem;
+    }
+
+    .gnb_link::after {
+        display: none;
+    }
+
+    .gnb_depth {
+        position: static;
+        display: none;
+        width: 100%;
+        padding: 0 0 1.6rem;
+        background: none;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+    }
+
+    .gnb_item.is_open .gnb_depth {
+        display: block;
+    }
+
+    /* =========================
+       Main visual
+    ========================= */
+    .main_visual {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        height: auto;
+        min-height: 200vh;
+        overflow: visible;
+    }
+
+    .main_bg {
+        position: sticky;
+        top: 0;
+        height: 100svh;
+        grid-area: 1 / 1;
+    }
+
+    .main_inner {
+        position: relative;
+        z-index: 2;
+        grid-area: 1 / 1;
+        margin-top: 0;
+        transform: none;
+    }
+
+    .main_copy {
+        position: relative;
+        min-height: 100svh;
+    }
+
+    .main_meta,
+    .main_bottom,
+    .main_progress {
+        display: none;
+    }
+
+    .main_desc {
+        margin-top: 2rem;
+    }
+
+    /* =========================
+       Main intro
+    ========================= */
+    .main_intro {
+        display: flex;
+        flex-direction: column;
+        gap: 2.4rem;
+        height: auto;
+        min-height: 100vh;
+        padding: 9rem var(--grid-margin) 6rem;
+    }
+
+    .main_intro_message,
+    .main_intro_text,
+    .main_intro_desc {
+        position: static;
+        top: auto;
+        right: auto;
+        bottom: auto;
+        left: auto;
+        width: auto;
+        transform: none;
+    }
+
+    .main_intro_title em {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .main_intro_line {
+        display: none;
+    }
+
+    /* =========================
+       Vision
+    ========================= */
+    .vision_section {
+        position: relative;
+        z-index: 3;
+        background: #fff;
+    }
+
+    .vision_inner {
+        display: block;
+        padding: 0 var(--grid-margin);
+    }
+
+    .vision_sticky {
+        position: static;
+        display: block;
+        height: auto;
+        margin-bottom: 8rem;
+    }
+
+    .vision_scroll {
+        padding: 0 0 14rem;
+    }
+
+    .vision_block {
+        margin-bottom: 10rem;
+    }
+
+    .vision_keyword_list {
+        margin-top: 10rem;
+    }
+
+    .vision_text {
+        font-size: 2rem;
+        line-height: 3.4rem;
+    }
+
+    /* =========================
+       Solution
+    ========================= */
+    .solution_section {
+        height: auto;
+        min-height: 0;
+        padding: 12rem 0;
+    }
+
+    .solution_inner {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .solution_center,
+    .solution_deco,
+    .solution_orbit_left,
+    .solution_orbit_right {
+        display: none;
+    }
+
+    .solution_mobile {
+        display: block;
+        width: auto;
+        margin-inline: -2rem;
+        padding: 8rem 4rem 8rem;
+        background: #0f172a;
+    }
+
+    .solution_mobile_group {
+        width: 100%;
+        margin-bottom: 10rem;
+    }
+
+    .solution_mobile_group:last-child {
+        margin-bottom: 0;
+    }
+
+    .solution_mobile_title {
+        font-family: "Big Shoulders", sans-serif;
+        font-size: 6rem;
+        line-height: 0.9;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        color: #fff;
+    }
+
+    .solution_mobile_slider {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        touch-action: pan-y;
+    }
+
+    .solution_mobile_slider .swiper-wrapper {
+        display: flex;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .solution_mobile_slider .swiper-slide {
+        position: relative;
+        flex-shrink: 0;
+        width: min(43rem, calc(100vw - 4rem));
+        height: auto;
+    }
+
+    .solution_mobile_slider .solution_card {
+        position: relative;
+        top: auto;
+        left: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        min-height: 28rem;
+        padding: 2.4rem;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: none !important;
+    }
+
+    .solution_mobile_slider .solution_card_text {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .solution_mobile_slider .solution_card h3 {
+        min-height: 5.8rem;
+        margin-bottom: 2rem;
+        font-size: 2.2rem;
+        line-height: 1.3;
+    }
+
+    .solution_mobile_slider .solution_card_text>p:last-child {
+        font-size: 1.5rem;
+        line-height: 1.7;
+    }
+
+    .solution_mobile_head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        margin-bottom: 2.4rem;
+    }
+
+    .solution_mobile_pagination {
+        position: static;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.8rem;
+        width: auto;
+    }
+
+    .solution_mobile_pagination .swiper-pagination-bullet {
+        width: 0.8rem;
+        height: 0.8rem;
+        margin: 0 !important;
+        border-radius: 50%;
+        background: #c5c5c5;
+        opacity: 1;
+    }
+
+    .solution_mobile_pagination .swiper-pagination-bullet-active {
+        width: 2.4rem;
+        border-radius: 999px;
+        background: var(--color-primary);
+
+    }
+
+
+
+
+    /* =========================
+       Business Performance (베지어 패스+핀 연출 → 세로 스택 + 대각선 진입)
+    ========================= */
+    .performance_section {
+        height: auto;
+        padding: var(--section-gap) var(--grid-margin);
+        overflow: visible;
+    }
+
+    .performance_inner {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+    }
+
+    .performance_center {
+        position: static;
+        width: 100%;
+        margin-bottom: 6rem;
+        transform: none;
+    }
+
+    .performance_title {
+        font-size: 10rem;
+    }
+
+    .performance_line,
+    .performance_path_area {
+        display: none;
+    }
+
+    .performance_motion {
+        position: static;
+        width: min(60rem, 90%);
+        margin: 0 auto;
+    }
+
+    .performance_card_list {
+        position: static;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4.4rem;
+        width: 100%;
+        height: auto;
+    }
+
+    .performance_card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 32rem;
+        height: auto;
+        padding: 4rem 3.2rem;
+        opacity: 1;
+        transform: none;
+    }
+
+    .performance_img {
+        position: static;
+        width: 8rem;
+        margin-top: 3.2rem;
+    }
+
+    .performance_card:nth-child(odd) {
+        margin-right: auto;
+        margin-left: 0;
+    }
+
+    .performance_card:nth-child(even) {
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+
+
+
+
+    /* =========================
+       Keyword (PC 겹침+핀 연출 → 세로 스택 + fade-up)
+    ========================= */
+    .keyword_section {
+        height: auto;
+        padding: var(--section-gap) var(--grid-margin);
+        overflow: visible;
+    }
+
+    .keyword_inner {
+        display: flex;
+        flex-direction: column;
+        gap: 16rem;
+        width: 100%;
+        height: auto;
+    }
+
+    .keyword_item {
+        position: static;
+        width: 100%;
+        height: auto;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .keyword_pin {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 40vh;
+        height: auto;
+        text-align: center;
+    }
+
+    .keyword_title {
+        position: static;
+        width: 100%;
+        height: auto;
+        margin-bottom: 3.2rem;
+        transform: none;
+    }
+
+    /* 좌우/상하로 겹쳐 갈라지던 복제본은 하나만 온전하게 노출 */
+    .keyword_title span {
+        position: static;
+        width: min(50rem, 60vw);
+        margin: 0 auto;
+        transform: none;
+        overflow: visible;
+    }
+
+    .keyword_right,
+    .keyword_bottom {
+        display: none !important;
+    }
+
+    .keyword_left,
+    .keyword_top {
+        clip-path: none !important;
+    }
+
+    .keyword_desc {
+        position: static;
+        width: 100%;
+        transform: none;
+        opacity: 1;
+        font-size: 2.6rem;
+        line-height: 3.8rem;
+    }
+
+    .keyword_motion_line {
+        display: none;
+    }
+
+
+    /* =========================
+    scatter_section (PC 겹침+핀 연출 → 세로 스택 + fade-up)
+    ========================= */
+
+    .scatter_section {
+        height: 150vh;
+    }
+
+    /* 초기 흩어진 위치 */
+
+
+    .scatter_your {
+        left: 28%;
+    }
+
+    .scatter_business {
+        right: 27%;
+    }
+
+    .scatter_messaging {
+        left: 22%;
+    }
+
+    .scatter_to {
+        left: 34%;
+    }
+
+    .scatter_design {
+        right: 28%;
+    }
+
+    .scatter_and {
+        left: 25%;
+    }
+
+    .scatter_ai {
+        right: 54%;
+    }
+
+
+
+    /* =========================
+   Process
+   PC 가로 타임라인 → 모바일 세로 타임라인
+========================= */
+
+    .process_section {
+        height: auto;
+        min-height: 0;
+        padding: var(--section-gap) var(--grid-margin);
+        overflow: visible;
+    }
+
+    .process_inner {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+    }
+
+    .process_head {
+        padding-bottom: 8rem;
+        text-align: left;
+    }
+
+    .process_title {
+        margin-bottom: 2rem;
+    }
+
+    .process_desc {
+        color: rgba(255, 255, 255, 0.65);
+    }
+
+    /* PC용 가로 타임라인 숨김 */
+    .process_timeline {
+        display: none;
+    }
+
+    /* 모바일 세로 타임라인 표시 */
+    .process_mobile {
+        display: block;
+        width: 100%;
+    }
+
+    .process_mobile_list {
+        position: relative;
+        width: 100%;
+    }
+
+    /* 왼쪽 세로 연결선 */
+    .process_mobile_list::before {
+        content: "";
+        position: absolute;
+        top: 2.8rem;
+        bottom: 2.8rem;
+        left: 2.8rem;
+        width: 1px;
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .process_mobile_item {
+        position: relative;
+        display: grid;
+        grid-template-columns: 5.6rem minmax(0, 1fr);
+        column-gap: 2.8rem;
+        min-height: 17rem;
+        padding-bottom: 5rem;
+    }
+
+    .process_mobile_item:last-child {
+        min-height: 0;
+        padding-bottom: 0;
+    }
+
+    /* 숫자가 들어가는 원 */
+    .process_mobile_marker {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 5.6rem;
+        height: 5.6rem;
+        border: 1px solid rgba(255, 98, 0, 0.8);
+        border-radius: 50%;
+        background: #111111;
+    }
+
+    .process_mobile_num {
+        font-family: "Big Shoulders", sans-serif;
+        font-size: 2rem;
+        line-height: 1;
+        font-weight: 700;
+        color: var(--color-primary);
+    }
+
+    .process_mobile_content {
+        min-width: 0;
+        padding-top: 0.4rem;
+    }
+
+    .process_mobile_name {
+        margin-bottom: 1.6rem;
+        font-size: 2.4rem;
+        line-height: 1.4;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        color: #ffffff;
+    }
+
+    .process_mobile_text {
+        font-size: 1.6rem;
+        line-height: 1.8;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.55);
+    }
+
+    .process_mobile_text br {
+        display: none;
+    }
+
+
+    /* ===========================
+    News
+=========================== */
+
+    .news_inner {
+        width: calc(100% - 6rem);
+    }
+
+
+
+
+    /* =========================
+   Our Partners
+========================= */
+
+    .partner_section {
+        padding: 12rem 0 14rem;
+    }
+
+    .partner_head {
+        margin-bottom: 7rem;
+    }
+
+    .partner_title {
+        margin-bottom: 0;
+        font-size: 5.2rem;
+    }
+
+    .partner_pc {
+        display: none;
+    }
+
+    .partner_mobile {
+        display: block;
+    }
+
+    .partner_mobile .partner_marquee+.partner_marquee {
+        margin-top: 4rem;
+    }
+
+    .partner_mobile .partner_group {
+        gap: 5rem;
+        padding-right: 5rem;
+    }
+
+    .partner_mobile .partner_group img {
+        height: 2.4rem;
+        max-width: 13rem;
+    }
+
+    .partner_mobile .partner_marquee::before,
+    .partner_mobile .partner_marquee::after {
+        width: 8rem;
+    }
+
+    /* 첫째 줄 */
+    .partner_marquee_row_01 .partner_track_l {
+        animation: partner_marquee_left 25s linear infinite;
+    }
+
+    /* 둘째 줄 */
+    .partner_marquee_row_02 .partner_track_l {
+        animation: partner_marquee_left 29s linear infinite reverse;
+    }
+
+
+    .footer {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        z-index: 1;
+        width: 100%;
+        pointer-events: auto;
+    }
+
+    .footer_spacer {
+        display: none;
+    }
+
+    .contact_cta_title {
+        font-size: 5.2rem;
+    }
+
+    .footer_logo {
+        max-width: 18rem;
+    }
+
+
+
+    /* =========================
+   문의하기 팝업
+========================= */
+
+    .contact_popup {
+        align-items: center;
+        padding: 3rem var(--grid-margin);
+    }
+
+    .contact_popup_panel {
+        width: 100%;
+        max-width: 72rem;
+        max-height: calc(100dvh - 6rem);
+        padding: 5rem 4rem;
+        border-radius: 2rem;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .contact_popup_inner {
+        width: 100%;
+    }
+
+    .contact_popup_close {
+        top: 2rem;
+        right: 2rem;
+        width: 4.4rem;
+        height: 4.4rem;
+    }
+
+    .contact_popup_close span {
+        width: 2.2rem;
+    }
+
+    .contact_popup_head {
+        margin-bottom: 4rem;
+    }
+
+    .contact_popup_title {
+        margin-bottom: 0;
+        font-size: 5rem;
+        line-height: 1;
+    }
+
+    .contact_form {
+        width: 100%;
+    }
+
+    .contact_field {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .contact_field_label {
+        margin-bottom: 1.2rem;
+        padding-left: 0;
+        font-size: 1.5rem;
+    }
+
+    /* PC 가로 배열 → 태블릿부터 1열 */
+    .contact_row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .contact_row .contact_field {
+        width: 100%;
+    }
+
+    /* 서비스 버튼은 화면에 맞춰 자연스럽게 줄바꿈 */
+    .contact_tag_list {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.8rem;
+        width: 100%;
+    }
+
+    .contact_tag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        min-height: 4.2rem;
+        padding: 0 0.3rem;
+        box-sizing: border-box;
+        font-size: 1.2rem;
+        line-height: 1.2;
+        white-space: nowrap;
+        text-align: center;
+        border-radius: 10rem;
+        flex: initial;
+    }
+
+    /* 인풋 공통 */
+    .contact_field input[type="text"],
+    .contact_field textarea,
+    .contact_email_domain select {
+        font-size: 1.6rem;
+    }
+
+    .contact_field input[type="text"],
+    .contact_email_domain select {
+        height: 5.2rem;
+        padding: 0 1.6rem;
+    }
+
+    .contact_field textarea {
+        min-height: 16rem;
+        height: 16rem;
+        padding: 1.6rem;
+        line-height: 1.6;
+        resize: vertical;
+    }
+
+    /* 이메일 */
+    .contact_email_wrap {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .contact_email_wrap>input {
+        min-width: 0;
+    }
+
+    .contact_email_at {
+        flex-shrink: 0;
+        font-size: 1.6rem;
+    }
+
+    .contact_email_domain {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .contact_email_domain::after {
+        right: 1.6rem;
+    }
+
+    .contact_field:last-of-type {
+        margin-bottom: 2rem;
+    }
+
+    /* 하단 */
+    .contact_bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2.4rem;
+        width: 100%;
+    }
+
+    .contact_agree {
+        width: 100%;
+        font-size: 1.5rem;
+        line-height: 1.5;
+    }
+
+    .contact_agree_box {
+        width: 2.2rem;
+        height: 2.2rem;
+    }
+
+    .contact_submit_btn {
+        width: 100%;
+        height: 5.6rem;
+        padding: 0 2rem;
+        border-radius: 1.2rem;
+        font-size: 1.6rem;
+    }
+
+
+
+
+
+
+    /* =========================
+       모바일에서 숨길 PC 전용 섹션
+    ========================= */
+    .curtain_section {
+        display: none;
+    }
+
+    .footer {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        z-index: 1;
+        width: 100%;
+    }
+
+    .footer_spacer {
+        display: none;
+    }
+
+    .footer_inner {
+        width: 100%;
+        padding: 0 var(--grid-margin) 3rem;
+    }
+
+    .footer_top {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4rem;
+        padding-bottom: 4rem;
+    }
+
+    .footer_brand,
+    .footer_contact {
+        min-height: 0;
+        padding-right: 0;
+        padding-bottom: 4rem;
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .footer_download {
+        align-items: flex-start;
+    }
+
+    .footer_sns {
+        justify-content: flex-start;
+    }
+
+    .footer_bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2rem;
+    }
+
+    .footer_policy {
+        flex-wrap: wrap;
+    }
+
+
+}
+
+
+/* ==========================================================
+   모바일
+   767px 이하
+========================================================== */
+@media (max-width: 767px) {
+    :root {
+        --grid-margin: 2rem;
+        --grid-gap: 1.6rem;
+        --section-gap: 9rem;
+
+        --fs_h1: 3.6rem;
+        --lh_h1: 4.6rem;
+
+        --fs_h2: 2.6rem;
+        --lh_h2: 3.6rem;
+
+        --fs_h3: 2rem;
+        --lh_h3: 3rem;
+
+        --fs_body: 1.6rem;
+        --lh_body: 2.6rem;
+
+        --fs_caption: 1.3rem;
+        --lh_caption: 2rem;
+    }
+
+    /* =========================
+       Main
+    ========================= */
+    .main_desc {
+        margin-top: 4.6rem;
+    }
+
+    .main_intro {
+        padding: 10rem var(--grid-margin);
+    }
+
+    .main_intro_label {
+        margin-bottom: 4rem;
+    }
+
+    .main_intro_message {
+        margin-bottom: 7rem;
+        line-height: 1.6;
+    }
+
+    .main_intro_text {
+        margin-bottom: 6rem;
+    }
+
+    .main_intro_title {
+        font-size: 3.4rem;
+        line-height: 1.3;
+    }
+
+    .main_intro_desc {
+        font-size: 1.5rem;
+        line-height: 1.7;
+    }
+
+    .main_intro_desc br {
+        display: none;
+    }
+
+    .main_intro_desc_left {
+        margin-bottom: 0;
+    }
+
+    .main_intro_desc_right {
+        margin-top: 0;
+        text-align: left;
+    }
+
+    /* =========================
+       Vision
+    ========================= */
+    .vision_section br {
+        display: none;
+    }
+
+    .vision_text {
+        font-size: 1.8rem;
+        line-height: 3rem;
+    }
+
+    /* =========================
+       Solution
+    ========================= */
+
+    .solution_section {
+        padding: 9rem 0;
+    }
+
+    .solution_inner {
+        padding: 0 var(--grid-margin);
+    }
+
+    .solution_mobile {
+        margin-inline: -2rem;
+        padding: 8rem 2rem 8rem;
+    }
+
+    .solution_mobile_group {
+        margin-bottom: 8rem;
+    }
+
+    .solution_mobile_title {
+        margin-bottom: 2.4rem;
+        font-size: 5.6rem;
+    }
+
+    .solution_mobile_slider .solution_card {
+        min-height: 28rem;
+        padding: 2.4rem;
+    }
+
+    .vision_scroll {
+        padding: 0 0 4rem;
+    }
+
+
+
+
+
+
+
+    /* =========================
+       Business Performance
+    ========================= */
+
+    .performance_title {
+        font-size: 8rem;
+    }
+
+    .performance_card_list {
+        align-items: stretch;
+    }
+
+    .performance_card {
+        max-width: 36rem;
+    }
+
+
+
+    /* =========================
+       Keyword
+    ========================= */
+    .keyword_inner {
+        gap: 12rem;
+    }
+
+    .keyword_title span {
+        width: min(30rem, 70vw);
+    }
+
+    .keyword_desc {
+        font-size: 2rem;
+        line-height: 3rem;
+    }
+
+
+
+
+
+    .scatter_word {
+        font-size: 4.8rem;
+    }
+
+    /* 초기 흩어진 위치 */
+    .scatter_connecting {
+        top: 12%;
+        left: 13%;
+        color: #999999;
+    }
+
+    .scatter_your {
+        top: 4%;
+        left: 50%;
+        color: #8d8d8d;
+    }
+
+    .scatter_business {
+        top: 16%;
+        right: 5%;
+        color: #828282;
+    }
+
+    .scatter_from {
+        top: 42%;
+        left: 0%;
+        color: #777777;
+    }
+
+    .scatter_messaging {
+        top: 54%;
+        left: 31%;
+        color: #666666;
+    }
+
+    .scatter_to {
+        top: 42%;
+        left: 61%;
+        color: #555555;
+    }
+
+    .scatter_design {
+        top: 44%;
+        right: 7%;
+        color: #444444;
+    }
+
+    .scatter_development {
+        bottom: 18%;
+        left: 7%;
+        color: #333333;
+    }
+
+    .scatter_and {
+        bottom: 18%;
+        left: 57%;
+        color: #2a2a2a;
+    }
+
+    .scatter_ai {
+        bottom: 25%;
+        right: 16%;
+        color: #222222;
+    }
+
+    /* =========================
+   Process
+========================= */
+
+    .process_section {
+        padding: 10rem var(--grid-margin);
+    }
+
+    .process_head {
+        padding-bottom: 6rem;
+    }
+
+    .process_title {
+        max-width: 28rem;
+    }
+
+    .process_desc {
+        max-width: 28rem;
+    }
+
+    .process_mobile_list::before {
+        top: 2.4rem;
+        bottom: 2.4rem;
+        left: 2.4rem;
+    }
+
+    .process_mobile_item {
+        grid-template-columns: 4.8rem minmax(0, 1fr);
+        column-gap: 2rem;
+        min-height: 15rem;
+        padding-bottom: 4rem;
+    }
+
+    .process_mobile_marker {
+        width: 4.8rem;
+        height: 4.8rem;
+    }
+
+    .process_mobile_num {
+        font-size: 1.8rem;
+    }
+
+    .process_mobile_content {
+        padding-top: 0.2rem;
+    }
+
+    .process_mobile_name {
+        margin-bottom: 1.2rem;
+        font-size: 2rem;
+        line-height: 1.45;
+    }
+
+    .process_mobile_text {
+        font-size: 1.5rem;
+        line-height: 1.75;
+    }
+
+
+
+
+    /* ===========================
+    News
+=========================== */
+
+
+    .news_control {
+        gap: 1rem;
+    }
+
+    .news_prev,
+    .news_next {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .news_fraction {
+        min-width: 7rem;
+        font-size: 2rem;
+    }
+
+    .news_meta {
+        font-size: 1.2rem;
+    }
+
+    .news_name {
+        min-height: 6rem;
+        font-size: 1.5rem;
+    }
+
+    .news_more {
+        font-size: 1.2rem;
+    }
+
+
+    /* =========================
+   Our Partners
+========================= */
+    .partner_section {
+        padding: 9rem 0 11rem;
+    }
+
+    .partner_head {
+        margin-bottom: 5rem;
+    }
+
+    .partner_title {
+        font-size: 4.4rem;
+    }
+
+    .partner_mobile .partner_marquee+.partner_marquee {
+        margin-top: 3.2rem;
+    }
+
+    .partner_mobile .partner_group {
+        gap: 3.6rem;
+        padding-right: 3.6rem;
+    }
+
+    .partner_mobile .partner_group img {
+        height: 2rem;
+        max-width: 10rem;
+    }
+
+    .partner_mobile .partner_marquee::before,
+    .partner_mobile .partner_marquee::after {
+        width: 4rem;
+    }
+
+    .partner_marquee_row_01 .partner_track_l {
+        animation-duration: 22s;
+    }
+
+    .partner_marquee_row_02 .partner_track_l {
+        animation-duration: 26s;
+    }
+
+
+
+    /* =========================
+   문의하기 팝업
+========================= */
+
+    .contact_popup {
+        display: block;
+        padding: 0;
+        background: var(--color-bg);
+    }
+
+    .contact_popup_dim {
+        display: none;
+    }
+
+    .contact_popup_panel {
+        width: 100%;
+        max-width: none;
+        height: 100dvh;
+        max-height: none;
+        padding:
+            max(7.2rem, env(safe-area-inset-top)) 2rem max(3rem, env(safe-area-inset-bottom));
+        border-radius: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        transform: translateY(100%);
+    }
+
+    .contact_popup.is_active .contact_popup_panel {
+        transform: translateY(0);
+    }
+
+    .contact_popup_close {
+        position: fixed;
+        top: max(1.4rem, env(safe-area-inset-top));
+        right: 1.2rem;
+        z-index: 10;
+        width: 4.8rem;
+        height: 4.8rem;
+        border-radius: 50%;
+        background: rgba(248, 248, 248, 0.92);
+    }
+
+    .contact_popup_head {
+        margin-bottom: 3.6rem;
+        padding-right: 4rem;
+        text-align: left;
+    }
+
+    .contact_popup_title {
+        font-size: 4.4rem;
+        line-height: 1;
+    }
+
+    .contact_field {
+        margin-bottom: 3.2rem;
+    }
+
+    .contact_field_label {
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+    }
+
+    .contact_tag:last-child {
+        font-size: 1.05rem;
+        letter-spacing: -0.05rem;
+    }
+
+    /* 모바일 입력 높이 */
+    .contact_field input[type="text"],
+    .contact_email_domain select {
+        height: 5.2rem;
+        padding: 0 1.4rem;
+        border-radius: 1rem;
+    }
+
+    /* 이메일은 모바일에서도 한 줄 유지 */
+    .contact_email_wrap {
+        grid-template-columns: minmax(0, 1fr) 1.6rem minmax(0, 1fr);
+        gap: 0.6rem;
+    }
+
+    .contact_email_at {
+        text-align: center;
+        font-size: 1.4rem;
+    }
+
+    .contact_email_domain::after {
+        right: 1.4rem;
+        width: 0.8rem;
+        height: 0.8rem;
+    }
+
+    .contact_field textarea {
+        min-height: 10rem;
+        height: 10rem;
+        border-radius: 1rem;
+    }
+
+    .contact_agree {
+        align-items: flex-start;
+        gap: 1rem;
+        font-size: 1.3rem;
+    }
+
+    .contact_agree_box {
+        margin-top: 0.1rem;
+    }
+
+    .contact_submit_btn {
+        height: 5.6rem;
+        border-radius: 1rem;
+    }
+
+}
+
+
+/* ==========================================================
+   일반 모바일
+   361px ~ 480pxs
+========================================================== */
 @media (min-width: 361px) and (max-width: 480px) {
+    .main_desc {
+        margin-top: 8rem;
+    }
+
+    .vision_text {
+        font-size: 1.6rem;
+        line-height: 2.8rem;
+    }
+
+    .solution_mobile_title {
+        margin-bottom: 0;
+        font-size: 3.6rem;
+    }
+
+    .solution_mobile_slider .solution_card {
+        min-height: 28rem;
+        padding: 2.4rem;
+    }
+
+    .solution_category {
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .solution_mobile_slider .solution_card {
+        gap: 0;
+    }
+
+    .solution_mobile_slider .solution_card h3 {
+        min-height: 0;
+        margin-bottom: 2rem;
+        font-size: 2rem;
+        line-height: 1.3;
+    }
+
+    .solution_mobile_slider .solution_card_text>p:last-child {
+        font-size: 1.3rem;
+    }
+
+    .solution_card_img {
+        width: 17rem;
+        height: 22rem;
+        border-radius: 1.6rem;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .keyword_desc {
+        font-size: 1.8rem;
+    }
+
+
+
+    .scatter_word {
+        font-size: 3rem;
+    }
+
+    .contact_popup_title {
+        font-size: 3.2rem;
+    }
 
 }
 
-/* 태블릿 이상 */
-@media (min-width: 768px) {
 
+
+/* ==========================================================
+   작은 모바일
+   360px 이하
+========================================================== */
+@media (max-width: 360px) {
+    .solution_mobile_title {
+        font-size: 3.6rem;
+    }
+
+    .solution_mobile_slider br {
+        display: none;
+    }
+
+    .solution_mobile_head {
+        margin-bottom: 0;
+    }
+
+    .solution_mobile_slider .solution_card {
+        min-height: 26rem;
+        padding: 2rem;
+    }
+
+    .solution_mobile_slider .solution_card h3 {
+        min-height: 0;
+        margin-bottom: 2rem;
+        font-size: 1.8rem;
+        line-height: 1.3;
+    }
+
+    .solution_category {
+        margin-bottom: .8rem;
+        font-size: 1rem;
+        color: #fff;
+        font-weight: 400;
+    }
+
+    .solution_mobile_slider .solution_card_text>p:last-child {
+        font-size: 1.2rem;
+    }
+
+    .solution_card_img {
+        width: 14rem;
+        height: 20rem;
+    }
+
+
+
+    .contact_email_wrap {
+        grid-template-columns: minmax(0, 1fr) 1.4rem minmax(0, 1fr);
+        gap: 0.4rem;
+    }
+
+    .contact_email_wrap input,
+    .contact_email_domain select {
+        padding-right: 1rem;
+        padding-left: 1rem;
+        font-size: 1.4rem;
+    }
+
+    .contact_email_domain::after {
+        right: 1rem;
+    }
 }

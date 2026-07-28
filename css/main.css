@@ -15,6 +15,7 @@
 
     --font-main: 'Pretendard Variable', 'Pretendard', sans-serif;
 
+    /* 데스크톱 기본 글자 크기 */
     --fs_h1: 6.4rem;
     --lh_h1: 8.6rem;
 
@@ -48,6 +49,7 @@
     position: relative;
     z-index: 1;
     width: 100%;
+    max-width: 100%;
     min-height: 100vh;
     background: #fff;
 }
@@ -136,6 +138,43 @@ section {
     width: 100%;
 }
 
+
+.gnb_toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    width: 4.4rem;
+    height: 4.4rem;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 101;
+}
+
+.gnb_toggle span {
+    display: block;
+    width: 2.4rem;
+    height: 2px;
+    background: #fff;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+#header.menu_open .gnb_toggle span:nth-child(1) {
+    transform: translateY(0.8rem) rotate(45deg);
+}
+
+#header.menu_open .gnb_toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+#header.menu_open .gnb_toggle span:nth-child(3) {
+    transform: translateY(-0.8rem) rotate(-45deg);
+}
+
+
 .gnb {
     position: absolute;
     top: 0;
@@ -152,7 +191,7 @@ section {
 
 .gnb_item {
     position: relative;
-    min-width: 5rem;
+    min-width: 9rem;
     height: 12.8rem;
     text-align: center;
 }
@@ -226,7 +265,7 @@ section {
 
 .gnb_depth a:hover {
     color: var(--color-primary);
-    font-weight: 700;
+    /* font-weight: 700; */
     text-decoration: underline;
     text-underline-offset: 0.4rem;
 }
@@ -305,19 +344,16 @@ section {
 .main_title_slider {
     position: relative;
     width: 100%;
-    height: 17.2rem;
-    /* typo_h1 line-height(8.6rem) × 2줄 기준. 문구 줄 수가 달라지면 값 조정 */
+    height: calc(var(--lh_h1) * 2);
 }
 
 .main_meta {
     position: absolute;
     top: 12rem;
     z-index: 20;
-
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-
     font-size: 1.2rem;
     line-height: 1.4;
     letter-spacing: 0.12em;
@@ -347,8 +383,6 @@ section {
     top: 0;
     left: 0;
     width: 100%;
-    font-size: 6.4rem;
-    line-height: 1.25;
     font-weight: 800;
     opacity: 0;
     transform: translateY(-3rem);
@@ -467,7 +501,6 @@ section {
 .main_intro_label {
     position: absolute;
     top: 43.5rem;
-    left: 8rem;
     font-size: 1.8rem;
     color: #fff;
 }
@@ -484,6 +517,7 @@ section {
     line-height: 1.28;
     font-weight: 700;
     letter-spacing: -0.045em;
+
 }
 
 .main_intro_title span {
@@ -583,7 +617,8 @@ section {
 .main_progress_bar {
     position: relative;
     flex: 1 1 0;
-    height: 2px;
+    height: 0.6rem;
+    border-radius: 10rem;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.25);
 }
@@ -597,7 +632,8 @@ section {
     transform: scaleX(0);
     transform-origin: left center;
     height: 100%;
-    background: #fff;
+    background: var(--color-primary);
+    border-radius: 10rem;
 }
 
 .scroll_guide_text {
@@ -644,6 +680,8 @@ section {
 =========================== */
 
 .vision_section {
+    position: relative;
+    z-index: 5;
     background: #fff;
 }
 
@@ -764,11 +802,9 @@ section {
     left: 0;
     bottom: 0.08em;
     z-index: -1;
-
     width: 100%;
     height: 0.22em;
     background: var(--color-primary);
-
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1037,7 +1073,7 @@ section {
 
 .solution_word {
     font-family: "Big Shoulders", sans-serif;
-    font-size: 14rem;
+    font-size: 15rem;
     line-height: 0.85;
     font-weight: 900;
     letter-spacing: -0.04em;
@@ -1104,14 +1140,14 @@ section {
     margin-bottom: 1.8rem;
     font-size: 1.3rem;
     color: #fff;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .solution_card h3 {
     margin-bottom: 3.6rem;
     font-size: 2.4rem;
     line-height: 1.2;
-    font-weight: 500;
+    font-weight: 600;
     color: #fff;
 }
 
@@ -1196,6 +1232,10 @@ section {
 
 
 
+
+.solution_mobile {
+    display: none;
+}
 
 
 
@@ -1327,7 +1367,6 @@ section {
     /* stroke: none; */
     stroke-width: 2;
     stroke-linecap: butt;
-
     transform: rotate(10deg) translateY(-10rem);
     transform-origin: center;
     transform-box: fill-box;
@@ -1370,8 +1409,6 @@ section {
     align-items: flex-end;
     /* 핵심 */
     margin-bottom: 9.6rem;
-
-    font-family: 'Paperozi';
     font-size: 5.6rem;
     line-height: 0.9;
     font-weight: 600;
@@ -1402,7 +1439,7 @@ section {
 .performance_caption {
     font-size: 1.8rem;
     line-height: 1.7;
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: -0.04em;
     color: #fff;
 }
@@ -1519,12 +1556,9 @@ section {
     left: 50%;
     width: 100%;
     transform: translate(-50%, -50%);
-
     opacity: 0;
     will-change: clip-path, opacity;
-
-    font-family: 'Paperozi';
-    font-weight: 500;
+    font-weight: 600;
     font-size: 6rem;
     line-height: 8.6rem;
 }
@@ -1555,9 +1589,7 @@ section {
     top: 50%;
     left: 50%;
     z-index: 1;
-
     display: block;
-
     pointer-events: none;
     will-change: transform, opacity, filter;
 }
@@ -1569,11 +1601,9 @@ section {
     top: 50%;
     left: 50%;
     z-index: 1;
-
     display: block;
     width: 140vw;
     height: 1px;
-
     background: linear-gradient(90deg,
             transparent 0%,
             rgba(255, 255, 255, 0) 18%,
@@ -1582,10 +1612,8 @@ section {
             rgba(255, 255, 255, 0.15) 64%,
             rgba(255, 255, 255, 0) 82%,
             transparent 100%);
-
     transform: translate(-50%, -50%) scaleX(0);
     transform-origin: center;
-
     pointer-events: none;
     will-change: transform, opacity, filter;
 }
@@ -1673,14 +1701,12 @@ section {
 .scatter_word {
     position: absolute;
     display: inline-block;
-
     font-family: "Big Shoulders", sans-serif;
     font-size: 6.4rem;
     line-height: 1;
     font-weight: 600;
     letter-spacing: -0.04em;
     white-space: nowrap;
-
     will-change: transform, color;
 }
 
@@ -1754,11 +1780,17 @@ section {
    서비스가 만들어지는 과정
    =========================== */
 
+/* 모바일 타임라인은 PC에서 숨김 */
+.process_mobile {
+    display: none;
+}
+
 .process_section {
     position: relative;
     background: #111111;
     height: 100vh;
     padding-top: 16rem;
+    overflow-x: clip;
 }
 
 .process_inner {
@@ -1876,23 +1908,21 @@ section {
    =========================== */
 
 .process_item.is_active .process_num {
-
     font-size: 4rem;
-    transform: scale(1.8);
+    transform: scale(1.5);
     color: #FF6200;
     margin-bottom: 4px;
 }
 
 .process_item.is_active .process_name {
-    /* font-size: 15px; */
-    font-weight: 700;
+    font-weight: 600;
     color: #ffffff;
 }
 
 /* 설명 active — data-step 으로 연동 */
 .process_texts li.is_active .process_text {
-    color: rgba(255, 255, 255, 0.85);
-    font-weight: 700;
+    color: #ffffff;
+    /* font-weight: 600; */
 }
 
 
@@ -2036,14 +2066,12 @@ section {
     min-height: 7.8rem;
     margin-top: 1.8rem;
     overflow: hidden;
-
     font-size: 2rem;
     line-height: 1.55;
     font-weight: 600;
     letter-spacing: -0.03em;
     color: #222;
     word-break: keep-all;
-
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
 }
@@ -2053,19 +2081,14 @@ section {
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-
     width: 100%;
     margin-top: auto;
     padding-top: 3rem;
     padding-bottom: 0.8rem;
-
     border-bottom: 1px solid #bbb;
-
-    font-family: "Big Shoulders", sans-serif;
     font-size: 1.6rem;
     font-weight: 600;
     color: #555;
-
     transition:
         color 0.3s ease,
         border-color 0.3s ease;
@@ -2180,8 +2203,6 @@ section {
     justify-content: center;
     gap: 0.8rem;
     min-width: 7rem;
-
-    font-family: "Big Shoulders", sans-serif;
     font-size: 2.4rem;
     line-height: 1;
     font-weight: 600;
@@ -2219,7 +2240,7 @@ section {
 .partner_title {
     margin-bottom: 2rem;
     font-family: "Big Shoulders", sans-serif;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 6.4rem;
     text-align: center;
 }
@@ -2263,7 +2284,6 @@ section {
     gap: 8rem;
     flex-shrink: 0;
     padding-right: 8rem;
-    margin-bottom: 8rem;
 }
 
 .partner_group img {
@@ -2291,6 +2311,16 @@ section {
     }
 }
 
+
+.partner_mobile {
+    display: none;
+}
+
+.partner_track_l {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+}
 
 /* ===========================
     문의하기
@@ -2336,7 +2366,6 @@ section {
     /* padding: 0 4rem; */
     background: var(--color-primary);
     color: #fff;
-    font-family: 'Paperozi';
     font-size: 2.6rem;
     font-weight: 700;
     transition: all .35s ease;
@@ -2745,78 +2774,16 @@ section {
 .footer_inner {
     display: flex;
     flex-direction: column;
-
     width: 100%;
     max-width: none;
     height: 100%;
-
     margin: 0 auto;
     padding: 0 7.2rem 4rem;
 }
 
 
-/* ===========================
-   Footer Contact CTA
-=========================== */
 
-.footer_cta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 
-    flex: 1;
-    min-height: 38rem;
-
-    text-align: center;
-}
-
-.footer_cta_title {
-    margin-bottom: 2.8rem;
-
-    font-family: "Big Shoulders", sans-serif;
-    font-size: 6.4rem;
-    line-height: 1;
-    font-weight: 700;
-
-    color: #fff;
-}
-
-.footer_cta_desc {
-    margin-bottom: 3.6rem;
-
-    font-size: 1.6rem;
-    line-height: 1.8;
-
-    color: rgba(255, 255, 255, 0.78);
-}
-
-.footer_cta_btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 17rem;
-    height: 5.6rem;
-    padding: 0 3.2rem;
-
-    background: var(--color-primary);
-
-    font-family: "Paperozi", sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #fff;
-
-    transition:
-        background 0.3s ease,
-        transform 0.3s ease;
-}
-
-.footer_cta_btn:hover {
-    background: #fff;
-    color: #111;
-    transform: translateY(-0.4rem);
-}
 
 
 /* ===========================
@@ -2825,8 +2792,7 @@ section {
 
 .footer_top {
     display: grid;
-    grid-template-columns:
-        minmax(28rem, 1.5fr) minmax(20rem, 0.75fr) minmax(34rem, 1.1fr) minmax(16rem, 0.55fr);
+    grid-template-columns: 1fr 1fr 2fr 1fr;
     gap: 5.6rem;
     align-items: center;
     padding: 0 0 5rem;
@@ -2839,21 +2805,26 @@ section {
     border-right: 1px solid rgba(255, 255, 255, 0.5);
 }
 
+.footer_brand {
+    display: flex;
+    align-items: center;
+    /* 세로 가운데 */
+}
+
 .footer_logo {
     display: block;
     width: 100%;
-    max-width: 40rem;
+    max-width: 24rem;
 }
 
 .footer_logo img {
     display: block;
     width: 100%;
-
+    filter: brightness(0) invert(1);
     /*
         현재 logo_black.svg가 검은색 로고라면
         검은 푸터에서 흰색으로 보이게 처리
     */
-    filter: brightness(0) invert(1);
 }
 
 .footer_sns {
@@ -2891,11 +2862,9 @@ section {
 
 .footer_title {
     margin-bottom: 2.4rem;
-
     font-family: "Big Shoulders", sans-serif;
     font-size: 1.8rem;
     font-weight: 500;
-
     color: #fff;
 }
 
@@ -2950,9 +2919,7 @@ section {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding-top: 3.2rem;
-
     border-top: 1px solid rgba(255, 255, 255, 0.55);
 }
 
@@ -2966,63 +2933,4 @@ section {
     display: flex;
     align-items: center;
     gap: 1.4rem;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* =========================
-    Responsive
-========================= */
-@media (max-width: 1440px) {
-    :root {
-        --grid-margin: 8rem;
-    }
-}
-
-@media (max-width: 1024px) {
-    :root {
-        --grid-margin: 4rem;
-        --grid-gap: 2rem;
-    }
-
-    .section {
-        padding: 9rem 0;
-    }
-
-    .sec-title {
-        font-size: 4.4rem;
-    }
-}
-
-@media (max-width: 768px) {
-    :root {
-        --grid-margin: 2rem;
-        --grid-gap: 1.6rem;
-    }
-
-    .grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    .section {
-        padding: 7rem 0;
-    }
-
-    .sec-title {
-        font-size: 3.2rem;
-    }
-
-    .sec-desc {
-        font-size: 1.6rem;
-    }
 }

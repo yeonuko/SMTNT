@@ -1,48 +1,95 @@
 gsap.registerPlugin(ScrollTrigger);
 
-gsap.registerPlugin(ScrollTrigger, Flip);
 
-/* ── Lenis 스무스 스크롤 ── */
-const lenis = new Lenis({
-    duration: 0.9,
-    easing: (t) => 1 - Math.pow(1 - t, 3),
-    smoothWheel: true,
-    wheelMultiplier: 1,
-});
+/* ── Lenis 스무스 스크롤 (데스크탑 1200px 이상에서만) ──
+   태블릿/모바일은 GSAP pin·scrub를 쓰지 않기로 해서 Lenis도 끔.
+   네이티브 스크롤이 터치 제스처 반응성/배터리에 더 유리함.
+   ※ 로드 시점 화면 크기 기준으로 한 번만 판단하며, 브레이크포인트를
+     넘나드는 실시간 리사이즈는 반영되지 않음(새로고침 시 재판단) */
+const isDesktopViewport = window.matchMedia("(min-width: 1200px)").matches;
 
-lenis.on('scroll', ScrollTrigger.update);
+const lenis = isDesktopViewport ?
+    new Lenis({
+        duration: 0.9,
+        easing: (t) => 1 - Math.pow(1 - t, 3),
+        smoothWheel: true,
+        wheelMultiplier: 1
+    }) : {
+        on() {},
+        start() {},
+        stop() {}
+    };
 
-gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-});
+if (isDesktopViewport) {
+    lenis.on('scroll', ScrollTrigger.update);
 
-/* Lenis와 같이 쓸 때는 꺼두는 걸 권장: 안 꺼두면 브라우저가 잠깐
-   멈췄다 돌아올 때(영상 디코딩/이미지 로딩 등) GSAP이 밀린 시간을
-   한 번에 따라잡으려 하면서 순간적으로 튀는 현상이 생길 수 있음 */
-gsap.ticker.lagSmoothing(0);
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+
+    /* Lenis와 같이 쓸 때는 꺼두는 걸 권장: 안 꺼두면 브라우저가 잠깐
+       멈췄다 돌아올 때(영상 디코딩/이미지 로딩 등) GSAP이 밀린 시간을
+       한 번에 따라잡으려 하면서 순간적으로 튀는 현상이 생길 수 있음 */
+    gsap.ticker.lagSmoothing(0);
+}
 
 /* 데스크탑 전용 스크롤 애니메이션 분기
-   → 768px 이상에서만 GSAP pin/scrub 애니메이션 실행,
-     모바일에서는 해당 콜백이 아예 실행되지 않고 일반 스크롤로 동작함 */
+   → 1200px 이상에서만 GSAP pin/scrub 애니메이션 실행,
+     태블릿/모바일에서는 해당 콜백이 아예 실행되지 않고 일반 스크롤로 동작함 */
 const mm = gsap.matchMedia();
 
 
+
 /* ── Nav 스크롤 ── */
-lenis.on('scroll', (e) => {
-    const scroll = e.scroll;
+function initHeaderScroll() {
     const header = document.querySelector("#header");
 
-    if (scroll <= 0) {
-        header.classList.remove("hide");
+    if (!header) return;
+
+    if (isDesktopViewport) {
+        lenis.on("scroll", (e) => {
+            if (e.scroll <= 0) {
+                header.classList.remove("hide");
+                return;
+            }
+
+            if (e.velocity > 0) {
+                header.classList.add("hide");
+            } else if (e.velocity < 0) {
+                header.classList.remove("hide");
+            }
+        });
+
         return;
     }
 
-    if (e.velocity > 0) {
-        header.classList.add("hide");
-    } else if (e.velocity < 0) {
-        header.classList.remove("hide");
-    }
-});
+    let previousScroll = window.scrollY;
+
+    window.addEventListener(
+        "scroll",
+        () => {
+            const currentScroll = window.scrollY;
+
+            if (currentScroll <= 0) {
+                header.classList.remove("hide");
+                previousScroll = currentScroll;
+                return;
+            }
+
+            if (currentScroll > previousScroll) {
+                header.classList.add("hide");
+            } else {
+                header.classList.remove("hide");
+            }
+
+            previousScroll = currentScroll;
+        }, {
+            passive: true
+        }
+    );
+}
+
+initHeaderScroll();
 
 
 
@@ -146,12 +193,13 @@ initMainVideoSlider();
 
 
 
+
 /* ── 모바일 GNB 토글 ── */
 function initMobileNav() {
     const header = document.querySelector("#header");
     const toggle = document.querySelector(".gnb_toggle");
     const gnbItems = document.querySelectorAll(".gnb_item");
-    const mq = window.matchMedia("(max-width: 767px)");
+    const mq = window.matchMedia("(max-width: 1199px)");
 
     if (!header || !toggle) return;
 
@@ -213,7 +261,7 @@ initMobileNav();
 
 
 /* ── 메인화면 스크롤 (데스크탑 전용) ── */
-mm.add("(min-width: 768px)", () => {
+mm.add("(min-width: 1200px)", () => {
     ScrollTrigger.create({
         trigger: ".main_visual",
         start: "top top",
@@ -224,6 +272,8 @@ mm.add("(min-width: 768px)", () => {
 
     initMainIntro();
 });
+
+
 
 function initMainIntro() {
     const intro = document.querySelector(".main_intro");
@@ -313,67 +363,6 @@ initVisionHighlight();
 
 
 
-/* ── 운영중인 서비스 가로스크롤 ── */
-function initServiceHorizontal() {
-    const section = document.querySelector(".service_section");
-    const horizontal = document.querySelector(".service_horizontal");
-    const panels = gsap.utils.toArray(".service_panel:not(.service_intro)");
-
-    if (!section || !horizontal) return;
-
-    function getScrollAmount() {
-        return horizontal.scrollWidth - window.innerWidth;
-    }
-
-    const horizontalTween = gsap.to(horizontal, {
-        x: () => -getScrollAmount(),
-        ease: "none",
-        scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: () => `+=${getScrollAmount()}`,
-            pin: true,
-            scrub: true,
-            invalidateOnRefresh: true,
-            anticipatePin: 1
-        }
-    });
-
-    panels.forEach((panel) => {
-        const thumb = panel.querySelector(".service_thumb");
-        const info = panel.querySelector(".service_info");
-
-        gsap.fromTo([thumb, info], {
-            y: 50,
-            opacity: 0.4
-        }, {
-            y: 0,
-            opacity: 1,
-            ease: "none",
-            scrollTrigger: {
-                trigger: panel,
-                containerAnimation: horizontalTween,
-                start: "left 95%",
-                end: "left 65%",
-                scrub: true,
-                invalidateOnRefresh: true
-            }
-        });
-    });
-}
-
-initServiceHorizontal();
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -429,7 +418,7 @@ function initSolutionOrbit() {
         xPercent: -50,
         yPercent: -50,
         opacity: 0,
-        pointerEvents: "none" 
+        pointerEvents: "none"
     });
 
     setActiveGroup(null);
@@ -511,7 +500,7 @@ function initSolutionOrbit() {
 
         tl.to(card, {
             opacity: 0,
-            pointerEvents: "none", 
+            pointerEvents: "none",
             duration: 0.06,
             ease: "none"
         }, start + cardDuration - 0.06);
@@ -522,7 +511,14 @@ function initSolutionOrbit() {
     }, 0);
 }
 
-initSolutionOrbit();
+
+if (window.innerWidth >= 1200) {
+    initSolutionOrbit();
+}
+
+
+
+
 
 
 
@@ -603,9 +599,74 @@ function initSolutionFloating() {
     });
 }
 
-initSolutionFloating();
+if (window.innerWidth >= 1200) {
+    initSolutionFloating();
+}
 
 
+
+/* ── Our Solution 모바일 슬라이더 ── */
+function initSolutionMobileSwiper() {
+    const sliders = document.querySelectorAll(".solution_mobile_slider");
+
+    if (!sliders.length) return;
+
+    sliders.forEach((slider) => {
+        if (slider.swiper) return;
+
+        new Swiper(slider, {
+            slidesPerView: 1.15,
+            slidesPerGroup: 1,
+            spaceBetween: 16,
+
+            pagination: {
+                el: slider
+                    .closest(".solution_mobile_group")
+                    .querySelector(".solution_mobile_pagination"),
+                clickable: true,
+            },
+
+            speed: 500,
+
+            grabCursor: true,
+
+            simulateTouch: true,
+            allowTouchMove: true,
+            touchRatio: 1,
+
+            observer: true,
+            observeParents: true,
+            observeSlideChildren: true,
+
+            watchOverflow: false,
+
+            breakpoints: {
+                0: {
+                    slidesPerView: "auto",
+                    spaceBetween: 10,
+                },
+                768: {
+                    slidesPerView: "auto",
+                    spaceBetween: 20,
+                },
+
+                1024: {
+                    slidesPerView: 2.5,
+                    spaceBetween: 12
+                }
+            },
+
+            on: {
+                init(swiper) {
+                    console.log("Solution Swiper initialized", swiper.el);
+                }
+            }
+        });
+
+    });
+}
+
+window.addEventListener("load", initSolutionMobileSwiper);
 
 
 
@@ -721,7 +782,44 @@ function initPerformanceMotion() {
     });
 }
 
-initPerformanceMotion();
+
+
+/* 모바일/태블릿: 세로 스택 + 카드가 좌/우에서 45도 가량 기울어진 채
+   들어오다가, 스크롤 위치가 맞춰지면(화면 중앙 근처) 정면으로 눕고
+   중앙으로 정렬되는 1회성(반복 가능) 연출. pin/scrub 없음 */
+function initPerformanceMobile() {
+    const cards = gsap.utils.toArray(".performance_card");
+
+    if (!cards.length) return;
+
+    /* 회전 각도는 취향껏 조절 가능한 값 — 너무 크면(45deg) 글자가
+       읽기 힘들어져서 18deg 정도로 우선 잡아둠 */
+    const ROTATE_DEG = 18;
+
+    cards.forEach((card, index) => {
+        const fromLeft = index % 2 === 0;
+
+        gsap.from(card, {
+            xPercent: fromLeft ? -70 : 70,
+            rotate: fromLeft ? -ROTATE_DEG : ROTATE_DEG,
+            opacity: 0,
+            duration: 0.9,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: card,
+                start: "top 65%",
+                end: "bottom 20%",
+                toggleActions: "play reverse play reverse"
+            }
+        });
+    });
+}
+
+if (window.innerWidth >= 1200) {
+    initPerformanceMotion();
+} else {
+    initPerformanceMobile();
+}
 
 
 
@@ -1031,7 +1129,53 @@ function initKeywordSplit() {
 }
 
 
-initKeywordSplit();
+/* 모바일/태블릿: 세로 스택 + 1회성 fade-up (pin/scrub 없음) */
+function initKeywordMobile() {
+    const section = document.querySelector(".keyword_section");
+    const items = gsap.utils.toArray(".keyword_item");
+
+    if (!section || !items.length) return;
+
+    gsap.set(items, {
+        autoAlpha: 1
+    });
+
+    items.forEach((item, index) => {
+        const title = item.querySelector(".keyword_title");
+        const desc = item.querySelector(".keyword_desc");
+
+        const fromX = index % 2 === 0 ? -80 : 80;
+
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: item,
+                start: "top 50%",
+                end: "bottom 15%",
+                toggleActions: "play reverse play reverse"
+            }
+        });
+
+        tl.from(title, {
+            xPercent: fromX,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out"
+        });
+
+        tl.from(desc, {
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            ease: "power3.out"
+        }, "-=0.25");
+    });
+}
+
+if (window.innerWidth >= 1200) {
+    initKeywordSplit();
+} else {
+    initKeywordMobile();
+}
 
 
 
@@ -1096,20 +1240,23 @@ function initScatterText() {
         };
     }
 
+    // 목적 위치를 한 번만 계산
+    const targets = words.map(word => getTarget(word));
+
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "top+=800 top",
-            scrub: true,
+            end: "top+=500 top",
+            scrub: 0.3,
             invalidateOnRefresh: true
         }
     });
 
-    words.forEach((word) => {
+    words.forEach((word, i) => {
         tl.to(word, {
-            x: () => getTarget(word).x,
-            y: () => getTarget(word).y,
+            x: targets[i].x,
+            y: targets[i].y,
             scale: endScale,
             color: word.dataset.word === "connecting" ?
                 "#FF6200" : "#000000",
@@ -1235,7 +1382,11 @@ initCurtainSections();
     서비스가 만들어지는 과정
    =========================== */
 
+
 (function () {
+
+    /* 모바일/태블릿에서는 PC용 canvas + pin 애니메이션 실행 안 함 */
+    if (window.innerWidth < 1200) return;
 
     const STEPS = 6;
     const CANVAS_W = 1440;
@@ -1246,8 +1397,11 @@ initCurtainSections();
     const BASE_Y = 68;
 
     const canvas = document.getElementById('process_canvas');
+
     if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
+    // 기존 아래 코드 그대로
 
     const items = Array.from(document.querySelectorAll('.process_item'));
     const textItems = Array.from(document.querySelectorAll('.process_texts li'));
@@ -1383,6 +1537,76 @@ initCurtainSections();
 
 })();
 
+/* ===========================
+    서비스가 만들어지는 과정
+    모바일 타임라인 애니메이션
+=========================== */
+
+(function () {
+
+    /* PC에서는 실행 안 함 */
+    if (window.innerWidth >= 1200) return;
+
+    if (!window.gsap || !window.ScrollTrigger) {
+        console.warn("GSAP / ScrollTrigger 로드 필요");
+        return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const items = gsap.utils.toArray(".process_mobile_item");
+
+    if (!items.length) return;
+
+    items.forEach((item) => {
+        const marker = item.querySelector(".process_mobile_marker");
+        const content = item.querySelector(".process_mobile_content");
+
+        /* 항목 전체를 왼쪽으로 숨김 */
+        gsap.set(item, {
+            x: -60,
+            opacity: 0
+        });
+
+        /* 숫자 원은 작게 시작 */
+        gsap.set(marker, {
+            scale: 0.4,
+            transformOrigin: "center center"
+        });
+
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: item,
+                start: "top 82%",
+                once: true
+            }
+        });
+
+        /* 동그라미 + 글씨 전체가 옆으로 솟아 나옴 */
+        tl.to(item, {
+            x: 0,
+            opacity: 1,
+            duration: 0.75,
+            ease: "power3.out"
+        });
+
+        /* 숫자 원이 통 튀어나옴 */
+        tl.to(marker, {
+            scale: 1,
+            duration: 0.5,
+            ease: "back.out(1.8)"
+        }, "-=0.55");
+
+        /* 글씨가 아래에서 살짝 올라옴 */
+        tl.to(content, {
+            y: 0,
+            duration: 0.55,
+            ease: "power3.out"
+        }, "-=0.5");
+    });
+
+})();
+
 window.addEventListener("load", () => {
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
@@ -1394,7 +1618,9 @@ window.addEventListener("load", () => {
 
 
 
-/* ── News Slider ── */
+
+
+
 /* ── News Slider ── */
 function initNewsSlider() {
     const slider = document.querySelector(".news_slider");
@@ -1482,7 +1708,7 @@ function initNewsSlider() {
 
         breakpoints: {
             0: {
-                slidesPerView: 1.15,
+                slidesPerView: 2.5,
                 slidesPerGroup: 1,
                 spaceBetween: 16
             },
@@ -1553,7 +1779,9 @@ initNewsSlider();
         entries.forEach((entry) => {
             footer.classList.toggle("is_visible", entry.isIntersecting);
         });
-    }, { threshold: 0 });
+    }, {
+        threshold: 0
+    });
 
     io.observe(spacer);
 })();
