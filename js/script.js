@@ -521,7 +521,7 @@ function initSolutionOrbit() {
     /* 애니메이션 타이밍 */
     var invertTime = 0.08;
     var cardStartTime = 0.1;
-    var cardGap = 0.05; // PC 기본
+    var cardGap = 0.07; // PC 기본
     if (isTablet) {
         cardGap = 0.11;
     }
@@ -800,71 +800,6 @@ function initSolutionFloating() {
    가벼운 무한 루프 애니메이션이라 모든 화면에서 실행 */
 initSolutionFloating();
 
-
-
-
-/* ── Our Solution 모바일 슬라이더 ── */
-function initSolutionMobileSwiper() {
-    const sliders = document.querySelectorAll(".solution_mobile_slider");
-
-    if (!sliders.length) return;
-
-    sliders.forEach((slider) => {
-        if (slider.swiper) return;
-
-        new Swiper(slider, {
-            slidesPerView: 1.15,
-            slidesPerGroup: 1,
-            spaceBetween: 16,
-
-            pagination: {
-                el: slider
-                    .closest(".solution_mobile_group")
-                    .querySelector(".solution_mobile_pagination"),
-                clickable: true,
-            },
-
-            speed: 500,
-
-            grabCursor: true,
-
-            simulateTouch: true,
-            allowTouchMove: true,
-            touchRatio: 1,
-
-            observer: true,
-            observeParents: true,
-            observeSlideChildren: true,
-
-            watchOverflow: false,
-
-            breakpoints: {
-                0: {
-                    slidesPerView: "auto",
-                    spaceBetween: 10,
-                },
-                768: {
-                    slidesPerView: "auto",
-                    spaceBetween: 20,
-                },
-
-                1024: {
-                    slidesPerView: 2.5,
-                    spaceBetween: 12
-                }
-            },
-
-            on: {
-                init(swiper) {
-                    console.log("Solution Swiper initialized", swiper.el);
-                }
-            }
-        });
-
-    });
-}
-
-window.addEventListener("load", initSolutionMobileSwiper);
 
 
 
