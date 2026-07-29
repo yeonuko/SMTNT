@@ -958,6 +958,377 @@ if (window.innerWidth >= 1200) {
 
 
 
+/* ── PC Keyword 큰 텍스트 분리 + 가로 피슝 라인 ── */
+function initKeywordSplit() {
+    const section = document.querySelector(".keyword_section");
+    const items = gsap.utils.toArray(".keyword_item");
+
+    if (!section || !items.length) return;
+
+
+    /* ==============================
+       피슝 라인 자동 생성
+    ============================== */
+
+    items.forEach((item) => {
+        const pin = item.querySelector(".keyword_pin");
+
+        if (!pin) return;
+
+        if (!pin.querySelector(".keyword_motion_line")) {
+            const glowLine = document.createElement("span");
+            const mainLine = document.createElement("span");
+
+            glowLine.className =
+                "keyword_motion_line line_glow";
+
+            mainLine.className =
+                "keyword_motion_line line_main";
+
+            pin.prepend(glowLine);
+            pin.prepend(mainLine);
+        }
+    });
+
+
+    /* ==============================
+       초기 상태 설정
+    ============================== */
+
+    gsap.set(items, {
+        autoAlpha: 0,
+        x: 0,
+        y: 0
+    });
+
+    items.forEach((item) => {
+        const parts =
+            item.querySelectorAll(".keyword_title span");
+
+        const desc =
+            item.querySelector(".keyword_desc");
+
+        const lines =
+            item.querySelectorAll(".keyword_motion_line");
+
+        gsap.set(parts, {
+            xPercent: -50,
+            yPercent: -50,
+            x: 0,
+            y: 0
+        });
+
+        if (desc) {
+            gsap.set(desc, {
+                opacity: 0,
+                scale: 0.96
+            });
+        }
+
+        gsap.set(lines, {
+            scaleX: 0,
+            scaleY: 1,
+            opacity: 0
+        });
+    });
+
+
+    /* 첫 번째 키워드 표시 */
+    gsap.set(items[0], {
+        autoAlpha: 1
+    });
+
+
+    /* ==============================
+       메인 스크롤 타임라인
+    ============================== */
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,
+            start: "top top",
+
+            end: () => `+=${items.length * 1400}`,
+
+            pin: true,
+            pinSpacing: true,
+            scrub: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true
+        }
+    });
+
+
+    items.forEach((item, index) => {
+        const isLR =
+            item.classList.contains("keyword_lr");
+
+        const left =
+            item.querySelector(".keyword_left");
+
+        const right =
+            item.querySelector(".keyword_right");
+
+        const top =
+            item.querySelector(".keyword_top");
+
+        const bottom =
+            item.querySelector(".keyword_bottom");
+
+        const desc =
+            item.querySelector(".keyword_desc");
+
+        const mainLine =
+            item.querySelector(".line_main");
+
+        const glowLine =
+            item.querySelector(".line_glow");
+
+
+        const start = index * 1.6;
+
+        const enterDuration =
+            index === 0 ? 0 : 0.38;
+
+
+        /*
+         * 화면 중앙에 도착한 다음
+         * 피슝 라인과 텍스트 분리 시작
+         */
+        const focusStart =
+            start +
+            enterDuration +
+            0.18;
+
+
+        /*
+         * 키워드마다 진입 방향 교차
+         *
+         * 1, 3번째: 아래에서 위로
+         * 2, 4번째: 오른쪽에서 왼쪽으로
+         */
+        const enterAxis =
+            index % 2 === 0 ? "y" : "x";
+
+        const enterValue =
+            index % 2 === 0 ?
+            "100vh" :
+            "100vw";
+
+
+        /* ==============================
+           아이템 등장
+        ============================== */
+
+        tl.set(
+            item, {
+                autoAlpha: 1,
+                x: 0,
+                y: 0
+            },
+            start
+        );
+
+
+        if (index !== 0) {
+            tl.fromTo(
+                item, {
+                    [enterAxis]: enterValue
+                }, {
+                    [enterAxis]: 0,
+                    duration: enterDuration,
+                    ease: "none"
+                },
+                start
+            );
+        }
+
+
+        /* ==============================
+           피슝 빛 번짐 라인
+        ============================== */
+
+        if (glowLine) {
+            tl.fromTo(
+                glowLine, {
+                    scaleX: 0.02,
+                    opacity: 0,
+                    filter: "blur(12px)"
+                }, {
+                    scaleX: 1,
+                    opacity: 0.9,
+                    filter: "blur(6px)",
+                    duration: 0.12,
+                    ease: "power4.out"
+                },
+                focusStart
+            );
+        }
+
+
+        /* ==============================
+           피슝 메인 라인
+        ============================== */
+
+        if (mainLine) {
+            tl.fromTo(
+                mainLine, {
+                    scaleX: 0,
+                    opacity: 0
+                }, {
+                    scaleX: 1,
+                    opacity: 1,
+                    duration: 0.1,
+                    ease: "power4.out"
+                },
+                focusStart + 0.02
+            );
+        }
+
+
+        /* ==============================
+           큰 키워드 텍스트 분리
+        ============================== */
+
+        if (isLR && left && right) {
+            /*
+             * 좌우 분리
+             * Expertise / Support
+             */
+            tl.to(
+                left, {
+                    x: "-18vw",
+                    duration: 0.45,
+                    ease: "power2.out"
+                },
+                focusStart + 0.06
+            );
+
+            tl.to(
+                right, {
+                    x: "18vw",
+                    duration: 0.45,
+                    ease: "power2.out"
+                },
+                focusStart + 0.06
+            );
+        } else if (top && bottom) {
+            /*
+             * 상하 분리
+             * ONE-STOP / Experience
+             */
+            tl.to(
+                top, {
+                    y: "-8rem",
+                    duration: 0.45,
+                    ease: "power2.out"
+                },
+                focusStart + 0.06
+            );
+
+            tl.to(
+                bottom, {
+                    y: "8rem",
+                    duration: 0.45,
+                    ease: "power2.out"
+                },
+                focusStart + 0.06
+            );
+        }
+
+
+        /* ==============================
+           설명 문구 등장
+        ============================== */
+
+        if (desc) {
+            tl.to(
+                desc, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.24,
+                    ease: "power2.out"
+                },
+                focusStart + 0.22
+            );
+        }
+
+
+        /* ==============================
+           피슝 메인 라인 소멸
+        ============================== */
+
+        if (mainLine) {
+            tl.to(
+                mainLine, {
+                    scaleX: 1.15,
+                    opacity: 0,
+                    duration: 0.18,
+                    ease: "power2.in"
+                },
+                focusStart + 0.15
+            );
+        }
+
+
+        /* ==============================
+           빛 번짐 라인 소멸
+        ============================== */
+
+        if (glowLine) {
+            tl.to(
+                glowLine, {
+                    scaleX: 1.25,
+                    opacity: 0,
+                    filter: "blur(14px)",
+                    duration: 0.24,
+                    ease: "power2.out"
+                },
+                focusStart + 0.14
+            );
+        }
+
+
+        /* ==============================
+           다음 키워드로 전환
+        ============================== */
+
+        if (index !== items.length - 1) {
+            const exitAxis =
+                index % 2 === 0 ? "y" : "x";
+
+            const exitValue =
+                index % 2 === 0 ?
+                "-100vh" :
+                "-100vw";
+
+            const exitStart =
+                focusStart + 0.95;
+
+
+            tl.to(
+                item, {
+                    [exitAxis]: exitValue,
+                    duration: 0.45,
+                    ease: "none"
+                },
+                exitStart
+            );
+
+
+            tl.set(
+                item, {
+                    autoAlpha: 0
+                },
+                exitStart + 0.45
+            );
+        }
+    });
+}
+
+
+
+
 
 /* ── 모바일 / 태블릿 Keyword 피슝 애니메이션 ── */
 function initKeywordMobile() {
