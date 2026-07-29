@@ -370,151 +370,348 @@ initVisionHighlight();
 /* ── Our Solution Orbit ── */
 /* ── Our Solution Orbit ── */
 function initSolutionOrbit() {
-    const section = document.querySelector(".solution_section");
-    const leftCards = gsap.utils.toArray(".solution_orbit_left .solution_card");
-    const rightCards = gsap.utils.toArray(".solution_orbit_right .solution_card");
-    const words = gsap.utils.toArray(".solution_word");
+    var section = document.querySelector(".solution_section");
 
-    if (!section || (!leftCards.length && !rightCards.length) || !words.length) return;
+    var leftCards = gsap.utils.toArray(
+        ".solution_orbit_left .solution_card"
+    );
 
+    var rightCards = gsap.utils.toArray(
+        ".solution_orbit_right .solution_card"
+    );
+
+    var words = gsap.utils.toArray(".solution_word");
+
+    if (
+        !section ||
+        (!leftCards.length && !rightCards.length) ||
+        !words.length
+    ) {
+        return;
+    }
+
+
+    /* 화면 크기 구분 */
+    var isMobile = window.innerWidth <= 767;
+
+    var isTablet =
+        window.innerWidth >= 768 &&
+        window.innerWidth <= 1199;
+
+    var scrollDistance = 7500;
+
+    if (isMobile) {
+        scrollDistance = 4800;
+    } else if (isTablet) {
+        scrollDistance = 6000;
+    }
+
+
+    /* 중앙 단어 활성화 */
     function setActiveGroup(group) {
-        words.forEach((word) => {
-            word.classList.toggle("is_active", !!group && word.dataset.group === group);
+        words.forEach(function (word) {
+            var isActive =
+                group &&
+                word.dataset.group === group;
+
+            word.classList.toggle(
+                "is_active",
+                Boolean(isActive)
+            );
         });
     }
 
+
+    /* 카드 궤도 좌표 계산 */
     function getOrbitValue(side, angle) {
-        const rad = angle * Math.PI / 180;
+        var rad = angle * Math.PI / 180;
 
-        const centerX = side === "left" ?
-            window.innerWidth * -0.08 :
-            window.innerWidth * 1.08;
+        var centerOffset = 0.08;
+        var radiusX = window.innerWidth * 0.8;
+        var radiusY = window.innerHeight * 0.72;
 
-        const centerY = window.innerHeight * 0.5;
-        const radiusX = window.innerWidth * 0.65;
-        const radiusY = window.innerHeight * 0.72;
+        if (isMobile) {
+            centerOffset = 0.18;
+            radiusX = window.innerWidth * 0.78;
+            radiusY = window.innerHeight * 0.42;
+        } else if (isTablet) {
+            centerOffset = 0.12;
+            radiusX = window.innerWidth * 0.8;
+            radiusY = window.innerHeight * 0.65;
+        }
+
+        var centerX;
+
+        if (side === "left") {
+            centerX =
+                window.innerWidth *
+                -centerOffset;
+        } else {
+            centerX =
+                window.innerWidth *
+                (1 + centerOffset);
+        }
+
+        var centerY =
+            window.innerHeight * 0.5;
 
         return {
-            x: centerX + Math.cos(rad) * radiusX - window.innerWidth / 2,
-            y: centerY + Math.sin(rad) * radiusY - window.innerHeight / 2
+            x: centerX +
+                Math.cos(rad) * radiusX -
+                window.innerWidth / 2,
+
+            y: centerY +
+                Math.sin(rad) * radiusY -
+                window.innerHeight / 2
         };
     }
 
-    const orbitCards = [];
-    const maxLength = Math.max(leftCards.length, rightCards.length);
 
-    for (let i = 0; i < maxLength; i++) {
-        if (leftCards[i]) orbitCards.push({
-            card: leftCards[i],
-            side: "left"
-        });
-        if (rightCards[i]) orbitCards.push({
-            card: rightCards[i],
-            side: "right"
-        });
+    /* 좌우 카드를 번갈아 배열 */
+    var orbitCards = [];
+
+    var maxLength = Math.max(
+        leftCards.length,
+        rightCards.length
+    );
+
+    var i;
+
+    for (i = 0; i < maxLength; i++) {
+        if (leftCards[i]) {
+            orbitCards.push({
+                card: leftCards[i],
+                side: "left"
+            });
+        }
+
+        if (rightCards[i]) {
+            orbitCards.push({
+                card: rightCards[i],
+                side: "right"
+            });
+        }
     }
 
-    gsap.set(orbitCards.map(item => item.card), {
+
+    /* 카드 초기 상태 */
+    var allCards = orbitCards.map(function (item) {
+        return item.card;
+    });
+
+    var cardScale = 1;
+
+    if (isMobile) {
+        cardScale = 0.7;
+    } else if (isTablet) {
+        cardScale = 0.9;
+    }
+
+    gsap.set(allCards, {
         xPercent: -50,
         yPercent: -50,
+        scale: cardScale,
         opacity: 0,
         pointerEvents: "none"
     });
 
     setActiveGroup(null);
 
-    const invertTime = 0.08; // 색 반전 타이밍
-    const cardStartTime = 0.1; // 카드 시작 타이밍
-    const cardGap = 0.05; // 카드 간격
-    const cardDuration = 0.28; // 카드 속도
-    const focusDelay = cardDuration * 0.35; // data-group 단어가 더 빨리 바뀌게
-    const totalTime = cardStartTime + orbitCards.length * cardGap + cardDuration;
 
-    const tl = gsap.timeline({
+    /* 애니메이션 타이밍 */
+    var invertTime = 0.08;
+    var cardStartTime = 0.1;
+    var cardGap = 0.05; // PC 기본
+    if (isTablet) {
+        cardGap = 0.11;
+    }
+    if (isMobile) {
+        cardGap = 0.15;
+    }
+    var cardDuration = 0.28;
+    var focusDelay = cardDuration * 0.35;
+
+    var totalTime =
+        cardStartTime +
+        orbitCards.length * cardGap +
+        cardDuration;
+
+
+    /* 타임라인 */
+    var tl = gsap.timeline({
         scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "+=7500",
+
+            end: function () {
+                return "+=" + scrollDistance;
+            },
+
             pin: true,
             scrub: true,
             anticipatePin: 1,
+            invalidateOnRefresh: true,
 
-            onUpdate() {
-                const time = tl.time();
+            onUpdate: function () {
+                var time = tl.time();
 
-                if (time < cardStartTime + focusDelay) {
+                if (
+                    time <
+                    cardStartTime + focusDelay
+                ) {
                     setActiveGroup(null);
                     return;
                 }
 
-                const activeIndex = Math.min(
-                    orbitCards.length - 1,
-                    Math.max(0, Math.floor((time - cardStartTime - focusDelay) / cardGap))
+                var activeIndex = Math.floor(
+                    (
+                        time -
+                        cardStartTime -
+                        focusDelay
+                    ) / cardGap
                 );
 
-                setActiveGroup(orbitCards[activeIndex].card.dataset.group);
+                if (activeIndex < 0) {
+                    activeIndex = 0;
+                }
+
+                if (
+                    activeIndex >
+                    orbitCards.length - 1
+                ) {
+                    activeIndex =
+                        orbitCards.length - 1;
+                }
+
+                var activeCard =
+                    orbitCards[activeIndex].card;
+
+                setActiveGroup(
+                    activeCard.dataset.group
+                );
             }
         }
     });
 
-    tl.set(section, {
-        backgroundColor: "#333333"
-    }, invertTime);
 
-    tl.set([".solution_label", ".solution_desc", ".solution_word"], {
-        color: "#000000"
-    }, invertTime);
+    /* 배경 반전 */
+    tl.set(
+        section, {
+            backgroundColor: "#333333"
+        },
+        invertTime
+    );
 
-    orbitCards.forEach((item, index) => {
-        const card = item.card;
-        const side = item.side;
-        const start = cardStartTime + index * cardGap;
 
-        const startAngle = side === "left" ? -62 : 242;
-        const endAngle = side === "left" ? 72 : 112;
-        const proxy = {
+    /* 중앙 글자 색상 */
+    tl.set(
+        [
+            ".solution_label",
+            ".solution_desc",
+            ".solution_word"
+        ], {
+            color: "#000000"
+        },
+        invertTime
+    );
+
+
+    /* 카드별 궤도 애니메이션 */
+    orbitCards.forEach(function (item, index) {
+        var card = item.card;
+        var side = item.side;
+
+        var start =
+            cardStartTime +
+            index * cardGap;
+
+        var startAngle;
+        var endAngle;
+
+        if (side === "left") {
+            startAngle = -62;
+            endAngle = 72;
+        } else {
+            startAngle = 242;
+            endAngle = 112;
+        }
+
+        var proxy = {
             angle: startAngle
         };
 
-        tl.to(proxy, {
-            angle: endAngle,
-            duration: cardDuration,
-            ease: "none",
+        var initialPosition =
+            getOrbitValue(
+                side,
+                startAngle
+            );
 
-            onUpdate() {
-                const pos = getOrbitValue(side, proxy.angle);
+        gsap.set(card, {
+            x: initialPosition.x,
+            y: initialPosition.y
+        });
 
-                gsap.set(card, {
-                    x: pos.x,
-                    y: pos.y
-                });
-            }
-        }, start);
 
-        tl.to(card, {
-            opacity: 1,
-            pointerEvents: "auto",
-            duration: 0.06,
-            ease: "none"
-        }, start);
+        /* 궤도 이동 */
+        tl.to(
+            proxy, {
+                angle: endAngle,
+                duration: cardDuration,
+                ease: "none",
 
-        tl.to(card, {
-            opacity: 0,
-            pointerEvents: "none",
-            duration: 0.06,
-            ease: "none"
-        }, start + cardDuration - 0.06);
+                onUpdate: function () {
+                    var position =
+                        getOrbitValue(
+                            side,
+                            proxy.angle
+                        );
+
+                    gsap.set(card, {
+                        x: position.x,
+                        y: position.y
+                    });
+                }
+            },
+            start
+        );
+
+
+        /* 카드 나타남 */
+        tl.to(
+            card, {
+                opacity: 1,
+                pointerEvents: "auto",
+                duration: 0.06,
+                ease: "none"
+            },
+            start
+        );
+
+
+        /* 카드 사라짐 */
+        tl.to(
+            card, {
+                opacity: 0,
+                pointerEvents: "none",
+                duration: 0.06,
+                ease: "none"
+            },
+            start + cardDuration - 0.06
+        );
     });
 
+
+    /* 전체 타임라인 길이 확보 */
     tl.to({}, {
-        duration: totalTime
-    }, 0);
+            duration: totalTime
+        },
+        0
+    );
 }
 
 
-if (window.innerWidth >= 1200) {
-    initSolutionOrbit();
-}
+/* PC / 태블릿 / 모바일 모두 실행 */
+initSolutionOrbit();
 
 
 
@@ -599,9 +796,10 @@ function initSolutionFloating() {
     });
 }
 
-if (window.innerWidth >= 1200) {
-    initSolutionFloating();
-}
+/* PC 전용으로 막혀있었으나, 마우스/스크롤에 의존하지 않는
+   가벼운 무한 루프 애니메이션이라 모든 화면에서 실행 */
+initSolutionFloating();
+
 
 
 
@@ -826,310 +1024,7 @@ if (window.innerWidth >= 1200) {
 
 
 
-/* ── Keyword 큰 텍스트 분리 + 가로 피슝 라인 ── */
-function initKeywordSplit() {
-    const section = document.querySelector(".keyword_section");
-    const items = gsap.utils.toArray(".keyword_item");
-
-    if (!section || !items.length) return;
-
-
-    /* ==============================
-       라인 자동 생성
-    ============================== */
-
-    items.forEach((item) => {
-        const pin = item.querySelector(".keyword_pin");
-
-        if (!pin) return;
-
-        if (!pin.querySelector(".keyword_motion_line")) {
-            const glowLine = document.createElement("span");
-            const mainLine = document.createElement("span");
-
-            glowLine.className = "keyword_motion_line line_glow";
-            mainLine.className = "keyword_motion_line line_main";
-
-            pin.prepend(glowLine);
-            pin.prepend(mainLine);
-        }
-    });
-
-
-    /* ==============================
-       초기 상태
-    ============================== */
-
-    gsap.set(items, {
-        autoAlpha: 0,
-        x: 0,
-        y: 0
-    });
-
-    items.forEach((item) => {
-        const parts = item.querySelectorAll(".keyword_title span");
-        const desc = item.querySelector(".keyword_desc");
-        const lines = item.querySelectorAll(".keyword_motion_line");
-
-        gsap.set(parts, {
-            xPercent: -50,
-            yPercent: -50,
-            x: 0,
-            y: 0
-        });
-
-        gsap.set(desc, {
-            opacity: 0,
-            scale: 0.96
-        });
-
-        /* 모든 라인은 가로 */
-        gsap.set(lines, {
-            scaleX: 0,
-            scaleY: 1,
-            opacity: 0
-        });
-    });
-
-
-    gsap.set(items[0], {
-        autoAlpha: 1
-    });
-
-
-    /* ==============================
-       메인 타임라인
-    ============================== */
-
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: `+=${items.length * 1400}`,
-            pin: true,
-            scrub: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true
-        }
-    });
-
-
-    items.forEach((item, index) => {
-        const isLR = item.classList.contains("keyword_lr");
-
-        const left = item.querySelector(".keyword_left");
-        const right = item.querySelector(".keyword_right");
-
-        const top = item.querySelector(".keyword_top");
-        const bottom = item.querySelector(".keyword_bottom");
-
-        const desc = item.querySelector(".keyword_desc");
-
-        const mainLine = item.querySelector(".line_main");
-        const glowLine = item.querySelector(".line_glow");
-
-
-        const start = index * 1.6;
-
-        const enterDuration =
-            index === 0 ? 0 : 0.38;
-
-
-        /*
-            중앙 도착 후 피슝 시작
-        */
-
-        const focusStart =
-            start +
-            enterDuration +
-            0.18;
-
-
-        const enterAxis =
-            index % 2 === 0 ? "y" : "x";
-
-        const enterValue =
-            index % 2 === 0 ? "100vh" : "100vw";
-
-
-        /* ==============================
-           아이템 등장
-        ============================== */
-
-        tl.set(item, {
-            autoAlpha: 1,
-            x: 0,
-            y: 0
-        }, start);
-
-
-        if (index !== 0) {
-            tl.fromTo(
-                item,
-
-                {
-                    [enterAxis]: enterValue
-                },
-
-                {
-                    [enterAxis]: 0,
-                    duration: enterDuration,
-                    ease: "none"
-                },
-
-                start
-            );
-        }
-
-
-        /* ==============================
-           가로 피슝 라인
-        ============================== */
-
-        tl.fromTo(
-            glowLine,
-
-            {
-                scaleX: 0.02,
-                opacity: 0,
-                filter: "blur(12px)"
-            },
-
-            {
-                scaleX: 1,
-                opacity: 0.9,
-                filter: "blur(6px)",
-                duration: 0.12,
-                ease: "power4.out"
-            },
-
-            focusStart
-        );
-
-
-        tl.fromTo(
-            mainLine,
-
-            {
-                scaleX: 0,
-                opacity: 0
-            },
-
-            {
-                scaleX: 1,
-                opacity: 1,
-                duration: 0.1,
-                ease: "power4.out"
-            },
-
-            focusStart + 0.02
-        );
-
-
-        /* ==============================
-           텍스트 분리
-        ============================== */
-
-        if (isLR) {
-
-            tl.to(left, {
-                x: "-18vw",
-                duration: 0.45,
-                ease: "power2.out"
-            }, focusStart + 0.06);
-
-
-            tl.to(right, {
-                x: "18vw",
-                duration: 0.45,
-                ease: "power2.out"
-            }, focusStart + 0.06);
-
-        } else {
-
-            tl.to(top, {
-                y: "-8rem",
-                duration: 0.45,
-                ease: "power2.out"
-            }, focusStart + 0.06);
-
-
-            tl.to(bottom, {
-                y: "8rem",
-                duration: 0.45,
-                ease: "power2.out"
-            }, focusStart + 0.06);
-        }
-
-
-        /* ==============================
-           설명 등장
-        ============================== */
-
-        tl.to(desc, {
-            opacity: 1,
-            scale: 1,
-            duration: 0.24,
-            ease: "power2.out"
-        }, focusStart + 0.22);
-
-
-        /* ==============================
-           라인 소멸
-        ============================== */
-
-        tl.to(mainLine, {
-            scaleX: 1.15,
-            opacity: 0,
-            duration: 0.18,
-            ease: "power2.in"
-        }, focusStart + 0.15);
-
-
-        tl.to(glowLine, {
-            scaleX: 1.25,
-            opacity: 0,
-            filter: "blur(14px)",
-            duration: 0.24,
-            ease: "power2.out"
-        }, focusStart + 0.14);
-
-
-        /* ==============================
-           다음 키워드로 퇴장
-        ============================== */
-
-        if (index !== items.length - 1) {
-
-            const exitAxis =
-                index % 2 === 0 ? "y" : "x";
-
-            const exitValue =
-                index % 2 === 0 ?
-                "-100vh" :
-                "-100vw";
-
-
-            const exitStart =
-                focusStart + 0.95;
-
-
-            tl.to(item, {
-                [exitAxis]: exitValue,
-                duration: 0.45,
-                ease: "none"
-            }, exitStart);
-
-
-            tl.set(item, {
-                autoAlpha: 0
-            }, exitStart + 0.45);
-        }
-    });
-}
-
-
-/* 모바일/태블릿: 세로 스택 + 1회성 fade-up (pin/scrub 없음) */
+/* ── 모바일 / 태블릿 Keyword 피슝 애니메이션 ── */
 function initKeywordMobile() {
     const section = document.querySelector(".keyword_section");
     const items = gsap.utils.toArray(".keyword_item");
@@ -1141,42 +1036,220 @@ function initKeywordMobile() {
     });
 
     items.forEach((item, index) => {
+        const pin = item.querySelector(".keyword_pin");
         const title = item.querySelector(".keyword_title");
         const desc = item.querySelector(".keyword_desc");
 
-        const fromX = index % 2 === 0 ? -80 : 80;
+        if (!pin || !title || !desc) return;
+
+        /*
+         * keyword_pin 기준으로 라인이 중앙에 위치하도록 설정
+         * 기존 글자 구조에는 영향을 주지 않음
+         */
+        gsap.set(pin, {
+            position: "relative"
+        });
+
+        /*
+         * 모바일 피슝 라인 자동 생성
+         */
+        let lineWrap = pin.querySelector(".keyword_mobile_line_wrap");
+
+        if (!lineWrap) {
+            lineWrap = document.createElement("div");
+            lineWrap.className = "keyword_mobile_line_wrap";
+
+            const glowLine = document.createElement("span");
+            glowLine.className = "keyword_mobile_glow";
+
+            const mainLine = document.createElement("span");
+            mainLine.className = "keyword_mobile_main";
+
+            lineWrap.appendChild(glowLine);
+            lineWrap.appendChild(mainLine);
+
+            pin.appendChild(lineWrap);
+        }
+
+        const mainLine = lineWrap.querySelector(".keyword_mobile_main");
+        const glowLine = lineWrap.querySelector(".keyword_mobile_glow");
+
+        /*
+         * CSS 파일 수정 없이 JS에서 피슝 라인 스타일 지정
+         */
+        function setLinePosition() {
+            const pinRect = pin.getBoundingClientRect();
+            const titleRect = title.getBoundingClientRect();
+
+            const titleCenterY =
+                titleRect.top - pinRect.top + titleRect.height / 2;
+
+            gsap.set(lineWrap, {
+                position: "absolute",
+                left: "50%",
+                top: titleCenterY,
+                xPercent: -50,
+                yPercent: -50,
+                width: "100%",
+                height: "16px",
+                zIndex: 1,
+                pointerEvents: "none",
+                overflow: "visible"
+            });
+        }
+
+        setLinePosition();
+
+        window.addEventListener("resize", setLinePosition);
+
+        gsap.set([mainLine, glowLine], {
+            position: "absolute",
+            left: 0,
+            top: "50%",
+            width: "100%",
+            transformOrigin: "center center",
+            scaleX: 0,
+            opacity: 0,
+            pointerEvents: "none"
+        });
+
+        gsap.set(mainLine, {
+            height: "2px",
+            yPercent: -50,
+            background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 20%, rgba(255,255,255,1) 50%, rgba(255,255,255,0.15) 80%, transparent 100%)"
+        });
+
+        gsap.set(glowLine, {
+            height: "10px",
+            yPercent: -50,
+            background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 15%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0.05) 85%, transparent 100%)",
+            filter: "blur(7px)"
+        });
+
+        /*
+         * 글자가 라인보다 위에 보이도록 설정
+         */
+        gsap.set([title, desc], {
+            position: "relative",
+            top: "auto",
+            right: "auto",
+            bottom: "auto",
+            left: "auto",
+            zIndex: 2
+        });
+
+        /*
+         * 1, 3번째는 왼쪽에서
+         * 2, 4번째는 오른쪽에서
+         */
+        const fromLeft = index % 2 === 0;
+        const fromX = fromLeft ? -35 : 35;
+
+        const lineOrigin = fromLeft ?
+            "left center" :
+            "right center";
+
+        gsap.set([mainLine, glowLine], {
+            transformOrigin: lineOrigin
+        });
 
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: item,
-                start: "top 50%",
-                end: "bottom 15%",
-                toggleActions: "play reverse play reverse"
+                start: "top 72%",
+                toggleActions: "play none none reverse"
             }
         });
 
-        tl.from(title, {
-            xPercent: fromX,
-            opacity: 0,
-            duration: 0.8,
-            ease: "power3.out"
-        });
+        /* 피슝 빛 번짐 */
+        tl.fromTo(
+            glowLine, {
+                scaleX: 0,
+                opacity: 0
+            }, {
+                scaleX: 1,
+                opacity: 0.9,
+                duration: 0.22,
+                ease: "power4.out"
+            }
+        );
 
-        tl.from(desc, {
-            y: 30,
-            opacity: 0,
-            duration: 0.6,
-            ease: "power3.out"
-        }, "-=0.25");
+        /* 선명한 중앙 라인 */
+        tl.fromTo(
+            mainLine, {
+                scaleX: 0,
+                opacity: 0
+            }, {
+                scaleX: 1,
+                opacity: 1,
+                duration: 0.18,
+                ease: "power4.out"
+            },
+            "<0.03"
+        );
+
+        /* 키워드 진입 */
+        tl.fromTo(
+            title, {
+                xPercent: fromX,
+                scale: 1.05,
+                opacity: 0,
+                filter: "blur(8px)"
+            }, {
+                xPercent: 0,
+                scale: 1,
+                opacity: 1,
+                filter: "blur(0px)",
+                duration: 0.58,
+                ease: "power4.out"
+            },
+            "-=0.08"
+        );
+
+        /* 중앙 라인 잔상 제거 */
+        tl.to(
+            mainLine, {
+                scaleX: 1.08,
+                opacity: 0,
+                duration: 0.22,
+                ease: "power2.in"
+            },
+            "-=0.3"
+        );
+
+        tl.to(
+            glowLine, {
+                scaleX: 1.15,
+                opacity: 0,
+                duration: 0.3,
+                ease: "power2.out"
+            },
+            "<"
+        );
+
+        /* 설명 등장 */
+        tl.fromTo(
+            desc, {
+                y: 24,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.48,
+                ease: "power3.out"
+            },
+            "-=0.08"
+        );
     });
 }
 
+
+/* PC와 태블릿·모바일 애니메이션 분리 */
 if (window.innerWidth >= 1200) {
     initKeywordSplit();
 } else {
     initKeywordMobile();
 }
-
 
 
 
@@ -1949,3 +2022,19 @@ initNewsSlider();
         });
     }
 })();
+
+
+let previousWidth = window.innerWidth;
+let resizeTimer;
+
+window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+
+    resizeTimer = setTimeout(function () {
+        const currentWidth = window.innerWidth;
+
+        if (currentWidth !== previousWidth) {
+            window.location.reload();
+        }
+    }, 300);
+});

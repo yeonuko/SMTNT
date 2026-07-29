@@ -2342,9 +2342,8 @@ section {
     margin-bottom: 5rem;
     font-family: "Big Shoulders", sans-serif;
     font-size: 6.4rem;
-    font-weight: 800;
+    font-weight: 600;
     line-height: 0.9;
-    letter-spacing: -0.04em;
     color: #fff;
 }
 
@@ -2363,7 +2362,6 @@ section {
     gap: 1.2rem;
     min-width: 18rem;
     height: 5rem;
-    /* padding: 0 4rem; */
     background: var(--color-primary);
     color: #fff;
     font-size: 2.6rem;

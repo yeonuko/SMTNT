@@ -307,142 +307,111 @@
         line-height: 3.4rem;
     }
 
+
+
+
+
+
+
+
+
     /* =========================
        Solution
     ========================= */
+
+
+    .solution_mobile {
+        display: none;
+    }
+
     .solution_section {
-        height: auto;
-        min-height: 0;
-        padding: 12rem 0;
+        position: relative;
+        width: 100%;
+        height: 100svh;
+        min-height: 72rem;
+        padding: 0;
+        overflow: hidden;
     }
 
     .solution_inner {
         position: relative;
         width: 100%;
-        height: auto;
+        height: 100%;
+        min-height: inherit;
+        overflow: hidden;
     }
 
-    .solution_center,
-    .solution_deco,
+    .solution_center {
+        display: block;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .solution_orbit,
     .solution_orbit_left,
     .solution_orbit_right {
-        display: none;
-    }
-
-    .solution_mobile {
         display: block;
-        width: auto;
-        margin-inline: -2rem;
-        padding: 8rem 4rem 8rem;
-        background: #0f172a;
     }
 
-    .solution_mobile_group {
-        width: 100%;
-        margin-bottom: 10rem;
-    }
-
-    .solution_mobile_group:last-child {
-        margin-bottom: 0;
-    }
-
-    .solution_mobile_title {
-        font-family: "Big Shoulders", sans-serif;
-        font-size: 6rem;
-        line-height: 0.9;
-        font-weight: 900;
-        letter-spacing: -0.04em;
-        color: #fff;
-    }
-
-    .solution_mobile_slider {
-        position: relative;
-        width: 100%;
-        overflow: hidden;
-        touch-action: pan-y;
-    }
-
-    .solution_mobile_slider .swiper-wrapper {
-        display: flex;
-        align-items: stretch;
-        width: 100%;
-    }
-
-    .solution_mobile_slider .swiper-slide {
-        position: relative;
-        flex-shrink: 0;
-        width: min(43rem, calc(100vw - 4rem));
-        height: auto;
-    }
-
-    .solution_mobile_slider .solution_card {
-        position: relative;
-        top: auto;
-        left: auto;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    .solution_orbit {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
         width: 100%;
         height: 100%;
-        min-height: 28rem;
-        padding: 2.4rem;
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-        transform: none !important;
+        pointer-events: none;
     }
 
-    .solution_mobile_slider .solution_card_text {
-        display: flex;
-        flex: 1;
-        flex-direction: column;
-        min-width: 0;
+    .solution_word {
+        font-size: 10rem;
     }
 
-    .solution_mobile_slider .solution_card h3 {
-        min-height: 5.8rem;
-        margin-bottom: 2rem;
-        font-size: 2.2rem;
-        line-height: 1.3;
-    }
-
-    .solution_mobile_slider .solution_card_text>p:last-child {
-        font-size: 1.5rem;
-        line-height: 1.7;
-    }
-
-    .solution_mobile_head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    /*
+     * 기존 PC 카드의 색상, 내부 여백, 텍스트 내용은 유지하고
+     * 세로 화면에 맞게 이미지-텍스트 배치만 세로형으로 전환
+     * (마크업 순서는 그대로, column-reverse로 이미지를 위로 올림)
+     */
+    .solution_card {
+        transform-origin: center center;
+        scale: 0.78;
+        flex-direction: column-reverse;
+        align-items: stretch;
         gap: 2rem;
-        margin-bottom: 2.4rem;
+        width: 40rem
     }
 
-    .solution_mobile_pagination {
-        position: static;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 0.8rem;
-        width: auto;
+    .solution_card_img {
+        width: 100%;
+        height: rem;
     }
 
-    .solution_mobile_pagination .swiper-pagination-bullet {
-        width: 0.8rem;
-        height: 0.8rem;
-        margin: 0 !important;
-        border-radius: 50%;
-        background: #c5c5c5;
-        opacity: 1;
+    .solution_deco {
+        display: block;
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
     }
 
-    .solution_mobile_pagination .swiper-pagination-bullet-active {
-        width: 2.4rem;
-        border-radius: 999px;
-        background: var(--color-primary);
-
+    .solution_center {
+        z-index: 2;
     }
+
+    .deco_near {
+        width: 16rem;
+    }
+
+    .deco_mid {
+        width: 19rem;
+    }
+
+    .deco_far {
+        width: 11rem;
+    }
+
+
+
+
 
 
 
@@ -770,9 +739,12 @@
     /* ===========================
     News
 =========================== */
+    .news_section {
+        padding: 10rem var(--grid-margin);
+    }
 
     .news_inner {
-        width: calc(100% - 6rem);
+        width: 100%;
     }
 
 
@@ -1189,40 +1161,42 @@
        Solution
     ========================= */
 
+
     .solution_section {
-        padding: 9rem 0;
+        min-height: 64rem;
     }
 
-    .solution_inner {
-        padding: 0 var(--grid-margin);
+    .solution_center {
+        padding: 0 1.8rem;
     }
 
-    .solution_mobile {
-        margin-inline: -2rem;
-        padding: 8rem 2rem 8rem;
+    .solution_label {
+        font-size: 1.1rem;
     }
 
-    .solution_mobile_group {
-        margin-bottom: 8rem;
+    .solution_word {
+        font-size: clamp(3.8rem, 11.5vw, 5.4rem);
     }
 
-    .solution_mobile_title {
-        margin-bottom: 2.4rem;
-        font-size: 5.6rem;
+    .solution_desc {
+        font-size: 1.05rem;
     }
 
-    .solution_mobile_slider .solution_card {
-        min-height: 28rem;
-        padding: 2.4rem;
+    .solution_card {
+        scale: 0.6;
     }
 
-    .vision_scroll {
-        padding: 0 0 4rem;
+    .deco_near {
+        width: 10rem;
     }
 
+    .deco_mid {
+        width: 12rem;
+    }
 
-
-
+    .deco_far {
+        width: 7rem;
+    }
 
 
 
@@ -1231,7 +1205,11 @@
     ========================= */
 
     .performance_title {
-        font-size: 8rem;
+        font-size: 6rem;
+    }
+
+    .performance_desc {
+        font-size: 1.4rem;
     }
 
     .performance_card_list {
@@ -1343,6 +1321,7 @@
 
     .process_title {
         max-width: 28rem;
+        font-size: 2.6rem;
     }
 
     .process_desc {
@@ -1377,12 +1356,12 @@
 
     .process_mobile_name {
         margin-bottom: 1.2rem;
-        font-size: 2rem;
+        font-size: 1.8rem;
         line-height: 1.45;
     }
 
     .process_mobile_text {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         line-height: 1.75;
     }
 
@@ -1415,7 +1394,7 @@
 
     .news_name {
         min-height: 6rem;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
     .news_more {
@@ -1465,7 +1444,15 @@
         animation-duration: 26s;
     }
 
+    .contact_cta_btn {
+        min-width: 13rem;
+        height: 4rem;
+        font-size: 1.8rem;
+    }
 
+    .footer_logo {
+        max-width: 14rem;
+    }
 
     /* =========================
    문의하기 팝업
@@ -1587,67 +1574,76 @@
    일반 모바일
    361px ~ 480pxs
 ========================================================== */
-@media (min-width: 361px) and (max-width: 480px) {
+@media
+
+/*(min-width: 361px) and */
+(max-width: 480px) {
     .main_desc {
         margin-top: 8rem;
     }
+
+    .main_intro_title {
+        font-size: 2.8rem;
+    }
+
 
     .vision_text {
         font-size: 1.6rem;
         line-height: 2.8rem;
     }
 
-    .solution_mobile_title {
-        margin-bottom: 0;
-        font-size: 3.6rem;
+    .performance_title {
+        font-size: 4.4rem;
     }
 
-    .solution_mobile_slider .solution_card {
-        min-height: 28rem;
-        padding: 2.4rem;
-    }
-
-    .solution_category {
-        margin-bottom: 1rem;
-        font-size: 1.2rem;
-    }
-
-    .solution_mobile_slider .solution_card {
-        gap: 0;
-    }
-
-    .solution_mobile_slider .solution_card h3 {
-        min-height: 0;
-        margin-bottom: 2rem;
-        font-size: 2rem;
-        line-height: 1.3;
-    }
-
-    .solution_mobile_slider .solution_card_text>p:last-child {
-        font-size: 1.3rem;
-    }
-
-    .solution_card_img {
-        width: 17rem;
-        height: 22rem;
-        border-radius: 1.6rem;
-        overflow: hidden;
-        flex-shrink: 0;
+    .performance_desc {
+        margin-top: 4rem;
     }
 
     .keyword_desc {
         font-size: 1.8rem;
     }
 
-
+    .solution_card {
+        scale: 0.54;
+    }
 
     .scatter_word {
-        font-size: 3rem;
+        font-size: 2.8rem;
+    }
+
+    .news_fraction {
+        font-size: 1.6rem;
+    }
+
+    .news_prev,
+    .news_next {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .news_prev span,
+    .news_next span {
+        width: 0.8rem;
+        height: 0.8rem;
+    }
+
+    .contact_cta_inner {
+        max-width: 100%;
+    }
+
+    .contact_cta_title {
+        font-size: 4.4rem;
+    }
+
+    .contact_cta_desc {
+        font-size: 1.4rem;
     }
 
     .contact_popup_title {
         font-size: 3.2rem;
     }
+
 
 }
 
@@ -1658,45 +1654,6 @@
    360px 이하
 ========================================================== */
 @media (max-width: 360px) {
-    .solution_mobile_title {
-        font-size: 3.6rem;
-    }
-
-    .solution_mobile_slider br {
-        display: none;
-    }
-
-    .solution_mobile_head {
-        margin-bottom: 0;
-    }
-
-    .solution_mobile_slider .solution_card {
-        min-height: 26rem;
-        padding: 2rem;
-    }
-
-    .solution_mobile_slider .solution_card h3 {
-        min-height: 0;
-        margin-bottom: 2rem;
-        font-size: 1.8rem;
-        line-height: 1.3;
-    }
-
-    .solution_category {
-        margin-bottom: .8rem;
-        font-size: 1rem;
-        color: #fff;
-        font-weight: 400;
-    }
-
-    .solution_mobile_slider .solution_card_text>p:last-child {
-        font-size: 1.2rem;
-    }
-
-    .solution_card_img {
-        width: 14rem;
-        height: 20rem;
-    }
 
 
 
@@ -1714,5 +1671,13 @@
 
     .contact_email_domain::after {
         right: 1rem;
+    }
+
+    .scatter_word {
+        font-size: 2.8rem;
+    }
+
+    .process_mobile_content {
+        padding-top: 1rem;
     }
 }
