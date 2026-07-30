@@ -203,20 +203,86 @@ function initMobileNav() {
 
     if (!header || !toggle) return;
 
+    let scrollY = 0;
+
     function closeMenu() {
         header.classList.remove("menu_open");
         toggle.setAttribute("aria-expanded", "false");
         gnbItems.forEach((item) => item.classList.remove("is_open"));
-        lenis.start();
+
+        /* 스크롤 잠금은 모바일 전체 오버레이에서만 걸었던 것 — PC 드롭다운은
+           리스트만 열리고 닫히면 되고 스크롤엔 아무 영향도 줄 필요 없음 */
+        if (document.body.style.position === "fixed") {
+            lenis.start();
+            document.body.style.position = "";
+            document.body.style.top = "";
+            document.body.style.width = "";
+            window.scrollTo(0, scrollY);
+        }
     }
 
     function openMenu() {
         header.classList.add("menu_open");
         toggle.setAttribute("aria-expanded", "true");
-        lenis.stop();
+
+        /* 모바일 전체 오버레이일 때만 스크롤 잠금. PC는 작은 드롭다운이라
+           스크롤/lenis에 손댈 필요 없이 리스트만 보였다 사라지면 됨 */
+        if (mq.matches) {
+            lenis.stop();
+            scrollY = window.scrollY;
+            document.body.style.position = "fixed";
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = "100%";
+        }
     }
 
-    toggle.addEventListener("click", () => {
+    /* PC에서 메뉴가 열린 상태로 아래 스크롤하면
+        헤더와 함께 GNB도 자동으로 닫기 */
+    if (isDesktopViewport) {
+        lenis.on("scroll", (e) => {
+            const isMenuOpen =
+                header.classList.contains("menu_open");
+
+            if (!isMenuOpen) return;
+
+            /* 아래 방향으로 스크롤할 때 */
+            if (e.velocity > 0) {
+                closeMenu();
+            }
+        });
+    }
+
+    /* 드래그(스크롤 제스처)로 버튼을 스쳐 지나간 경우 클릭으로 처리되지 않도록 이동량 체크 */
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let toggledByDrag = false;
+
+    toggle.addEventListener("touchstart", (e) => {
+        const t = e.touches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+        toggledByDrag = false;
+    }, {
+        passive: true
+    });
+
+    toggle.addEventListener("touchmove", (e) => {
+        const t = e.touches[0];
+        const dx = Math.abs(t.clientX - touchStartX);
+        const dy = Math.abs(t.clientY - touchStartY);
+
+        if (dx > 10 || dy > 10) toggledByDrag = true;
+    }, {
+        passive: true
+    });
+
+    toggle.addEventListener("click", (e) => {
+        if (toggledByDrag) {
+            toggledByDrag = false;
+            e.preventDefault();
+            return;
+        }
+
         const isOpen = header.classList.contains("menu_open");
         isOpen ? closeMenu() : openMenu();
     });
@@ -226,7 +292,14 @@ function initMobileNav() {
         const link = item.querySelector(".gnb_link");
         const depth = item.querySelector(".gnb_depth");
 
-        if (!link || !depth) return;
+        if (!link) return;
+
+        /* 뎁스(하위메뉴)가 없는 링크는 클릭 즉시 해당 섹션으로 이동하는 거라
+           메뉴도 같이 닫아줘야 함 */
+        if (!depth) {
+            link.addEventListener("click", closeMenu);
+            return;
+        }
 
         link.addEventListener("click", (e) => {
             if (!mq.matches) return;
@@ -253,6 +326,16 @@ function initMobileNav() {
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeMenu();
     });
+
+    /* 패널(또는 토글 버튼) 바깥을 클릭하면 닫기 */
+    document.addEventListener("click", (e) => {
+        if (!header.classList.contains("menu_open")) return;
+        if (toggle.contains(e.target)) return;
+        const gnb = document.querySelector(".gnb");
+        if (gnb && gnb.contains(e.target)) return;
+
+        closeMenu();
+    });
 }
 
 initMobileNav();
@@ -272,6 +355,25 @@ mm.add("(min-width: 1200px)", () => {
 
     initMainIntro();
 });
+
+
+/* ── 모바일 main_intro_text 1회성 fade-up (PC는 위 스크럽 강조 유지) ── */
+function initMainIntroTextMobile() {
+    const isMobile = window.matchMedia("(max-width: 1199px)").matches;
+    if (!isMobile) return;
+
+    const text = document.querySelector(".main_intro_text");
+    if (!text) return;
+
+    ScrollTrigger.create({
+        trigger: text,
+        start: "top 85%",
+        once: true,
+        onEnter: () => text.classList.add("is_visible")
+    });
+}
+
+initMainIntroTextMobile();
 
 
 
@@ -359,6 +461,63 @@ function initVisionHighlight() {
 }
 
 initVisionHighlight();
+
+
+/* ── Vision 모바일 스크롤 레일 (좌측 세로선 + 진행률 채움 + 하이라이트 마커) ── */
+function initVisionRail() {
+    const isMobile = window.matchMedia("(max-width: 1199px)").matches;
+    if (!isMobile) return;
+
+    const scrollWrap = document.querySelector(".vision_scroll");
+    const rail = document.querySelector(".vision_rail");
+    const fill = document.querySelector(".vision_rail_fill");
+    const highlights = gsap.utils.toArray(".vision_scroll .vision_highlight");
+
+    if (!scrollWrap || !rail || !fill || !highlights.length) return;
+
+    /* 하이라이트 문단이 시작되는 위치마다 레일 옆에 마커 생성 */
+    highlights.forEach((highlight) => {
+        const marker = document.createElement("span");
+        marker.className = "vision_rail_marker";
+        rail.appendChild(marker);
+
+        const setPosition = () => {
+            const wrapTop = scrollWrap.getBoundingClientRect().top + window.scrollY;
+            const highlightTop = highlight.getBoundingClientRect().top + window.scrollY;
+            marker.style.top = `${highlightTop - wrapTop}px`;
+        };
+
+        setPosition();
+        window.addEventListener("resize", setPosition);
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(setPosition);
+        }
+
+        ScrollTrigger.create({
+            trigger: highlight,
+            start: "top 65%",
+            end: "bottom 35%",
+            onToggle: (self) => marker.classList.toggle("is_active", self.isActive)
+        });
+    });
+
+    /* 레일 채움 = vision_scroll을 지나는 진행률에 맞춰 스크럽 */
+    gsap.fromTo(fill, {
+            scaleY: 0
+        }, {
+            scaleY: 1,
+            ease: "none",
+            scrollTrigger: {
+                trigger: scrollWrap,
+                start: "top 70%",
+                end: "bottom 70%",
+                scrub: true
+            }
+        }
+    );
+}
+
+initVisionRail();
 
 
 
@@ -526,7 +685,7 @@ function initSolutionOrbit() {
         cardGap = 0.11;
     }
     if (isMobile) {
-        cardGap = 0.15;
+        cardGap = 0.2;
     }
     var cardDuration = 0.28;
     var focusDelay = cardDuration * 0.35;
@@ -1459,6 +1618,8 @@ function initKeywordMobile() {
             transformOrigin: lineOrigin
         });
 
+        const prevItem = index > 0 ? items[index - 1] : null;
+
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: item,
@@ -1466,6 +1627,30 @@ function initKeywordMobile() {
                 toggleActions: "play none none reverse"
             }
         });
+
+        /* 다음 item이 등장할 때 이전 item을 같이 사라지게 하는 효과는
+           별도의 scrub 트윈으로 분리 — 시간 기반 play/reverse 타임라인에 얹으면
+           스크롤을 위로 되돌릴 때 트리거 시점을 정확히 되짚어 지나가야만
+           역재생이 붙어서 "내릴 때만 되고 올릴 땐 안 되는" 문제가 있었음.
+           scrub은 스크롤 위치에 실시간으로 물려서 방향 상관없이 항상 맞게 따라옴 */
+        if (prevItem) {
+            gsap.fromTo(prevItem, {
+                opacity: 1,
+                y: 0,
+                filter: "blur(0px)"
+            }, {
+                opacity: 0,
+                y: -20,
+                filter: "blur(4px)",
+                ease: "none",
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 90%",
+                    end: "top 55%",
+                    scrub: true
+                }
+            });
+        }
 
         /* 피슝 빛 번짐 */
         tl.fromTo(
@@ -1991,6 +2176,15 @@ window.addEventListener("load", () => {
     ScrollTrigger.refresh();
 });
 
+/* 웹폰트가 window load 이후 늦게 도착하면 ScrollTrigger 시작좌표가
+   폰트 적용 전 레이아웃 기준으로 고정돼버려서 scatter_section 등에서
+   스크롤 싱크가 밀리는 문제가 있었음 → 폰트 로드 완료 후 강제 재계산 */
+if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+        ScrollTrigger.refresh();
+    });
+}
+
 
 
 
@@ -2151,6 +2345,17 @@ initNewsSlider();
     setFooterHeight();
     window.addEventListener("load", setFooterHeight);
     window.addEventListener("resize", setFooterHeight);
+
+    /* 모바일 주소창 표시/숨김으로 실제 뷰포트 높이만 바뀌는 경우
+       (window resize가 안 잡히는 경우가 있어) visualViewport로 별도 감지 */
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", setFooterHeight);
+    }
+
+    /* 웹폰트 로드로 footer_inner 실제 높이가 늦게 바뀌는 경우 대비 */
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(setFooterHeight);
+    }
 
     // footer_spacer가 화면에 실제로 들어왔을 때만 footer를 클릭 가능하게 전환
     // (다른 곳에서 클릭이 새어 들어가는 걸 막기 위한 안전장치)
