@@ -628,7 +628,7 @@
     ========================= */
 
     .scatter_section {
-        height: 150vh;
+        height: calc(100svh + 650px);
     }
 
     /* 초기 흩어진 위치 */

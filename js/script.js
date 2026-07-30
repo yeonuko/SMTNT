@@ -503,18 +503,17 @@ function initVisionRail() {
 
     /* 레일 채움 = vision_scroll을 지나는 진행률에 맞춰 스크럽 */
     gsap.fromTo(fill, {
-            scaleY: 0
-        }, {
-            scaleY: 1,
-            ease: "none",
-            scrollTrigger: {
-                trigger: scrollWrap,
-                start: "top 70%",
-                end: "bottom 70%",
-                scrub: true
-            }
+        scaleY: 0
+    }, {
+        scaleY: 1,
+        ease: "none",
+        scrollTrigger: {
+            trigger: scrollWrap,
+            start: "top 70%",
+            end: "bottom 70%",
+            scrub: true
         }
-    );
+    });
 }
 
 initVisionRail();
@@ -1634,22 +1633,31 @@ function initKeywordMobile() {
            역재생이 붙어서 "내릴 때만 되고 올릴 땐 안 되는" 문제가 있었음.
            scrub은 스크롤 위치에 실시간으로 물려서 방향 상관없이 항상 맞게 따라옴 */
         if (prevItem) {
-            gsap.fromTo(prevItem, {
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)"
-            }, {
-                opacity: 0,
-                y: -20,
-                filter: "blur(4px)",
-                ease: "none",
-                scrollTrigger: {
-                    trigger: item,
-                    start: "top 90%",
-                    end: "top 55%",
-                    scrub: true
+            gsap.fromTo(
+                prevItem, {
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)"
+                }, {
+                    opacity: 0,
+                    y: -30,
+                    filter: "blur(8px)",
+                    ease: "power1.inOut",
+
+                    scrollTrigger: {
+                        trigger: item,
+
+                        /* 다음 아이템이 들어오기 시작하면 이전 아이템 퇴장 */
+                        start: "top 60%",
+
+                        /* 넉넉한 스크롤 구간에 걸쳐 자연스럽게 사라짐 */
+                        end: "top 50%",
+
+                        /* true보다 숫자를 주면 스크롤을 부드럽게 따라감 */
+                        scrub: 0.5
+                    }
                 }
-            });
+            );
         }
 
         /* 피슝 빛 번짐 */
