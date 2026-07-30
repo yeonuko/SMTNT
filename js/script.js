@@ -475,29 +475,63 @@ function initVisionRail() {
 
     if (!scrollWrap || !rail || !fill || !highlights.length) return;
 
-    /* 하이라이트 문단이 시작되는 위치마다 레일 옆에 마커 생성 */
+    /* 하이라이트 위치마다 레일 옆에 마커 생성 */
     highlights.forEach((highlight) => {
         const marker = document.createElement("span");
         marker.className = "vision_rail_marker";
         rail.appendChild(marker);
 
+        const keyword = highlight.closest(".vision_keyword");
+        const keywordHead = keyword ?
+            keyword.querySelector(".vision_keyword_head") :
+            null;
+
+        /*
+         * 키워드 영역이면 vision_keyword_head 기준
+         * 상단 소개 문장이면 기존 highlight 기준
+         */
+        const target = keywordHead || highlight;
+
         const setPosition = () => {
-            const wrapTop = scrollWrap.getBoundingClientRect().top + window.scrollY;
-            const highlightTop = highlight.getBoundingClientRect().top + window.scrollY;
-            marker.style.top = `${highlightTop - wrapTop}px`;
+            const wrapRect = scrollWrap.getBoundingClientRect();
+            const targetRect = target.getBoundingClientRect();
+
+            marker.style.top = `${
+            targetRect.top -
+            wrapRect.top +
+            targetRect.height / 2 - 4
+        }px`;
         };
 
         setPosition();
+
         window.addEventListener("resize", setPosition);
+
         if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(setPosition);
+            document.fonts.ready.then(() => {
+                setPosition();
+                ScrollTrigger.refresh();
+            });
         }
 
         ScrollTrigger.create({
-            trigger: highlight,
+            /*
+             * 마커 위치와 활성화 시점을 같은 요소로 통일
+             */
+            trigger: target,
             start: "top 65%",
-            end: "bottom 35%",
-            onToggle: (self) => marker.classList.toggle("is_active", self.isActive)
+
+            onEnter: () => {
+                marker.classList.add("is_active");
+            },
+
+            onEnterBack: () => {
+                marker.classList.add("is_active");
+            },
+
+            onLeaveBack: () => {
+                marker.classList.remove("is_active");
+            }
         });
     });
 
@@ -659,10 +693,12 @@ function initSolutionOrbit() {
 
     var cardScale = 1;
 
-    if (isMobile) {
-        cardScale = 0.7;
-    } else if (isTablet) {
+    if (window.innerWidth <= 480) {
+        cardScale = 0.8;
+    } else if (window.innerWidth <= 767) {
         cardScale = 0.9;
+    } else if (window.innerWidth <= 1199) {
+        cardScale = 0.9
     }
 
     gsap.set(allCards, {

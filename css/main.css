@@ -1237,7 +1237,7 @@ section {
 .solution_card_img {
     width: 18rem;
     height: 26rem;
-    border-radius: 1.6rem;
+    border-radius: 2rem;
     overflow: hidden;
     flex-shrink: 0;
 }

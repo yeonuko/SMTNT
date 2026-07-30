@@ -420,16 +420,16 @@
      */
     .solution_card {
         transform-origin: center center;
-        scale: 0.78;
         flex-direction: column-reverse;
         align-items: stretch;
         gap: 2rem;
-        width: 40rem
+        width: 40rem;
+        padding: 4rem;
     }
 
     .solution_card_img {
         width: 100%;
-        aspect-ratio: 18 / 26;
+        aspect-ratio: 16 / 20;
         height: auto;
     }
 
@@ -1205,6 +1205,10 @@
         line-height: 3rem;
     }
 
+    .vision_scroll {
+        padding: 0px 0 3rem 2.8rem;
+    }
+
     /* =========================
        Solution
     ========================= */
@@ -1218,6 +1222,10 @@
         padding: 0 1.8rem;
     }
 
+    .solution_card h3 {
+        margin-bottom: 1.6rem;
+    }
+
     .solution_label {
         font-size: 1.8rem;
     }
@@ -1228,10 +1236,6 @@
 
     .solution_desc {
         font-size: 1.6rem;
-    }
-
-    .solution_card {
-        scale: 0.6;
     }
 
     .deco_near {
@@ -1659,10 +1663,6 @@
 
     .keyword_desc {
         font-size: 1.8rem;
-    }
-
-    .solution_card {
-        scale: 0.54;
     }
 
     .scatter_word {
