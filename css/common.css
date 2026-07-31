@@ -52,6 +52,7 @@ body {
     overflow-x: clip;
     overflow-y: visible;
     word-break: keep-all;
+    background-color: #080808;   /* 모바일 푸터 밑 밀림현상으로 추가 */
 }
 
 html.lenis,
