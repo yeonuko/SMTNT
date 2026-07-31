@@ -233,6 +233,7 @@
     .main_copy {
         position: relative;
         min-height: 100lvh;
+        padding: 0 var(--grid-margin);
     }
 
     .main_meta,
@@ -1259,10 +1260,12 @@
 
     .performance_title {
         font-size: 6rem;
+        line-height: 1;
     }
 
     .performance_desc {
         font-size: 1.4rem;
+        line-height: 1.6;
     }
 
     .performance_card_list {

@@ -2185,8 +2185,8 @@ initCurtainSections();
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: item,
-                start: "top 82%",
-                once: true
+                start: "top 70%",
+                toggleActions: "play none none reverse"
             }
         });
 
