@@ -218,7 +218,7 @@
     .main_bg {
         position: sticky;
         top: 0;
-        height: 100svh;
+        height: calc(var(--vh, 1svh) * 100);
         grid-area: 1 / 1;
     }
 
@@ -374,7 +374,7 @@
     .solution_section {
         position: relative;
         width: 100%;
-        height: 100svh;
+        height: calc(var(--vh, 1svh) * 100);
         min-height: 72rem;
         padding: 0;
         overflow: hidden;
