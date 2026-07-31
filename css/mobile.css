@@ -212,15 +212,13 @@
         display: grid;
         height: auto;
         min-height: 200vh;
-        overflow: hidden;
+        overflow: visible;
     }
 
     .main_bg {
         position: sticky;
         top: 0;
-        /* 주소창 토글로 인한 뷰포트 오차를 대비해 여유분(6rem)을
-           더해두고, 넘치는 부분은 .main_visual의 overflow:hidden으로 자름 */
-        height: calc(var(--vh, 1svh) * 100 + 6rem);
+        height: calc(var(--vh, 1svh) * 100);
         grid-area: 1 / 1;
     }
 
@@ -376,8 +374,7 @@
     .solution_section {
         position: relative;
         width: 100%;
-        /* 주소창 토글로 인한 뷰포트 오차 대비 여유분(6rem), 넘치는 부분은 아래 overflow:hidden으로 자름 */
-        height: calc(var(--vh, 1svh) * 100 + 6rem);
+        height: calc(var(--vh, 1svh) * 100);
         min-height: 72rem;
         padding: 0;
         overflow: hidden;

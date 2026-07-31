@@ -618,23 +618,18 @@ function initSolutionOrbit() {
     function getOrbitValue(side, angle) {
         var rad = angle * Math.PI / 180;
 
-        /* window.innerHeight는 iOS 사파리에서 주소창 상태에 따라
-           실제 100svh 섹션 박스보다 크게 잡힐 수 있어, 세로 계산은
-           섹션의 실측 높이를 기준으로 함 */
-        var vh = section.offsetHeight;
-
         var centerOffset = 0.08;
         var radiusX = window.innerWidth * 0.8;
-        var radiusY = vh * 0.72;
+        var radiusY = window.innerHeight * 0.72;
 
         if (isMobile) {
             centerOffset = 0.18;
             radiusX = window.innerWidth * 0.78;
-            radiusY = vh * 0.42;
+            radiusY = window.innerHeight * 0.42;
         } else if (isTablet) {
             centerOffset = 0.12;
             radiusX = window.innerWidth * 0.8;
-            radiusY = vh * 0.65;
+            radiusY = window.innerHeight * 0.65;
         }
 
         var centerX;
@@ -649,7 +644,8 @@ function initSolutionOrbit() {
                 (1 + centerOffset);
         }
 
-        var centerY = vh * 0.5;
+        var centerY =
+            window.innerHeight * 0.5;
 
         return {
             x: centerX +
@@ -658,7 +654,7 @@ function initSolutionOrbit() {
 
             y: centerY +
                 Math.sin(rad) * radiusY -
-                vh / 2
+                window.innerHeight / 2
         };
     }
 
@@ -698,7 +694,7 @@ function initSolutionOrbit() {
     var cardScale = 1;
 
     if (window.innerWidth <= 480) {
-        cardScale = 0.9;
+        cardScale = 0.8;
     } else if (window.innerWidth <= 767) {
         cardScale = 0.9;
     } else if (window.innerWidth <= 1199) {
