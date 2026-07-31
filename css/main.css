@@ -386,7 +386,7 @@ section {
 .main_meta_deco {
     display: block;
     margin-bottom: 1rem;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(255, 255, 255, 0.85);
     line-height: 0;
 }
 
