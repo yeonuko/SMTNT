@@ -694,7 +694,7 @@ function initSolutionOrbit() {
     var cardScale = 1;
 
     if (window.innerWidth <= 480) {
-        cardScale = 0.8;
+        cardScale = 0.7;
     } else if (window.innerWidth <= 767) {
         cardScale = 0.9;
     } else if (window.innerWidth <= 1199) {
