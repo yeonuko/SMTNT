@@ -110,6 +110,21 @@ section {
     backdrop-filter: blur(0);
 }
 
+/* GNB 앵커 이동 시 화면을 잠깐 덮어주는 트랜지션 오버레이 */
+.nav_transition_overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--color-black);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.32s ease;
+}
+
+.nav_transition_overlay.is_active {
+    opacity: 1;
+}
+
 #header.hide {
     transform: translateY(-110%);
 }
@@ -140,7 +155,7 @@ section {
 
 
 .gnb_toggle {
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -175,43 +190,33 @@ section {
 }
 
 
-/* 우측 상단 드롭다운 카드 (PC) — 모바일은 mobile.css에서 전체 오버레이로 재정의 */
+/* PC 기본 GNB — 항상 노출되는 가로 리스트 (예전 방식). 모바일은 mobile.css에서 전체 오버레이로 재정의 */
 .gnb {
-    position: absolute;
-    top: 8rem;
-    right: 32rem;
-    left: auto;
-    width: 22rem;
-    height: auto;
-    padding: 1.6rem 0;
-    background: rgba(0, 0, 0, 0.85);
-    border-radius: 1.2rem;
-    box-shadow: 0 1.6rem 4rem rgba(0, 0, 0, 0.35);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translateY(-0.8rem);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-}
-
-#header.menu_open .gnb {
+    position: static;
+    width: auto;
+    height: 100%;
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transform: translateY(0);
+    transform: none;
 }
 
 .gnb_list {
     display: flex;
-    flex-direction: column;
-    gap: 0;
-    height: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 4rem;
+    height: 100%;
 }
 
 .gnb_item {
     position: relative;
     min-width: 0;
-    height: auto;
+    height: 100%;
     text-align: left;
 }
 
@@ -219,20 +224,18 @@ section {
     position: relative;
     display: flex;
     align-items: center;
-    width: 100%;
-    height: auto;
-    padding: 1.2rem 2.4rem;
+    height: 100%;
+    padding: 0;
     font-family: "Big Shoulders", sans-serif;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 500;
     color: #fff;
-    transition: color 0.3s ease, background 0.3s ease;
+    transition: color 0.3s ease;
 }
 
 .gnb_item:hover .gnb_link,
 .gnb_item.is_active .gnb_link {
     color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.06);
 }
 
 .gnb_depth {
@@ -1085,6 +1088,7 @@ section {
 }
 
 
+
 /* Service → Solution */
 
 .curtain_gray {
@@ -1096,9 +1100,25 @@ section {
 }
 
 
+
+
+/* Solution → WHY SMTNT */
+.curtain_515151 {
+    background: rgb(51, 51, 51);
+}
+
+.curtain_515151 .stripe_item {
+    background: #fff;
+}
+
+
+
+
+
+
 /* Solution → Performance */
 .curtain_c3c3c3 {
-    background: rgb(51, 51, 51);
+    background: rgb(255, 255, 255);
 }
 
 .curtain_c3c3c3 .stripe_item {
@@ -1311,6 +1331,188 @@ section {
 
 .solution_mobile {
     display: none;
+}
+
+
+
+
+/* ===========================
+    Why SMTNT
+=========================== */
+
+.why_section {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-white, #fff);
+}
+
+.why_inner {
+    position: relative;
+    width: 100%;
+    max-width: 192rem;
+    margin: 0 auto;
+    padding-top: var(--section-gap);
+}
+
+.why_title {
+    position: relative;
+    z-index: 4;
+    max-width: 90rem;
+    margin: 0 auto 8rem;
+    font-size: var(--fs_h2);
+    line-height: var(--lh_h2);
+    font-weight: 700;
+    text-align: center;
+    color: var(--color-black);
+}
+
+.why_scene {
+    position: relative;
+    width: 100%;
+    height: 210rem;
+}
+
+/* 배경 대형 텍스트 — 카드에 의해 일부 가려지도록 카드보다 아래 z-index */
+.why_bg_text {
+    position: absolute;
+    z-index: 1;
+    font-family: "Big Shoulders", sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #333;
+    white-space: nowrap;
+}
+
+.why_bg_text_why {
+    top: 46rem;
+    left: 60rem;
+    font-size: 20rem;
+}
+
+.why_bg_text_sm {
+    top: 90rem;
+    left: 74rem;
+    font-size: 20rem;
+}
+
+.why_bg_text_tnt {
+    top: 107rem;
+    left: 93rem;
+    font-size: 20rem;
+}
+
+.why_deco {
+    position: absolute;
+    z-index: 2;
+}
+
+.why_deco img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.why_deco_cube {
+    top: 64rem;
+    left: 88rem;
+    width: 26rem;
+}
+
+.why_deco_cardweb {
+    top: 113rem;
+    left: 105rem;
+    width: 42rem;
+}
+
+.why_card_list {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+}
+
+.why_card {
+    position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: max-content;
+    min-height: 24rem;
+    padding: 4.8rem 4.4rem;
+    border-radius: 2.4rem;
+    background: #F7F7F7;
+    color: var(--color-black);
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.12);
+    transition: background 0.35s ease, color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.why_card:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    box-shadow: 0 3rem 6rem rgba(0, 0, 0, 0.18);
+    transform: translateY(-0.4rem);
+}
+
+.why_card_num {
+    font-size: var(--fs_caption);
+    color: rgba(0, 0, 0, 0.4);
+    transition: color 0.35s ease;
+}
+
+.why_card:hover .why_card_num {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.why_card_title {
+    display: block;
+    margin-top: 2.8rem;
+    font-size: var(--fs_h3);
+    line-height: var(--lh_h3);
+    font-weight: 700;
+}
+
+.why_card_desc {
+    display: block;
+    margin-top: 2.4rem;
+    font-size: 1.6rem;
+    line-height: 2.8rem;
+    color: rgba(0, 0, 0, 0.6);
+    transition: color 0.35s ease;
+}
+
+.why_card:hover .why_card_desc {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.why_card_01 {
+    top: 24rem;
+    left: 44rem;
+    max-width: 69rem;
+}
+
+.why_card_02 {
+    top: 35rem;
+    left: 100rem;
+    max-width: 62.6rem;
+}
+
+.why_card_03 {
+    top: 64rem;
+    left: 28rem;
+    max-width: 73.8rem;
+}
+
+.why_card_04 {
+    top: 85rem;
+    left: 108rem;
+    max-width: 49.75rem;
+}
+
+.why_card_05 {
+    top: 108rem;
+    left: 44rem;
+    max-width: 48rem;
 }
 
 
@@ -2387,6 +2589,16 @@ section {
     display: flex;
     width: max-content;
     will-change: transform;
+}
+
+/* 모션 민감 사용자: 무한 반복되는 장식 애니메이션 정지 */
+@media (prefers-reduced-motion: reduce) {
+
+    .scroll_mouse i,
+    .scroll_guide_arrow span,
+    .partner_marquee_top .partner_track_l {
+        animation: none;
+    }
 }
 
 /* ===========================

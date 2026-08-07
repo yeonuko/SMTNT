@@ -169,9 +169,10 @@
     }
 
     .gnb_item {
+        width: 40rem;
         height: auto;
         min-width: 0;
-        text-align: left;
+        text-align: center;
         border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
 
@@ -456,6 +457,140 @@
 
     .deco_far {
         width: 11rem;
+    }
+
+
+
+
+    /* =========================
+       Why SMTNT (자유배치+대형텍스트 → 지그재그 세로 스택, 배경 텍스트 제거)
+    ========================= */
+    .why_section {
+        overflow: visible;
+    }
+
+    .why_inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: auto;
+        padding: var(--section-gap) var(--grid-margin);
+        gap: 4.8rem;
+    }
+
+    .why_title {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        font-size: 3.2rem;
+        line-height: 1.4;
+        opacity: 0;
+        transform: translateY(4rem);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .why_title.is_visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .why_scene {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .why_bg_text {
+        position: absolute;
+        left: 50%;
+        z-index: 1;
+        font-size: 8rem;
+        line-height: 0.9;
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(4rem);
+        pointer-events: none;
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .why_bg_text.is_visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0);
+    }
+
+    .why_bg_text_why {
+        top: 39%;
+    }
+
+    .why_bg_text_sm {
+        top: 56%;
+    }
+
+    .why_bg_text_tnt {
+        top: 72%;
+    }
+
+    .why_card_list {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        gap: 4rem;
+    }
+
+    .why_card,
+    .why_card_01,
+    .why_card_02,
+    .why_card_03,
+    .why_card_04,
+    .why_card_05 {
+        position: static;
+        width: 100%;
+        max-width: 44rem;
+        opacity: 0;
+        transform: translateY(4rem);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .why_card.is_visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .why_card:nth-child(odd) {
+        margin-right: auto;
+        margin-left: 0;
+    }
+
+    .why_card:nth-child(even) {
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    .why_deco {
+        position: static;
+        opacity: 0;
+        transform: translateY(4rem);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .why_deco.is_visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .why_deco_cube {
+        width: 14rem;
+        align-self: flex-end;
+        margin-right: 4rem;
+    }
+
+    .why_deco_cardweb {
+        width: 26rem;
+        align-self: flex-start;
+        margin-left: 4rem;
     }
 
 
@@ -854,6 +989,7 @@
     }
 
 
+
     .footer {
         position: relative;
         left: auto;
@@ -1118,6 +1254,15 @@
     }
 
 
+}
+
+/* 모션 민감 사용자: 모바일 파트너 마퀴(첫째/둘째 줄) 정지 */
+@media (prefers-reduced-motion: reduce) {
+
+    .partner_marquee_row_01 .partner_track_l,
+    .partner_marquee_row_02 .partner_track_l {
+        animation: none;
+    }
 }
 
 
