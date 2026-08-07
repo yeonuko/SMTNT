@@ -38,6 +38,11 @@ if (isDesktopViewport) {
      태블릿/모바일에서는 해당 콜백이 아예 실행되지 않고 일반 스크롤로 동작함 */
 const mm = gsap.matchMedia();
 
+/* 모션 민감 사용자 대응: 자동재생/무한반복 장식 애니메이션(영상 자동재생,
+   Solution 플로팅, 마퀴)을 끄는 데 씀. 스크롤에 반응해서만 움직이는
+   ScrollTrigger 애니메이션은 사용자가 유발한 동작이라 대상에서 제외 */
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 
 
 /* ── Nav 스크롤 ── */
@@ -149,7 +154,7 @@ function initMainVideoSlider() {
 
             if (i === index) {
                 video.currentTime = 0;
-                video.play();
+                if (!prefersReducedMotion) video.play();
             } else {
                 video.pause();
             }
@@ -185,6 +190,11 @@ function initMainVideoSlider() {
 }
 
 initMainVideoSlider();
+
+/* Scatter 섹션 배경의 autoplay/loop 데코 영상: 모션 민감 사용자는 정지 */
+if (prefersReducedMotion) {
+    document.querySelectorAll(".scatter_bg video").forEach((video) => video.pause());
+}
 
 
 
@@ -339,6 +349,58 @@ function initMobileNav() {
 }
 
 initMobileNav();
+
+/* ── GNB 앵커 클릭 시 부드럽게 스크롤 이동 ──
+   기존엔 href="#about" 같은 앵커를 그냥 브라우저 기본 동작으로 이동시켜서
+   Lenis smooth scroll을 안 타고 순간 이동(뚝!)했음.
+   데스크탑은 lenis.scrollTo, 태블릿/모바일은 네이티브 smooth scroll 사용.
+   #contact는 팝업 트리거라 제외. */
+function initSmoothAnchorScroll() {
+    const header = document.querySelector("#header");
+    const headerHeight = header ? header.offsetHeight : 0;
+
+    /* 이동 중 화면을 아주 잠깐 덮어주는 트랜지션 오버레이.
+       그 뒤에서 스크롤을 즉시 점프시키면 중간 pin/scrub 섹션들이
+       빠르게 재생되며 지나가는 게 안 보이고, 오버레이만 스윽 걷히면서
+       도착 지점이 자연스럽게 드러남 (ScrollTrigger를 끄고 켜는 비용 없음) */
+    const overlay = document.createElement("div");
+    overlay.className = "nav_transition_overlay";
+    document.body.appendChild(overlay);
+
+    document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach((link) => {
+        if (link.getAttribute("href") === "#contact") return;
+
+        link.addEventListener("click", (e) => {
+            const target = document.querySelector(link.getAttribute("href"));
+            if (!target) return;
+
+            e.preventDefault();
+
+            overlay.classList.add("is_active");
+
+            setTimeout(() => {
+                if (isDesktopViewport) {
+                    lenis.scrollTo(target, {
+                        offset: -headerHeight,
+                        immediate: true
+                    });
+                } else {
+                    const y = target.getBoundingClientRect().top + window.scrollY - headerHeight;
+                    window.scrollTo({
+                        top: y,
+                        behavior: "auto"
+                    });
+                }
+
+                requestAnimationFrame(() => {
+                    overlay.classList.remove("is_active");
+                });
+            }, 320);
+        });
+    });
+}
+
+initSmoothAnchorScroll();
 
 
 
@@ -920,7 +982,7 @@ function initSolutionFloating() {
     const section = document.querySelector(".solution_section");
     const items = gsap.utils.toArray(".solution_deco_item");
 
-    if (!section || !items.length) return;
+    if (!section || !items.length || prefersReducedMotion) return;
 
     items.forEach((item, index) => {
         const depth = Number(item.dataset.depth) || 0.5;
@@ -993,6 +1055,106 @@ function initSolutionFloating() {
 /* PC 전용으로 막혀있었으나, 마우스/스크롤에 의존하지 않는
    가벼운 무한 루프 애니메이션이라 모든 화면에서 실행 */
 initSolutionFloating();
+
+
+
+
+/* ── Why SMTNT: 타이틀/카드/장식/배경 텍스트 스크롤 진입·이탈 ──
+   위로 스크롤해서 요소가 시작 지점 위로 벗어나면 다시 사라지고,
+   다시 아래로 내리면 다시 나타나도록 toggleActions로 매번 반복되게 처리
+   (once 없음 — play: 진입 시 등장 / leave: 그대로 유지(더 내려도 안 사라짐) /
+    enterBack: 다시 진입 시 등장 / leaveBack: 위로 벗어나면 사라짐) */
+function initWhySection() {
+    const section = document.querySelector(".why_section");
+    if (!section) return;
+
+    const title = document.querySelector(".why_title");
+
+    mm.add("(min-width: 1200px)", () => {
+        const bgTexts = gsap.utils.toArray(".why_bg_text");
+        const items = gsap.utils.toArray(".why_card, .why_deco");
+
+        gsap.set(title, {
+            opacity: 0,
+            y: 40
+        });
+        gsap.set(bgTexts, {
+            opacity: 0,
+            y: 40
+        });
+        gsap.set(items, {
+            opacity: 0,
+            y: 60
+        });
+
+        gsap.to(title, {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: title,
+                start: "top 85%",
+                toggleActions: "play none none reverse"
+            }
+        });
+
+        bgTexts.forEach((el) => {
+            gsap.to(el, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        items.forEach((el) => {
+            gsap.to(el, {
+                opacity: 1,
+                y: 0,
+                duration: 0.9,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 88%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+    });
+
+    /* 태블릿/모바일: is_visible 클래스를 진입 시 붙이고, 위로 벗어나면 다시 뗌
+       (mobile.css의 opacity/transform 트랜지션이 실제 등장/이탈을 처리) */
+    if (!isDesktopViewport) {
+        const titleEl = document.querySelector(".why_title");
+        if (titleEl) {
+            ScrollTrigger.create({
+                trigger: titleEl,
+                start: "top 90%",
+                onEnter: () => titleEl.classList.add("is_visible"),
+                onEnterBack: () => titleEl.classList.add("is_visible"),
+                onLeaveBack: () => titleEl.classList.remove("is_visible")
+            });
+        }
+
+        gsap.utils.toArray(".why_card, .why_deco, .why_bg_text").forEach((el) => {
+            ScrollTrigger.create({
+                trigger: el,
+                start: "top 55%",
+                onEnter: () => el.classList.add("is_visible"),
+                onEnterBack: () => el.classList.add("is_visible"),
+                onLeaveBack: () => el.classList.remove("is_visible")
+            });
+        });
+    }
+}
+
+initWhySection();
 
 
 
