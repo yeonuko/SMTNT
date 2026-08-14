@@ -2577,6 +2577,20 @@ initNewsSlider();
 })();
 
 
+/* ── Footer 배경 워터마크 패턴 ── */
+function initFooterPattern() {
+    const el = document.querySelector(".footer_pattern");
+    if (!el) return;
+
+    const words = ["CONNECT", "PROTECT", "CREATE", "SMTNT", "SOLUTION", "PARTNER"];
+    let html = "";
+    for (let i = 0; i < 60; i++) html += `<span>${words[i % words.length]}</span>`;
+    el.innerHTML = html;
+}
+initFooterPattern();
+
+
+
 
 
 /* ── 문의하기 팝업 ── */
