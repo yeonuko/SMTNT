@@ -1220,7 +1220,7 @@ section {
     min-height: 35rem;
     padding: 4.2rem 5.2rem;
     border-radius: 2.4rem;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.85);
     opacity: 0.4;
     color: #fff;
     transform: translate(-50%, -50%);
@@ -1240,7 +1240,7 @@ section {
 }
 
 .solution_card h3 {
-    margin-bottom: 3.6rem;
+    margin-bottom: 3rem;
     font-size: 2.4rem;
     line-height: 1.2;
     font-weight: 600;
@@ -1252,6 +1252,12 @@ section {
     line-height: 1.8;
     color: #fff;
     font-weight: 100;
+}
+
+.solution_card_text span {
+    display: block;
+    font-size: 1.4rem;
+    line-height: 1.8;
 }
 
 .solution_card_img {
@@ -1351,7 +1357,7 @@ section {
     width: 100%;
     max-width: 192rem;
     margin: 0 auto;
-    padding-top: var(--section-gap);
+    /* padding-top: var(--section-gap); */
 }
 
 .why_title {
@@ -1369,7 +1375,7 @@ section {
 .why_scene {
     position: relative;
     width: 100%;
-    height: 210rem;
+    height: 180rem;
 }
 
 /* 배경 대형 텍스트 — 카드에 의해 일부 가려지도록 카드보다 아래 z-index */
@@ -1527,7 +1533,10 @@ section {
     height: 100vh;
     padding: 0;
     overflow: hidden;
-    background: #C3C3C3;
+    /* background: #C3C3C3; */
+    background:
+        linear-gradient(rgba(195, 195, 195, 0.7), rgba(195, 195, 195, 0.7)),
+        url("../img/bg01.jpg") center / cover no-repeat;
 }
 
 .performance_inner {
@@ -1669,7 +1678,7 @@ section {
     height: 52rem;
     padding: 5.6rem 4.8rem;
     border-radius: 3.2rem;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
     color: #fff;
     opacity: 0;
     transform: translate(-50%, -50%);
@@ -1726,7 +1735,7 @@ section {
     position: absolute;
     right: 5rem;
     bottom: 8rem;
-    width: 14rem;
+    width: 17rem;
 }
 
 .performance_img img {
@@ -1750,7 +1759,9 @@ section {
     height: 100vh;
     padding: 0;
     overflow: hidden;
-    background: #111;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+        url("../img/bg04.jpg") center / cover no-repeat;
 }
 
 .keyword_inner {
@@ -1971,7 +1982,7 @@ section {
     position: absolute;
     display: inline-block;
     font-family: "Big Shoulders", sans-serif;
-    font-size: 6.4rem;
+    font-size: 5.4rem;
     line-height: 1;
     font-weight: 600;
     letter-spacing: -0.04em;
@@ -2060,6 +2071,11 @@ section {
     height: 100vh;
     padding-top: 16rem;
     overflow-x: clip;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.9),
+            rgba(0, 0, 0, 0.7)),
+        url("../img/bg05.jpg") center / cover no-repeat,
+        #080808;
 }
 
 .process_inner {
@@ -2335,7 +2351,7 @@ section {
     min-height: 7.8rem;
     margin-top: 1.8rem;
     overflow: hidden;
-    font-size: 2rem;
+    font-size: 1.8rem;
     line-height: 1.55;
     font-weight: 600;
     letter-spacing: -0.03em;
@@ -2602,65 +2618,56 @@ section {
 }
 
 /* ===========================
-    문의하기
+    Footer Headline
    =========================== */
 
-.contact_cta_section {
-    position: relative;
-    padding: 12rem 0 19rem;
+.footer_headline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3.2rem;
+    flex-direction: column;
 }
 
-.contact_cta_inner {
-    width: 144rem;
-    max-width: calc(100% - 16rem);
-    margin: 0 auto;
+.footer_headline_text{
     text-align: center;
 }
-
-.contact_cta_title {
-    margin-bottom: 5rem;
+.footer_headline_label {
+    display: block;
+    margin-bottom: 1.6rem;
     font-family: "Big Shoulders", sans-serif;
     font-size: 6.4rem;
     font-weight: 600;
-    line-height: 0.9;
+    letter-spacing: 0.02em;
     color: #fff;
 }
 
-.contact_cta_desc {
-    margin-bottom: 4rem;
-    font-size: 1.8rem;
+.footer_headline_title {
+    max-width: 70rem;
+    font-size: 1.6rem;
     font-weight: 400;
-    line-height: 1.8;
+    line-height: 1.4;
     color: #fff;
+    word-break: keep-all;
 }
 
-.contact_cta_btn {
-    display: inline-flex;
+.footer_headline_arrow {
+    display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    gap: 1.2rem;
-    min-width: 18rem;
-    height: 5rem;
+    width: 6.4rem;
+    height: 6.4rem;
+    border-radius: 50%;
     background: var(--color-primary);
     color: #fff;
-    font-size: 2.6rem;
-    font-weight: 700;
-    transition: all .35s ease;
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 
-.contact_cta_btn::after {
-    content: "→";
-    font-size: 2rem;
-    transition: transform .35s ease;
-}
-
-.contact_cta_btn:hover {
+.footer_headline_arrow:hover {
     background: #fff;
-    color: #333;
-}
-
-.contact_cta_btn:hover::after {
-    transform: translateX(.6rem);
+    color: #111;
+    transform: rotate(45deg);
 }
 
 
@@ -3010,6 +3017,8 @@ section {
     padding: 18rem 0 20rem;
     overflow: hidden;
     background: #fff;
+    border-radius: 0 0 8rem 8rem;
+    /* 하단 양쪽 모서리만 둥글게 - footer_bg_fill과 짝 */
 }
 
 
@@ -3018,6 +3027,24 @@ section {
    높이 값(--footer-height)은 script.js가 footer의 실제 렌더링 높이를 재서 넣어준다. */
 .footer_spacer {
     height: var(--footer-height, 0px);
+    pointer-events: none;
+}
+
+/* partner_section의 border-radius(4rem)로 잘려나가는 틈에서
+   흰 배경이 아니라 footer와 동일한 배경이 보이도록 채워주는 독립 배경판.
+   footer_spacer(= footer.offsetHeight)와 무관하게 항상 8rem 더 크게 유지한다. */
+.footer_bg_fill {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    width: 100%;
+    height: calc(var(--footer-height, 0px) + 8rem);
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.38),
+            rgba(0, 0, 0, 0.38)),
+        url("../img/footer_bg.jpg") center / cover no-repeat,
+        #080808;
     pointer-events: none;
 }
 
@@ -3038,7 +3065,6 @@ section {
     background:
         linear-gradient(rgba(0, 0, 0, 0.38),
             rgba(0, 0, 0, 0.38)),
-        url("../img/footer_bg.jpg") center / cover no-repeat,
         #080808;
     color: #fff;
     pointer-events: none;
@@ -3049,143 +3075,39 @@ section {
 }
 
 .footer_inner {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: none;
     height: 100%;
     margin: 0 auto;
-    padding: 0 7.2rem 4rem;
+    padding: 8rem 7.2rem 6rem;
 }
 
-
-
-
-
-
-/* ===========================
-   Footer Information
-=========================== */
-
-.footer_top {
-    display: grid;
-    grid-template-columns: 1fr 1fr 2fr 1fr;
-    gap: 5.6rem;
-    align-items: center;
-    padding: 0 0 5rem;
-}
-
-.footer_brand,
-.footer_contact {
-    min-height: 14rem;
-    padding-right: 5rem;
-    border-right: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-.footer_brand {
+.footer_pattern {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
     display: flex;
-    align-items: center;
-    /* 세로 가운데 */
-}
-
-.footer_logo {
-    display: block;
-    width: 100%;
-    max-width: 24rem;
-}
-
-.footer_logo img {
-    display: block;
-    width: 100%;
-    filter: brightness(0) invert(1);
-    /*
-        현재 logo_black.svg가 검은색 로고라면
-        검은 푸터에서 흰색으로 보이게 처리
-    */
-}
-
-.footer_sns {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1.8rem;
-
-    margin-top: 3rem;
-}
-
-.footer_sns a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 4.8rem;
-    height: 4.8rem;
-    border: 1px solid rgba(255, 255, 255, 0.75);
-    border-radius: 50%;
-    transition:
-        background 0.3s ease,
-        border-color 0.3s ease;
-}
-
-.footer_sns a:hover {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-}
-
-.footer_sns img {
-    width: 2.4rem;
-    height: 2.4rem;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
-}
-
-.footer_title {
-    margin-bottom: 2.4rem;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 2.4rem 4rem;
+    padding: 2rem;
+    overflow: hidden;
     font-family: "Big Shoulders", sans-serif;
-    font-size: 1.8rem;
-    font-weight: 500;
-    color: #fff;
+    font-size: 6.4rem;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.045);
+    text-transform: uppercase;
+    user-select: none;
+    pointer-events: none;
 }
 
-.footer_contact_list li {
-    display: flex;
-    gap: 1.6rem;
-    margin-top: 1.6rem;
-    font-size: 1.6rem;
-    color: rgba(255, 255, 255, 0.9);
-}
 
-.footer_contact_list li span:first-child {
-    width: 1.6rem;
-    flex-shrink: 0;
-}
-
-.footer_address {
-    font-size: 1.6rem;
-    line-height: 1.85;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.footer_address p+p {
-    margin-top: 0.8rem;
-}
-
-.footer_download {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-.footer_download_btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;
-    height: 4.5rem;
-    padding: 0 2rem;
-    background: var(--color-primary);
-    font-size: 1.6rem;
-    font-weight: 500;
-    color: #fff;
-}
 
 
 /* ===========================
@@ -3193,15 +3115,45 @@ section {
 =========================== */
 
 .footer_bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 3.2rem;
+    margin-top: 8rem;
     padding-top: 3.2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.55);
 }
 
-.footer_copy,
-.footer_policy {
+.footer_bottom_contact {
+    justify-self: start;
+}
+
+.footer_address {
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    font-style: normal;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.footer_contact_list li {
+    display: flex;
+    gap: 1.2rem;
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0 0 1rem 0;
+}
+
+.footer_contact_list li span:first-child {
+    width: 1.4rem;
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.footer_bottom_copy {
+    justify-self: center;
+    text-align: center;
+}
+
+.footer_copy {
     font-size: 1.2rem;
     color: rgba(255, 255, 255, 0.8);
 }
@@ -3209,5 +3161,25 @@ section {
 .footer_policy {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1.4rem;
+    margin-top: 0.6rem;
+    font-size: 1.2rem;
+}
+
+.footer_policy a {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.footer_download_btn {
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    height: 4.2rem;
+    padding: 0 1.8rem;
+    background: var(--color-primary);
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #fff;
 }
