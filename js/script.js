@@ -525,6 +525,417 @@ function initVisionHighlight() {
 initVisionHighlight();
 
 
+/* ── Vision : 하나의 타이틀이 중앙 대형 → 왼쪽 sticky 위치로 이동 / Outro 자연 종료 ── */
+function initVisionSequence() {
+    const section = document.querySelector(".vision_section");
+    const inner = document.querySelector(".vision_inner");
+    const sticky = document.querySelector(".vision_sticky");
+    const stickyCopy = document.querySelector(".vision_sticky_copy");
+    const scrollWrap = document.querySelector(".vision_scroll");
+    const keywordList = document.querySelector(".vision_keyword_list");
+    const outro = document.querySelector(".vision_outro");
+    const outroBlock = outro ? outro.querySelector(".vision_block") : null;
+
+    if (!section || !inner || !sticky || !stickyCopy || !scrollWrap) return;
+
+    /*
+     * 복제 타이틀을 교체하지 않는다.
+     * 실제 왼쪽 sticky 안에 있는 하나의 .vision_sticky_copy 자체를
+     * 처음에는 viewport 중앙으로 transform해 두었다가,
+     * 첫 100vh 동안 transform: none 상태로 되돌린다.
+     */
+    /* ── 타이틀 중앙 → 왼쪽 sticky 이동 ── */
+
+    /*
+     * 여기서 stickyCopy는 아직 transform이 없는
+     * 원래 최종 위치 상태이므로 딱 한 번만 측정한다.
+     *
+     * ScrollTrigger refresh 때 다시 측정하지 않는다.
+     */
+    const finalRect = stickyCopy.getBoundingClientRect();
+
+    const INTRO_SCALE = 1.3;
+
+
+    /*
+     * transform-origin이 left center이므로
+     * scale 했을 때의 위치 계산도 그 기준에 맞춘다.
+     *
+     * X:
+     * 왼쪽 기준점은 그대로이고 폭만 오른쪽으로 커짐
+     *
+     * Y:
+     * center 기준 scale이므로 중심 위치는 그대로 유지됨
+     */
+    const introX =
+        (window.innerWidth / 2) -
+        (finalRect.left + (finalRect.width * INTRO_SCALE) / 2);
+
+    const introY =
+        (window.innerHeight / 2) -
+        (finalRect.top + finalRect.height / 2);
+
+    /*
+     * 오른쪽 전체(.vision_scroll)는 숨기지 않는다.
+     * 이전처럼 컨테이너 자체를 opacity:0으로 만들면 ScrollTrigger가 꼬였을 때
+     * 키워드가 통째로 사라질 수 있다. 키워드 묶음만 아주 약하게 등장시킨다.
+     */
+    if (keywordList) {
+        gsap.fromTo(keywordList, {
+            opacity: 1,
+            y: 4 * 16
+        }, {
+            opacity: 1,
+            y: 0,
+            ease: "none",
+            scrollTrigger: {
+                trigger: section,
+                start: "top+=45% top",
+                end: "top+=95% top",
+                scrub: true
+            }
+        });
+    }
+
+    /*
+     * Outro는 등장만 제어한다.
+     * 끝에서 autoAlpha:0으로 강제 제거하지 않는다.
+     * sticky 컨테이너의 끝에 도달하면 일반 문서 흐름대로 위로 밀려나며
+     * 다음 solution 섹션이 올라오므로 '뿅 사라지는' 순간이 없다.
+     */
+    if (outro && outroBlock) {
+        const outroItems = [
+            document.querySelector(".vision_text:nth-of-type(1)"),
+            document.querySelector(".vision_deco_01"),
+            document.querySelector(".vision_text:nth-of-type(2)"),
+            document.querySelector(".vision_deco_02"),
+            document.querySelector(".vision_text:nth-of-type(3)"),
+            document.querySelector(".vision_deco_03"),
+            document.querySelector(".vision_signature")
+        ].filter(Boolean);
+
+        gsap.set(outroItems, {
+            autoAlpha: 0,
+            y: 60
+        });
+
+        gsap.timeline({
+                scrollTrigger: {
+                    trigger: outro,
+                    start: "top 75%",
+                    end: "top 20%",
+                    scrub: 1
+                }
+            })
+            .to(outroItems, {
+                autoAlpha: 1,
+                y: 0,
+                stagger: 0.14,
+                ease: "none"
+            });
+    }
+}
+
+mm.add("(min-width: 1200px)", () => {
+    initVisionSequence();
+});
+
+/* ── Vision Outro 모바일 : 스크럽 대신 진입 시 1회성 fade-up ── */
+function initVisionOutroMobile() {
+    const outro = document.querySelector(".vision_outro");
+
+    if (!outro) return;
+
+    const outroItems = [
+        document.querySelector(".vision_text:nth-of-type(1)"),
+        document.querySelector(".vision_deco_01"),
+        document.querySelector(".vision_text:nth-of-type(2)"),
+        document.querySelector(".vision_deco_02"),
+        document.querySelector(".vision_text:nth-of-type(3)"),
+        document.querySelector(".vision_deco_03"),
+        document.querySelector(".vision_signature")
+    ].filter(Boolean);
+
+    if (!outroItems.length) return;
+
+    gsap.set(outroItems, {
+        autoAlpha: 0,
+        y: 40
+    });
+
+    gsap.to(outroItems, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.12,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: outro,
+            start: "top 40%",
+            toggleActions: "play none none reverse"
+        }
+    });
+}
+
+if (window.innerWidth < 1200) {
+    initVisionOutroMobile();
+}
+
+
+/* ── Vision 데스크탑 스크롤 연동 곡선
+   : 첫 키워드 시작 ~ 마지막 키워드 끝까지만 라인 생성
+   : 기존 베지어 형태 계산은 그대로 유지
+── */
+function initVisionCurve() {
+    const scrollWrap = document.querySelector(".vision_scroll");
+    const curveWrap = document.querySelector(".vision_curve");
+    const svg = document.querySelector(".vision_curve_svg");
+    const bgPath = document.querySelector(".vision_curve_path_bg");
+    const fillPath = document.querySelector(".vision_curve_path_fill");
+
+    if (!scrollWrap || !curveWrap || !svg || !bgPath || !fillPath) return;
+
+    const anchors = gsap.utils.toArray(".vision_keyword_head");
+    const keywords = gsap.utils.toArray(".vision_keyword");
+
+    if (!anchors.length || !keywords.length) return;
+
+    let markers = [];
+    let scrubTween = null;
+
+    /* 라인 시작/끝에 줄 여백 */
+    const CURVE_PADDING_TOP = -15;
+    const CURVE_PADDING_BOTTOM = 0;
+
+
+    function buildMarkers(anchorPoints) {
+        markers.forEach((m) => {
+            if (m.trigger) m.trigger.kill();
+            m.el.remove();
+        });
+
+        markers = [];
+
+        anchorPoints.forEach((point, i) => {
+            const el = document.createElement("div");
+
+            el.className = "vision_curve_marker";
+            el.style.transform = `translate(${point.x}px, ${point.y}px)`;
+
+            curveWrap.appendChild(el);
+
+            const trigger = ScrollTrigger.create({
+                trigger: anchors[i],
+                start: "top 65%",
+
+                onEnter: () => {
+                    el.classList.add("is_active");
+                },
+
+                onEnterBack: () => {
+                    el.classList.add("is_active");
+                },
+
+                onLeaveBack: () => {
+                    el.classList.remove("is_active");
+                }
+            });
+
+            markers.push({
+                el,
+                trigger
+            });
+        });
+    }
+
+
+    function buildPath() {
+        const wrapRect = scrollWrap.getBoundingClientRect();
+
+        const firstKeyword = keywords[0];
+        const lastKeyword = keywords[keywords.length - 1];
+
+        const firstRect = firstKeyword.getBoundingClientRect();
+        const lastRect = lastKeyword.getBoundingClientRect();
+
+
+        /*
+         * vision_scroll 전체 높이를 사용하지 않고
+         * 실제 키워드 콘텐츠 시작/끝을 기준으로 곡선 영역을 만든다.
+         */
+        const curveStart =
+            firstRect.top -
+            wrapRect.top -
+            CURVE_PADDING_TOP;
+
+        const curveEnd =
+            lastRect.bottom -
+            wrapRect.top +
+            CURVE_PADDING_BOTTOM;
+
+        const height = curveEnd - curveStart;
+
+
+        /*
+         * curveWrap 자체를 콘텐츠 시작 위치로 이동
+         */
+        curveWrap.style.top = `${curveStart}px`;
+        curveWrap.style.height = `${height}px`;
+
+
+        const curveRect = curveWrap.getBoundingClientRect();
+        const scaleX = curveRect.width / 100;
+
+        svg.setAttribute(
+            "viewBox",
+            `0 0 100 ${height}`
+        );
+
+
+        /*
+         * 키워드 타이틀 위치를
+         * 새 curve 영역 기준 좌표로 변환
+         */
+        const anchorPoints = anchors.map((el, i) => {
+            const r = el.getBoundingClientRect();
+
+            return {
+                x: i % 2 === 0 ? 30 : 70,
+
+                y: r.top -
+                    wrapRect.top -
+                    curveStart +
+                    r.height / 2
+            };
+        });
+
+
+        /*
+         * 시작점 / 끝점
+         *
+         * 기존처럼 중앙 50에서 시작하고
+         * 중앙 50으로 종료.
+         */
+        const points = [{
+                x: 50,
+                y: 0
+            },
+
+            ...anchorPoints,
+
+            {
+                x: 50,
+                y: height
+            }
+        ];
+
+
+        /*
+         * 기존 cubic Bézier 계산 유지
+         */
+        let d = `M ${points[0].x} ${points[0].y}`;
+
+        for (let i = 0; i < points.length - 1; i++) {
+            const p0 = points[i];
+            const p1 = points[i + 1];
+
+            const midY = (p0.y + p1.y) / 2;
+
+            d += `
+                C
+                ${p0.x} ${midY},
+                ${p1.x} ${midY},
+                ${p1.x} ${p1.y}
+            `;
+        }
+
+
+        bgPath.setAttribute("d", d);
+        fillPath.setAttribute("d", d);
+
+
+        /*
+         * 진행 라인 초기화
+         */
+        const totalLength = fillPath.getTotalLength();
+
+        fillPath.style.strokeDasharray = totalLength;
+        fillPath.style.strokeDashoffset = totalLength;
+
+
+        /*
+         * 마커도 새 curve 영역 기준으로 배치
+         */
+        buildMarkers(
+            anchorPoints.map((p) => ({
+                x: p.x * scaleX,
+                y: p.y
+            }))
+        );
+
+
+        /*
+         * 기존 tween 제거
+         */
+        if (scrubTween) {
+            scrubTween.kill();
+            scrubTween = null;
+        }
+
+
+        /*
+         * 라인 진행 역시
+         * vision_scroll 전체가 아니라
+         * 첫 번째 키워드 → 마지막 키워드를 기준으로 한다.
+         */
+        scrubTween = gsap.to(fillPath, {
+            strokeDashoffset: 0,
+            ease: "none",
+
+            scrollTrigger: {
+                trigger: firstKeyword,
+
+                start: "top 70%",
+
+                endTrigger: lastKeyword,
+                end: "bottom 70%",
+
+                scrub: true
+            }
+        });
+    }
+
+
+    buildPath();
+
+
+    /*
+     * 화면 크기가 변하면 다시 계산
+     */
+    window.addEventListener("resize", buildPath);
+
+
+    /*
+     * 폰트 로딩 이후 텍스트 높이가 달라질 수 있으므로 재계산
+     */
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(buildPath);
+    }
+}
+
+
+mm.add("(min-width: 1200px)", () => {
+    initVisionCurve();
+});
+
+
+
+
+
+
+
+
+
 /* ── Vision 모바일 스크롤 레일 (좌측 세로선 + 진행률 채움 + 하이라이트 마커) ── */
 function initVisionRail() {
     const isMobile = window.matchMedia("(max-width: 1199px)").matches;
@@ -756,7 +1167,7 @@ function initSolutionOrbit() {
     var cardScale = 1;
 
     if (window.innerWidth <= 480) {
-        cardScale = 0.7;
+        cardScale = 0.8;
     } else if (window.innerWidth <= 767) {
         cardScale = 0.9;
     } else if (window.innerWidth <= 1199) {
@@ -1986,10 +2397,12 @@ function initScatterText() {
             item => Number(item.dataset.line) === line
         );
 
+        const isMobileViewport = window.innerWidth <= 1199;
+
         const gap = window.innerWidth * 0.015;
         const lineGap = window.innerHeight * 0.09;
 
-        const targetStartX = window.innerWidth * 0.13;
+        const targetStartX = window.innerWidth * (isMobileViewport ? 0.05 : 0.13);
         const targetStartY = window.innerHeight * 0.58;
 
         let targetLeft = targetStartX;
@@ -2582,9 +2995,13 @@ function initFooterPattern() {
     const el = document.querySelector(".footer_pattern");
     if (!el) return;
 
-    const words = ["CONNECT", "PROTECT", "CREATE", "SMTNT", "SOLUTION", "PARTNER"];
+    const phrase = "· SMTNT · CONNECT · PROTECT · CREATE";
+    const rowCount = 9; //몇줄
+    const repeatPerRow = 10;
     let html = "";
-    for (let i = 0; i < 60; i++) html += `<span>${words[i % words.length]}</span>`;
+    for (let i = 0; i < rowCount; i++) {
+        html += `<div class="footer_pattern_row">${phrase.repeat(repeatPerRow)}</div>`;
+    }
     el.innerHTML = html;
 }
 initFooterPattern();
