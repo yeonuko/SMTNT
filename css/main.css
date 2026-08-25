@@ -83,9 +83,6 @@ section {
     margin: 0 auto;
 }
 
-.main_visual {
-    padding-top: 0;
-}
 
 
 
@@ -284,7 +281,7 @@ section {
 .main_visual {
     position: relative;
     height: 200vh;
-    /* 예시 */
+    padding-top: 0;
     overflow: hidden;
 }
 
@@ -757,9 +754,13 @@ section {
 .vision_section {
     position: relative;
     z-index: 5;
+    padding-top: 0;
     background: #fff;
 }
 
+/* 중앙 대형 → 왼쪽 sticky 전환은 같은 DOM 요소(.vision_sticky_copy)를 사용 */
+
+/* ── Main : 왼쪽 sticky + 오른쪽 scroll ── */
 .vision_inner {
     display: grid;
     grid-template-columns: 70rem 1fr;
@@ -767,15 +768,21 @@ section {
     align-items: start;
 }
 
-/* 왼쪽 고정 영역 */
-
 .vision_sticky {
     position: sticky;
     top: 0;
-    height: 74vh;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.vision_sticky_copy {
+    width: 100%;
+    transform-origin: left center;
+    will-change: transform;
 }
 
 .vision_label {
@@ -800,40 +807,100 @@ section {
     word-break: keep-all;
 }
 
-/* 오른쪽 스크롤 영역 */
-
 .vision_scroll {
-    padding: 6rem 0 20rem;
+    position: relative;
+    min-height: 180vh;
+    padding: 20vh 0 0;
+    opacity: 1;
+    transform: none;
+    background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+    background-size: 2.4rem 2.4rem;
+    background-position: -1rem 0;
 }
 
-.vision_block {
-    margin-bottom: 14rem;
+@media (min-width: 1200px) {
+    .vision_scroll {
+        opacity: 1;
+        transform: none;
+    }
+
+    .vision_keyword_list {
+        opacity: 1;
+        transform: none;
+        will-change: opacity, transform;
+    }
 }
 
-.vision_block:last-of-type {
-    margin-bottom: 0;
+.vision_curve {
+    position: absolute;
+    top: 0;
+    left: -8rem;
+    width: 5rem;
+    pointer-events: none;
 }
 
-.vision_text {
-    margin-top: 3.2rem;
-    font-size: 2.2rem;
-    line-height: 3.8rem;
-}
 
-.vision_signature {
+.vision_curve_svg {
     display: block;
-    margin-top: 6rem;
-    text-align: right;
-    font-size: 1.6rem;
-    color: #333;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
 }
 
+
+.vision_curve_path_bg {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.1);
+    stroke-width: 1;
+    /*
+     * 라인의 시작/끝이 딱 잘린 것처럼 보이지 않게
+     */
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    vector-effect: non-scaling-stroke;
+}
+
+
+.vision_curve_path_fill {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 1;
+    /*
+     * 주황색 진행 라인 역시 끝을 둥글게
+     */
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.vision_curve_marker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1rem;
+    height: 1rem;
+    margin: -0.5rem 0 0 -0.5rem;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid rgba(0, 0, 0, 0.2);
+    transition: background 0.5s ease, border-color 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+}
+
+.vision_curve_marker.is_active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: scale(1.5);
+    box-shadow: 0 0 0 5px rgba(255, 98, 0, 0.15);
+}
+
+/* 키워드 간격을 크게 벌려 오른쪽만 길게 흐르게 */
 .vision_keyword_list {
-    margin-top: 14rem;
+    margin-top: 0;
 }
 
 .vision_keyword {
-    margin-bottom: 8rem;
+    margin-bottom: 30vh;
 }
 
 .vision_keyword:last-child {
@@ -861,7 +928,6 @@ section {
     margin-bottom: 2rem;
     background: #ddd;
 }
-
 
 .vision_highlight {
     position: relative;
@@ -897,7 +963,131 @@ section {
     transform: scaleX(1);
 }
 
+/* ── Outro : 대표 인사말을 한 화면 이상 머물게 한 뒤 solution으로 연결 ── */
+.vision_outro {
+    position: relative;
+    height: 80vh;
+}
 
+.vision_outro_inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12rem;
+}
+
+.vision_outro_inner {
+    position: relative;
+}
+
+.vision_outro_deco {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.vision_deco,
+.vision_text,
+.vision_signature {
+    will-change: transform, opacity;
+}
+
+.vision_deco {
+    position: absolute;
+}
+
+.vision_deco img {
+    display: block;
+    width: 100%;
+}
+
+
+/* vision01 */
+.vision_deco_01 {
+    top: -24%;
+    left: 10%;
+    width: 13rem;
+}
+
+
+/* vision02 */
+.vision_deco_02 {
+    top: 20%;
+    right: 15%;
+    width: 20rem;
+}
+
+
+/* vision03 */
+.vision_deco_03 {
+    bottom: -22%;
+    left: 18%;
+    width: 16rem;
+}
+
+
+/* 텍스트는 장식보다 위 */
+.vision_block {
+    position: relative;
+    z-index: 2;
+}
+
+
+.vision_block {
+    width: min(100%, 112rem);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.vision_text {
+    margin-top: 3.2rem;
+    font-size: 2.4rem;
+    line-height: 1.7;
+    letter-spacing: -0.025em;
+}
+
+.vision_text:first-child {
+    margin-top: 0;
+}
+
+.vision_signature {
+    display: block;
+    margin-top: 6rem;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #333;
+}
+
+@media (max-width: 1199px) {
+    .vision_scroll {
+        min-height: auto;
+        padding-top: 0;
+    }
+
+    .vision_outro {
+        height: auto;
+    }
+
+    .vision_outro_inner {
+        position: relative;
+        height: auto;
+        padding: 12rem 2.4rem;
+    }
+
+    .vision_block {
+        text-align: left;
+    }
+
+    .vision_signature {
+        text-align: right;
+    }
+
+    .vision_text {
+        font-size: inherit;
+        line-height: inherit;
+    }
+}
 
 
 /* ===========================
@@ -1048,17 +1238,10 @@ section {
 
 .curtain_section {
     position: relative;
-    height: 50vh;
-    padding: 0;
-    overflow: hidden;
-    background: #d3d3d3;
-}
-
-.curtain_section {
-    position: relative;
     height: 55vh;
     padding: 0;
     overflow: visible;
+    background: #d3d3d3;
 }
 
 .stripes_container {
@@ -1533,10 +1716,10 @@ section {
     height: 100vh;
     padding: 0;
     overflow: hidden;
-    /* background: #C3C3C3; */
-    background:
+    background: #C3C3C3;
+    /* background:
         linear-gradient(rgba(195, 195, 195, 0.7), rgba(195, 195, 195, 0.7)),
-        url("../img/bg01.jpg") center / cover no-repeat;
+        url("../img/bg01.jpg") center / cover no-repeat; */
 }
 
 .performance_inner {
@@ -1735,7 +1918,7 @@ section {
     position: absolute;
     right: 5rem;
     bottom: 8rem;
-    width: 17rem;
+    width: 16rem;
 }
 
 .performance_img img {
@@ -1791,6 +1974,7 @@ section {
     height: 100vh;
     text-align: center;
     transform: none;
+    overflow: hidden;
 }
 
 .keyword_title {
@@ -1864,17 +2048,6 @@ section {
    Keyword Motion Line
 =========================== */
 
-.keyword_motion_line {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 1;
-    display: block;
-    pointer-events: none;
-    will-change: transform, opacity, filter;
-}
-
-
 /* 좌우 분리 키워드 */
 .keyword_motion_line {
     position: absolute;
@@ -1922,9 +2095,6 @@ section {
     z-index: 2;
 }
 
-.keyword_pin {
-    overflow: hidden;
-}
 
 /* ===========================
     Scatter Text
@@ -2071,11 +2241,6 @@ section {
     height: 100vh;
     padding-top: 16rem;
     overflow-x: clip;
-    background:
-        linear-gradient(rgba(0, 0, 0, 0.9),
-            rgba(0, 0, 0, 0.7)),
-        url("../img/bg05.jpg") center / cover no-repeat,
-        #080808;
 }
 
 .process_inner {
@@ -2509,11 +2674,6 @@ section {
 /* ===========================
     Our Partners
    =========================== */
-.partner_section {
-    padding: 26.2rem 0;
-    overflow: hidden;
-    background: #fff;
-}
 
 .partner_head {
     max-width: 140rem;
@@ -2623,31 +2783,42 @@ section {
 
 .footer_headline {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3.2rem;
     flex-direction: column;
+    align-items: stretch;
+    gap: 2.4rem;
+    text-align: left;
 }
 
-.footer_headline_text{
-    text-align: center;
-}
 .footer_headline_label {
     display: block;
-    margin-bottom: 1.6rem;
     font-family: "Big Shoulders", sans-serif;
-    font-size: 6.4rem;
+    font-size: 2.4rem;
     font-weight: 600;
-    letter-spacing: 0.02em;
-    color: #fff;
+    color: var(--color-primary);
+}
+
+.footer_headline_row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4.8rem;
 }
 
 .footer_headline_title {
-    max-width: 70rem;
+    max-width: none;
+    font-size: 7.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: #fff;
+    word-break: keep-all;
+}
+
+.footer_headline_sub {
     font-size: 1.6rem;
     font-weight: 400;
-    line-height: 1.4;
-    color: #fff;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.6);
     word-break: keep-all;
 }
 
@@ -2656,8 +2827,8 @@ section {
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    width: 6.4rem;
-    height: 6.4rem;
+    width: 8rem;
+    height: 8rem;
     border-radius: 50%;
     background: var(--color-primary);
     color: #fff;
@@ -3026,7 +3197,7 @@ section {
 /* footer가 fixed라 문서 흐름에서 빠지는 만큼, 그 자리를 대신 채워 스크롤 여유를 만든다.
    높이 값(--footer-height)은 script.js가 footer의 실제 렌더링 높이를 재서 넣어준다. */
 .footer_spacer {
-    height: var(--footer-height, 0px);
+    height: calc(var(--footer-height, 0px) + 40vh);
     pointer-events: none;
 }
 
@@ -3039,12 +3210,13 @@ section {
     bottom: 0;
     z-index: -1;
     width: 100%;
-    height: calc(var(--footer-height, 0px) + 8rem);
+    height: 100vh;
     background:
         linear-gradient(rgba(0, 0, 0, 0.38),
             rgba(0, 0, 0, 0.38)),
         url("../img/footer_bg.jpg") center / cover no-repeat,
         #080808;
+
     pointer-events: none;
 }
 
@@ -3059,7 +3231,7 @@ section {
     bottom: 0;
     z-index: 0;
     width: 100%;
-    height: auto;
+    height: 100vh;
     padding: 0;
     overflow: hidden;
     background:
@@ -3079,11 +3251,12 @@ section {
     z-index: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     max-width: none;
     height: 100%;
     margin: 0 auto;
-    padding: 8rem 7.2rem 6rem;
+    padding: 10rem 7.2rem 6rem;
 }
 
 .footer_pattern {
@@ -3091,20 +3264,24 @@ section {
     inset: 0;
     z-index: 0;
     display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    gap: 2.4rem 4rem;
-    padding: 2rem;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.6rem;
     overflow: hidden;
-    font-family: "Big Shoulders", sans-serif;
-    font-size: 6.4rem;
-    font-weight: 400;
+    /* font-family: "Big Shoulders", sans-serif; */
+    font-size: 8rem;
+    font-weight: 800;
     line-height: 1;
     letter-spacing: 0.02em;
-    color: rgba(255, 255, 255, 0.045);
+    color: rgba(255, 255, 255, 0.07);
     text-transform: uppercase;
+    white-space: nowrap;
     user-select: none;
     pointer-events: none;
+}
+
+.footer_pattern_row {
+    white-space: nowrap;
 }
 
 
@@ -3121,31 +3298,45 @@ section {
     gap: 3.2rem;
     margin-top: 8rem;
     padding-top: 3.2rem;
+    font-size: 1.4rem;
 }
 
 .footer_bottom_contact {
+    display: flex;
+    gap: 4.8rem;
     justify-self: start;
 }
 
-.footer_address {
-    margin-bottom: 2rem;
-    font-size: 1.4rem;
-    font-style: normal;
-    color: rgba(255, 255, 255, 0.6);
+.footer_contact_col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
 }
 
-.footer_contact_list li {
-    display: flex;
-    gap: 1.2rem;
+.footer_contact_label {
+    margin-bottom: 0.2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.footer_address {
+    max-width: 22rem;
+    font-style: normal;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.footer_contact_list li span {
+    padding: 0 1rem 0 0;
+}
+
+.footer_contact_col a,
+.footer_contact_col span:not(.footer_contact_label) {
     font-size: 1.4rem;
     color: rgba(255, 255, 255, 0.9);
-    padding: 0 0 1rem 0;
-}
-
-.footer_contact_list li span:first-child {
-    width: 1.4rem;
-    flex-shrink: 0;
-    color: rgba(255, 255, 255, 0.5);
 }
 
 .footer_bottom_copy {
