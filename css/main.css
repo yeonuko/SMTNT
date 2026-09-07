@@ -76,6 +76,7 @@ section {
 .process_inner,
 .media_inner,
 .contact_inner,
+.news_inner,
 .footer_inner,
 .vision_inner {
     width: 100%;
@@ -760,15 +761,17 @@ section {
 
 /* 중앙 대형 → 왼쪽 sticky 전환은 같은 DOM 요소(.vision_sticky_copy)를 사용 */
 
-/* ── Main : 왼쪽 sticky + 오른쪽 scroll ── */
+/* ── Main : 왼쪽 sticky(텍스트+카드) + 오른쪽 scroll ── */
 .vision_inner {
     display: grid;
-    grid-template-columns: 70rem 1fr;
-    column-gap: 12rem;
+    grid-template-columns: auto 1fr;
+    column-gap: 8rem;
     align-items: start;
 }
 
 .vision_sticky {
+    grid-column: 1;
+    grid-row: 1;
     position: sticky;
     top: 0;
     height: 100vh;
@@ -779,10 +782,42 @@ section {
     pointer-events: none;
 }
 
+/* 높이/스크롤(sticky) 범위는 vision_inner 기준 그대로 두고, 폭만 뷰포트 전체로 breakout */
+.vision_bg {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    position: sticky;
+    top: 0;
+    left: 50%;
+    width: 100vw;
+    margin-left: -50vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.vision_bg_blob {
+    position: absolute;
+    top: var(--vbg-y, 25%);
+    left: var(--vbg-x, 20%);
+    width: 50vw;
+    height: 50vh;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, var(--vbg-c1, rgba(133, 186, 255, 0.55)) 0%, transparent 70%);
+    filter: blur(60px);
+    will-change: top, left, filter;
+}
+
 .vision_sticky_copy {
-    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 4.8rem;
     transform-origin: left center;
     will-change: transform;
+}
+
+.vision_sticky_text {
+    flex-shrink: 0;
 }
 
 .vision_label {
@@ -802,15 +837,59 @@ section {
     background: var(--color-primary);
 }
 
+
+
 .vision_title {
     color: #111;
     word-break: keep-all;
 }
 
-.vision_scroll {
+.vision_sticky_text .vision_title {
+    font-size: 4.8rem;
+    font-weight: 800;
+}
+
+/* ── Vision : 왼쪽 사진 자리에 넣은 카드 (그라디언트 배경 + Connect/Protect/Create가 쌓여서 스크롤에 맞춰 넘어감) ── */
+.vision_visual_card {
     position: relative;
-    min-height: 180vh;
-    padding: 20vh 0 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    width: 28rem;
+    height: 35rem;
+    border-radius: 2.4rem;
+    --vc-angle: 135deg;
+    --vc-c1: #6ea8fe;
+    --vc-c2: #ffd9a8;
+    --vc-c3: #ff9d6c;
+    --vc-c4: #6ea8fe;
+    background: linear-gradient(var(--vc-angle), var(--vc-c1) 0%, var(--vc-c2) 45%, var(--vc-c3) 55%, var(--vc-c4) 100%);
+}
+
+.vision_visual_stack {
+    will-change: transform;
+}
+
+.vision_visual_item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35rem;
+    padding: 0 3.2rem;
+    text-align: center;
+}
+
+.vision_visual_item .vision_title {
+    color: #fff;
+    font-size: 4.8rem;
+    line-height: 1.2;
+}
+
+.vision_scroll {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    height: 175vh;
+    padding: 34vh 0 0;
     opacity: 1;
     transform: none;
     background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
@@ -818,81 +897,7 @@ section {
     background-position: -1rem 0;
 }
 
-@media (min-width: 1200px) {
-    .vision_scroll {
-        opacity: 1;
-        transform: none;
-    }
 
-    .vision_keyword_list {
-        opacity: 1;
-        transform: none;
-        will-change: opacity, transform;
-    }
-}
-
-.vision_curve {
-    position: absolute;
-    top: 0;
-    left: -8rem;
-    width: 5rem;
-    pointer-events: none;
-}
-
-
-.vision_curve_svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-}
-
-
-.vision_curve_path_bg {
-    fill: none;
-    stroke: rgba(0, 0, 0, 0.1);
-    stroke-width: 1;
-    /*
-     * 라인의 시작/끝이 딱 잘린 것처럼 보이지 않게
-     */
-    stroke-linecap: round;
-    stroke-linejoin: round;
-
-    vector-effect: non-scaling-stroke;
-}
-
-
-.vision_curve_path_fill {
-    fill: none;
-    stroke: var(--color-primary);
-    stroke-width: 1;
-    /*
-     * 주황색 진행 라인 역시 끝을 둥글게
-     */
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    vector-effect: non-scaling-stroke;
-}
-
-.vision_curve_marker {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1rem;
-    height: 1rem;
-    margin: -0.5rem 0 0 -0.5rem;
-    border-radius: 50%;
-    background: #fff;
-    border: 1.5px solid rgba(0, 0, 0, 0.2);
-    transition: background 0.5s ease, border-color 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
-}
-
-.vision_curve_marker.is_active {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    transform: scale(1.5);
-    box-shadow: 0 0 0 5px rgba(255, 98, 0, 0.15);
-}
 
 /* 키워드 간격을 크게 벌려 오른쪽만 길게 흐르게 */
 .vision_keyword_list {
@@ -900,7 +905,13 @@ section {
 }
 
 .vision_keyword {
-    margin-bottom: 30vh;
+    margin-bottom: 16vh;
+    opacity: 0.3;
+    transition: opacity 0.5s ease;
+}
+
+.vision_keyword.is_active {
+    opacity: 1;
 }
 
 .vision_keyword:last-child {
@@ -909,16 +920,32 @@ section {
 
 .vision_keyword_head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 1.6rem;
     margin-bottom: 1.6rem;
     font-family: "Big Shoulders", sans-serif;
-    font-size: 2.4rem;
-    font-weight: 700;
 }
 
 .vision_keyword_num {
+    font-size: 2.4rem;
+    font-weight: 700;
     color: var(--color-primary);
+}
+
+.vision_keyword_name {
+    display: block;
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.vision_keyword_sub {
+    display: block;
+    margin-top: 0.4rem;
+    font-family: "Pretendard Variable", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #666;
 }
 
 .vision_keyword_line {
@@ -948,8 +975,9 @@ section {
     bottom: 0.08em;
     z-index: -1;
     width: 100%;
-    height: 0.22em;
+    height: 0.5em;
     background: var(--color-primary);
+    opacity: 0.5;
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1059,35 +1087,6 @@ section {
     color: #333;
 }
 
-@media (max-width: 1199px) {
-    .vision_scroll {
-        min-height: auto;
-        padding-top: 0;
-    }
-
-    .vision_outro {
-        height: auto;
-    }
-
-    .vision_outro_inner {
-        position: relative;
-        height: auto;
-        padding: 12rem 2.4rem;
-    }
-
-    .vision_block {
-        text-align: left;
-    }
-
-    .vision_signature {
-        text-align: right;
-    }
-
-    .vision_text {
-        font-size: inherit;
-        line-height: inherit;
-    }
-}
 
 
 /* ===========================
@@ -2022,13 +2021,19 @@ section {
     clip-path: inset(50% 0 0 0);
 }
 
-.keyword_desc {
+.keyword_text_group {
     position: absolute;
-    margin-top: 0;
     top: 50%;
     left: 50%;
     width: 100%;
     transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+}
+
+.keyword_desc {
+    position: static;
+    margin: 0;
     opacity: 0;
     will-change: clip-path, opacity;
     font-weight: 600;
@@ -2041,6 +2046,15 @@ section {
 .keyword_support,
 .keyword_experience {
     color: var(--color-primary);
+}
+
+.keyword_subdesc {
+    position: static;
+    margin: 1.6rem 0 0;
+    opacity: 0;
+    font-size: 2rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 
@@ -2222,6 +2236,30 @@ section {
     color: #222222;
 }
 
+.scatter_intro {
+    position: absolute;
+    top: 38%;
+    left: 13%;
+    max-width: 46rem;
+    z-index: 2;
+}
+
+.scatter_desc {
+    margin: 0 0 1.6rem;
+    opacity: 0;
+    font-size: 1.8rem;
+    line-height: 1.7;
+    color: #555555;
+}
+
+.scatter_lead {
+    margin: 0;
+    opacity: 0;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #222222;
+}
+
 
 
 
@@ -2391,7 +2429,6 @@ section {
 }
 
 .news_inner {
-    width: calc(100% - 24rem);
     margin: 0 auto;
 }
 
@@ -2807,7 +2844,7 @@ section {
 
 .footer_headline_title {
     max-width: none;
-    font-size: 7.2rem;
+    font-size: 6.4rem;
     font-weight: 700;
     line-height: 1.3;
     letter-spacing: -0.01em;

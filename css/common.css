@@ -143,3 +143,12 @@ html.lenis body {
     font-weight: 900;
     font-style: normal;
 }
+
+
+.bricolage {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+}
