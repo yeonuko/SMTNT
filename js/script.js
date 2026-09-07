@@ -640,6 +640,133 @@ mm.add("(min-width: 1200px)", () => {
     initVisionSequence();
 });
 
+/* ── Vision : 왼쪽 이미지 스택 자리에 넣은 Connect/Protect/Create 타이틀 스택
+   : 스크롤로 해당 키워드 구간에 들어오면 타이틀이 한 칸씩 translateY로 넘어가고
+   : 오른쪽 vision_keyword는 is_active 토글로 진하게/흐리게(opacity) 전환된다
+── */
+function initVisionTitleStack() {
+    const stack = document.querySelector(".vision_visual_stack");
+    const items = gsap.utils.toArray(".vision_visual_item");
+    const keywords = gsap.utils.toArray(".vision_keyword");
+    const card = document.querySelector(".vision_visual_card");
+    const bgBlob = document.querySelector(".vision_bg_blob");
+
+    if (!stack || !items.length || !keywords.length) return;
+
+    let itemHeight = items[0].offsetHeight;
+    let activeIndex = 0;
+
+    /* Connect / Protect / Create 순서에 맞춘 카드 배경 그라디언트 세트 (각도 + 색 조금씩 변주) */
+    const cardGradients = [{
+            angle: "135deg",
+            c1: "#6ea8fe",
+            c2: "#ffd9a8",
+            c3: "#ff9d6c",
+            c4: "#6ea8fe"
+        },
+        {
+            angle: "150deg",
+            c1: "#6ee7d0",
+            c2: "#a8e6ff",
+            c3: "#6ca8ff",
+            c4: "#6ee7d0"
+        },
+        {
+            angle: "120deg",
+            c1: "#c9a8fe",
+            c2: "#ffb8e6",
+            c3: "#ff6ca0",
+            c4: "#c9a8fe"
+        }
+    ];
+
+    /* 같은 블롭을 인덱스마다 다른 위치 + 색으로 이동/변주 (겹치지 않게 코너를 다르게) */
+    const bgTones = [{
+            x: "30%",
+            y: "25%",
+            c1: "rgba(133, 186, 255, 0.55)"
+        },
+        {
+            x: "100%",
+            y: "52%",
+            c1: "rgba(120, 224, 197, 0.5)"
+        },
+        {
+            x: "20%",
+            y: "70%",
+            c1: "rgba(199, 153, 255, 0.5)"
+        }
+    ];
+
+    function setActive(index) {
+        if (index === activeIndex) return;
+
+        activeIndex = index;
+
+        keywords.forEach((keyword, i) => {
+            keyword.classList.toggle("is_active", i === index);
+        });
+
+        gsap.to(stack, {
+            y: -index * itemHeight,
+            duration: 0.6,
+            ease: "power3.inOut"
+        });
+
+        if (card && cardGradients[index]) {
+            gsap.to(card, {
+                duration: 0.6,
+                ease: "power3.inOut",
+                "--vc-angle": cardGradients[index].angle,
+                "--vc-c1": cardGradients[index].c1,
+                "--vc-c2": cardGradients[index].c2,
+                "--vc-c3": cardGradients[index].c3,
+                "--vc-c4": cardGradients[index].c4
+            });
+        }
+
+        if (bgBlob && bgTones[index]) {
+            gsap.to(bgBlob, {
+                duration: 0.6,
+                ease: "power3.inOut",
+                "--vbg-x": bgTones[index].x,
+                "--vbg-y": bgTones[index].y,
+                "--vbg-c1": bgTones[index].c1
+            });
+        }
+    }
+
+    /* 초기 상태 : 첫 번째 키워드를 활성으로 시작 */
+    keywords[0].classList.add("is_active");
+    gsap.set(stack, {
+        y: 0
+    });
+
+    keywords.forEach((keyword, i) => {
+        ScrollTrigger.create({
+            trigger: keyword,
+            start: "top 50%",
+            end: "bottom 50%",
+
+            onEnter: () => setActive(i),
+            onEnterBack: () => setActive(i)
+        });
+    });
+
+    /* 리사이즈 시 아이템 높이를 다시 재서 현재 활성 인덱스 기준으로 위치를 맞춘다 */
+    window.addEventListener("resize", () => {
+        itemHeight = items[0].offsetHeight;
+
+        gsap.set(stack, {
+            y: -activeIndex * itemHeight
+        });
+    });
+}
+
+mm.add("(min-width: 1200px)", () => {
+    initVisionTitleStack();
+});
+
 /* ── Vision Outro 모바일 : 스크럽 대신 진입 시 1회성 fade-up ── */
 function initVisionOutroMobile() {
     const outro = document.querySelector(".vision_outro");
@@ -682,252 +809,6 @@ if (window.innerWidth < 1200) {
 }
 
 
-/* ── Vision 데스크탑 스크롤 연동 곡선
-   : 첫 키워드 시작 ~ 마지막 키워드 끝까지만 라인 생성
-   : 기존 베지어 형태 계산은 그대로 유지
-── */
-function initVisionCurve() {
-    const scrollWrap = document.querySelector(".vision_scroll");
-    const curveWrap = document.querySelector(".vision_curve");
-    const svg = document.querySelector(".vision_curve_svg");
-    const bgPath = document.querySelector(".vision_curve_path_bg");
-    const fillPath = document.querySelector(".vision_curve_path_fill");
-
-    if (!scrollWrap || !curveWrap || !svg || !bgPath || !fillPath) return;
-
-    const anchors = gsap.utils.toArray(".vision_keyword_head");
-    const keywords = gsap.utils.toArray(".vision_keyword");
-
-    if (!anchors.length || !keywords.length) return;
-
-    let markers = [];
-    let scrubTween = null;
-
-    /* 라인 시작/끝에 줄 여백 */
-    const CURVE_PADDING_TOP = -15;
-    const CURVE_PADDING_BOTTOM = 0;
-
-
-    function buildMarkers(anchorPoints) {
-        markers.forEach((m) => {
-            if (m.trigger) m.trigger.kill();
-            m.el.remove();
-        });
-
-        markers = [];
-
-        anchorPoints.forEach((point, i) => {
-            const el = document.createElement("div");
-
-            el.className = "vision_curve_marker";
-            el.style.transform = `translate(${point.x}px, ${point.y}px)`;
-
-            curveWrap.appendChild(el);
-
-            const trigger = ScrollTrigger.create({
-                trigger: anchors[i],
-                start: "top 65%",
-
-                onEnter: () => {
-                    el.classList.add("is_active");
-                },
-
-                onEnterBack: () => {
-                    el.classList.add("is_active");
-                },
-
-                onLeaveBack: () => {
-                    el.classList.remove("is_active");
-                }
-            });
-
-            markers.push({
-                el,
-                trigger
-            });
-        });
-    }
-
-
-    function buildPath() {
-        const wrapRect = scrollWrap.getBoundingClientRect();
-
-        const firstKeyword = keywords[0];
-        const lastKeyword = keywords[keywords.length - 1];
-
-        const firstRect = firstKeyword.getBoundingClientRect();
-        const lastRect = lastKeyword.getBoundingClientRect();
-
-
-        /*
-         * vision_scroll 전체 높이를 사용하지 않고
-         * 실제 키워드 콘텐츠 시작/끝을 기준으로 곡선 영역을 만든다.
-         */
-        const curveStart =
-            firstRect.top -
-            wrapRect.top -
-            CURVE_PADDING_TOP;
-
-        const curveEnd =
-            lastRect.bottom -
-            wrapRect.top +
-            CURVE_PADDING_BOTTOM;
-
-        const height = curveEnd - curveStart;
-
-
-        /*
-         * curveWrap 자체를 콘텐츠 시작 위치로 이동
-         */
-        curveWrap.style.top = `${curveStart}px`;
-        curveWrap.style.height = `${height}px`;
-
-
-        const curveRect = curveWrap.getBoundingClientRect();
-        const scaleX = curveRect.width / 100;
-
-        svg.setAttribute(
-            "viewBox",
-            `0 0 100 ${height}`
-        );
-
-
-        /*
-         * 키워드 타이틀 위치를
-         * 새 curve 영역 기준 좌표로 변환
-         */
-        const anchorPoints = anchors.map((el, i) => {
-            const r = el.getBoundingClientRect();
-
-            return {
-                x: i % 2 === 0 ? 30 : 70,
-
-                y: r.top -
-                    wrapRect.top -
-                    curveStart +
-                    r.height / 2
-            };
-        });
-
-
-        /*
-         * 시작점 / 끝점
-         *
-         * 기존처럼 중앙 50에서 시작하고
-         * 중앙 50으로 종료.
-         */
-        const points = [{
-                x: 50,
-                y: 0
-            },
-
-            ...anchorPoints,
-
-            {
-                x: 50,
-                y: height
-            }
-        ];
-
-
-        /*
-         * 기존 cubic Bézier 계산 유지
-         */
-        let d = `M ${points[0].x} ${points[0].y}`;
-
-        for (let i = 0; i < points.length - 1; i++) {
-            const p0 = points[i];
-            const p1 = points[i + 1];
-
-            const midY = (p0.y + p1.y) / 2;
-
-            d += `
-                C
-                ${p0.x} ${midY},
-                ${p1.x} ${midY},
-                ${p1.x} ${p1.y}
-            `;
-        }
-
-
-        bgPath.setAttribute("d", d);
-        fillPath.setAttribute("d", d);
-
-
-        /*
-         * 진행 라인 초기화
-         */
-        const totalLength = fillPath.getTotalLength();
-
-        fillPath.style.strokeDasharray = totalLength;
-        fillPath.style.strokeDashoffset = totalLength;
-
-
-        /*
-         * 마커도 새 curve 영역 기준으로 배치
-         */
-        buildMarkers(
-            anchorPoints.map((p) => ({
-                x: p.x * scaleX,
-                y: p.y
-            }))
-        );
-
-
-        /*
-         * 기존 tween 제거
-         */
-        if (scrubTween) {
-            scrubTween.kill();
-            scrubTween = null;
-        }
-
-
-        /*
-         * 라인 진행 역시
-         * vision_scroll 전체가 아니라
-         * 첫 번째 키워드 → 마지막 키워드를 기준으로 한다.
-         */
-        scrubTween = gsap.to(fillPath, {
-            strokeDashoffset: 0,
-            ease: "none",
-
-            scrollTrigger: {
-                trigger: firstKeyword,
-
-                start: "top 70%",
-
-                endTrigger: lastKeyword,
-                end: "bottom 70%",
-
-                scrub: true
-            }
-        });
-    }
-
-
-    buildPath();
-
-
-    /*
-     * 화면 크기가 변하면 다시 계산
-     */
-    window.addEventListener("resize", buildPath);
-
-
-    /*
-     * 폰트 로딩 이후 텍스트 높이가 달라질 수 있으므로 재계산
-     */
-    if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(buildPath);
-    }
-}
-
-
-mm.add("(min-width: 1200px)", () => {
-    initVisionCurve();
-});
-
 
 
 
@@ -968,12 +849,13 @@ function initVisionRail() {
         const setPosition = () => {
             const wrapRect = scrollWrap.getBoundingClientRect();
             const targetRect = target.getBoundingClientRect();
+            const MARKER_OFFSET = 8;
 
             marker.style.top = `${
-            targetRect.top -
-            wrapRect.top +
-            targetRect.height / 2 - 4
-        }px`;
+                targetRect.top -
+                wrapRect.top +
+                MARKER_OFFSET
+            }px`;
         };
 
         setPosition();
@@ -1775,6 +1657,9 @@ function initKeywordSplit() {
         const desc =
             item.querySelector(".keyword_desc");
 
+        const subDesc =
+            item.querySelector(".keyword_subdesc");
+
         const lines =
             item.querySelectorAll(".keyword_motion_line");
 
@@ -1789,6 +1674,13 @@ function initKeywordSplit() {
             gsap.set(desc, {
                 opacity: 0,
                 scale: 0.96
+            });
+        }
+
+        if (subDesc) {
+            gsap.set(subDesc, {
+                opacity: 0,
+                y: 12
             });
         }
 
@@ -1844,6 +1736,9 @@ function initKeywordSplit() {
 
         const desc =
             item.querySelector(".keyword_desc");
+
+        const subDesc =
+            item.querySelector(".keyword_subdesc");
 
         const mainLine =
             item.querySelector(".line_main");
@@ -1986,7 +1881,7 @@ function initKeywordSplit() {
              */
             tl.to(
                 top, {
-                    y: "-8rem",
+                    y: "-13rem",
                     duration: 0.45,
                     ease: "power2.out"
                 },
@@ -1995,7 +1890,7 @@ function initKeywordSplit() {
 
             tl.to(
                 bottom, {
-                    y: "8rem",
+                    y: "13rem",
                     duration: 0.45,
                     ease: "power2.out"
                 },
@@ -2017,6 +1912,18 @@ function initKeywordSplit() {
                     ease: "power2.out"
                 },
                 focusStart + 0.22
+            );
+        }
+
+        if (subDesc) {
+            tl.to(
+                subDesc, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.28,
+                    ease: "power2.out"
+                },
+                focusStart + 0.3
             );
         }
 
@@ -2112,6 +2019,7 @@ function initKeywordMobile() {
         const pin = item.querySelector(".keyword_pin");
         const title = item.querySelector(".keyword_title");
         const desc = item.querySelector(".keyword_desc");
+        const subDesc = item.querySelector(".keyword_subdesc");
 
         if (!pin || !title || !desc) return;
 
@@ -2202,7 +2110,7 @@ function initKeywordMobile() {
         /*
          * 글자가 라인보다 위에 보이도록 설정
          */
-        gsap.set([title, desc], {
+        gsap.set([title, desc, subDesc].filter(Boolean), {
             position: "relative",
             top: "auto",
             right: "auto",
@@ -2348,6 +2256,22 @@ function initKeywordMobile() {
             },
             "-=0.08"
         );
+
+        /* 부가 설명 등장 */
+        if (subDesc) {
+            tl.fromTo(
+                subDesc, {
+                    y: 16,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.4,
+                    ease: "power3.out"
+                },
+                "-=0.2"
+            );
+        }
     });
 }
 
@@ -2454,6 +2378,32 @@ function initScatterText() {
             duration: 0.3,
             ease: "none"
         }, 0.5); //배경 나타나는 타이밍
+    }
+
+    const introEl = section.querySelector(".scatter_intro");
+
+    if (introEl) {
+        const introLines = introEl.querySelectorAll(".scatter_desc, .scatter_lead");
+
+        gsap.set(introLines, {
+            opacity: 0,
+            y: 20
+        });
+
+        gsap.to(introLines, {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.15,
+            ease: "power2.out",
+            scrollTrigger: {
+                trigger: section,
+                start: "top+=500 top",
+                end: "top+=650 top",
+                scrub: 0.3,
+                invalidateOnRefresh: true
+            }
+        });
     }
 }
 
