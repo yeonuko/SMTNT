@@ -2416,59 +2416,6 @@ initScatterText();
 
 
 
-
-
-
-
-
-
-
-
-
-/* ── Awards & Media ── */
-function initNewsSection() {
-    const section = document.querySelector(".news_section");
-    const head = document.querySelector(".news_head");
-    const items = gsap.utils.toArray(".news_item");
-
-    if (!section || !head || !items.length) return;
-
-    gsap.set([head, items], {
-        opacity: 1,
-        y: 0
-    });
-
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: section,
-            start: "top 75%",
-            toggleActions: "play none none none"
-        }
-    });
-
-    tl.from(head, {
-        y: 50,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out"
-    });
-
-    tl.from(items, {
-        y: 70,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: "power3.out"
-    }, "-=0.25");
-}
-
-initNewsSection();
-
-
-
-
-
-
 /* ── 커튼 전환 효과 ── */
 function initCurtainSections() {
     const sections = gsap.utils.toArray(".curtain_section");
@@ -2775,72 +2722,25 @@ function initNewsSlider() {
 
     if (!wrapper) return;
 
-    const DESKTOP_GROUP_SIZE = 5;
-
-    /*
-        1. 기존에 만들어진 빈 슬라이드가 있다면 제거
-        2. 실제 뉴스 개수를 기준으로
-        3. 5개 단위가 되도록 부족한 만큼 빈 슬라이드 추가
-    */
-    function createBlankSlides() {
-        wrapper
-            .querySelectorAll(".news_slide_blank")
-            .forEach((blank) => blank.remove());
-
-        const realSlides = wrapper.querySelectorAll(
-            ".news_slide:not(.news_slide_blank)"
-        );
-
-        const remainder = realSlides.length % DESKTOP_GROUP_SIZE;
-
-        if (remainder === 0) return;
-
-        const blankCount = DESKTOP_GROUP_SIZE - remainder;
-
-        for (let i = 0; i < blankCount; i++) {
-            const blankSlide = document.createElement("div");
-
-            blankSlide.className =
-                "swiper-slide news_slide news_slide_blank";
-
-            blankSlide.setAttribute("aria-hidden", "true");
-
-            wrapper.appendChild(blankSlide);
-        }
-    }
-
-    createBlankSlides();
+    const realSlides = wrapper.querySelectorAll(".news_slide");
 
     /*
         현재 페이지 / 전체 페이지 표시
-        빈 슬라이드는 전체 뉴스 개수에서 제외
+        루프 모드에서는 activeIndex 대신 realIndex 기준으로 계산
     */
     function updateNewsFraction(swiper) {
-        const group = Number(swiper.params.slidesPerGroup) || 1;
-
-        const realSlides = wrapper.querySelectorAll(
-            ".news_slide:not(.news_slide_blank)"
-        );
-
-        const totalPages = Math.ceil(realSlides.length / group);
-
-        const currentPage = Math.min(
-            Math.floor(swiper.activeIndex / group) + 1,
-            totalPages
-        );
-
-        currentEl.textContent = currentPage;
-        totalEl.textContent = totalPages;
+        currentEl.textContent = swiper.realIndex + 1;
+        totalEl.textContent = realSlides.length;
     }
 
     const newsSwiper = new Swiper(slider, {
         speed: 750,
-        loop: false,
-        watchOverflow: true,
+        loop: true,
+        loopAdditionalSlides: 5,
         grabCursor: true,
 
         slidesPerView: 5,
-        slidesPerGroup: 5,
+        slidesPerGroup: 1,
         spaceBetween: 24,
 
         navigation: {
@@ -2857,19 +2757,19 @@ function initNewsSlider() {
 
             768: {
                 slidesPerView: 2,
-                slidesPerGroup: 2,
+                slidesPerGroup: 1,
                 spaceBetween: 20
             },
 
             1024: {
                 slidesPerView: 3,
-                slidesPerGroup: 3,
+                slidesPerGroup: 1,
                 spaceBetween: 22
             },
 
             1440: {
                 slidesPerView: 5,
-                slidesPerGroup: 5,
+                slidesPerGroup: 1,
                 spaceBetween: 24
             }
         },
@@ -2884,7 +2784,6 @@ function initNewsSlider() {
             },
 
             breakpoint(swiper) {
-                swiper.slideTo(0, 0);
                 updateNewsFraction(swiper);
             },
 
@@ -2896,6 +2795,13 @@ function initNewsSlider() {
 }
 
 initNewsSlider();
+
+
+
+
+
+
+
 
 
 
