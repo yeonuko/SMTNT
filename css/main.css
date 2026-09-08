@@ -2465,7 +2465,7 @@ section {
 
 .news_slider {
     width: 100%;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .news_slider .swiper-wrapper {
