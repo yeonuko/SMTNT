@@ -2324,10 +2324,10 @@ function initScatterText() {
         const isMobileViewport = window.innerWidth <= 1199;
 
         const gap = window.innerWidth * 0.015;
-        const lineGap = window.innerHeight * 0.09;
+        const lineGap = window.innerHeight * (isMobileViewport ? 0.05 : 0.09); // 모바일만 0.06으로 좁힘(data-line의 줄간격)
 
-        const targetStartX = window.innerWidth * (isMobileViewport ? 0.05 : 0.13);
-        const targetStartY = window.innerHeight * 0.58;
+        const targetStartX = window.innerWidth * (isMobileViewport ? 0.05 : 0.13); //뭉친 텍스트 블록 전체의 좌우 위치
+        const targetStartY = window.innerHeight * (isMobileViewport ? 0.5 : 0.38); //뭉친 텍스트 블록 전체의 상하 위치 //뭉친 텍스트 블록 전체의 상하 위치
 
         let targetLeft = targetStartX;
 
@@ -2864,6 +2864,60 @@ initFooterPattern();
 
 
 
+
+
+/* ── 개인정보처리방침 / 이용약관 팝업 ── */
+(() => {
+    const popup = document.querySelector(".policy_popup");
+    if (!popup) return;
+
+    const panel = popup.querySelector(".policy_popup_panel");
+    const titleEl = popup.querySelector(".policy_popup_title");
+    const openTriggers = document.querySelectorAll("[data-policy-open]");
+    const closeTriggers = popup.querySelectorAll("[data-popup-close]");
+    const panels = popup.querySelectorAll("[data-policy-panel]");
+
+    const titles = {
+        privacy: "개인정보 처리방침",
+        terms: "이용약관",
+    };
+
+    const openPopup = (type) => {
+        panels.forEach((p) => {
+            p.hidden = p.dataset.policyPanel !== type;
+        });
+        if (titleEl) titleEl.textContent = titles[type] || "";
+
+        popup.classList.add("is_active");
+        document.body.style.overflow = "hidden";
+        if (typeof lenis !== "undefined") lenis.stop();
+    };
+
+    const closePopup = () => {
+        popup.classList.remove("is_active");
+        document.body.style.overflow = "";
+        if (typeof lenis !== "undefined") lenis.start();
+    };
+
+    openTriggers.forEach((trigger) => {
+        trigger.addEventListener("click", (e) => {
+            e.preventDefault();
+            openPopup(trigger.dataset.policyOpen);
+        });
+    });
+
+    closeTriggers.forEach((trigger) => {
+        trigger.addEventListener("click", closePopup);
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && popup.classList.contains("is_active")) closePopup();
+    });
+
+    if (panel) {
+        panel.addEventListener("click", (e) => e.stopPropagation());
+    }
+})();
 
 
 /* ── 문의하기 팝업 ── */
