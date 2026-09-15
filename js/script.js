@@ -438,6 +438,31 @@ function initMainIntroTextMobile() {
 initMainIntroTextMobile();
 
 
+/* ── 모바일 main_intro_desc 반복 fade-up (화면 벗어났다 돌아오면 재생) ── */
+function initMainIntroDescMobile() {
+    const isMobile = window.matchMedia("(max-width: 1199px)").matches;
+    if (!isMobile) return;
+
+    const descs = document.querySelectorAll(".main_intro_desc");
+    if (!descs.length) return;
+
+    descs.forEach((desc) => {
+        ScrollTrigger.create({
+            trigger: desc,
+            start: "top 85%",
+            end: "bottom 10%",
+            onEnter: () => desc.classList.add("is_visible"),
+            onEnterBack: () => desc.classList.add("is_visible"),
+            onLeave: () => desc.classList.remove("is_visible"),
+            onLeaveBack: () => desc.classList.remove("is_visible"),
+        });
+    });
+}
+
+initMainIntroDescMobile();
+
+
+
 
 function initMainIntro() {
     const intro = document.querySelector(".main_intro");
