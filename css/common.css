@@ -37,6 +37,7 @@ html {
     /* 62.5% => 1rem === 10px */
     width: 100%;
     min-height: 100%;
+    scrollbar-gutter: stable; /* 팝업창 열었을때 스크롤바 안움직이게 */
 }
 
 body {
