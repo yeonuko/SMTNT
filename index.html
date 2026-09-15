@@ -759,10 +759,10 @@
 
                             <article class="performance_card">
                                 <div class="performance_card_text">
-                                    <p class="performance_number">7 <span>년 +</span></p>
+                                    <p class="performance_number">10 <span>년 +</span></p>
                                     <p class="performance_caption">
                                         에스엠티엔티의<br>
-                                        평균 근속 년수는 7년+ 입니다.
+                                        평균 근속 년수는 10년+ 입니다.
                                     </p>
                                 </div>
                                 <div class="performance_img">
@@ -992,22 +992,6 @@
                     </div>
 
                     <div class="scatter_words">
-
-                        <!-- <span class="scatter_word scatter_connecting" data-word="connecting"
-                            data-line="1">Connecting</span>
-                        <span class="scatter_word scatter_your" data-word="your" data-line="1">Your</span>
-                        <span class="scatter_word scatter_business" data-word="business" data-line="1">Business</span>
-
-                        <span class="scatter_word scatter_from" data-word="from" data-line="2">From</span>
-                        <span class="scatter_word scatter_messaging" data-word="messaging"
-                            data-line="2">Messaging</span>
-                        <span class="scatter_word scatter_to" data-word="to" data-line="2">to</span>
-                        <span class="scatter_word scatter_design" data-word="design" data-line="2">Design,</span>
-
-                        <span class="scatter_word scatter_development" data-word="development"
-                            data-line="3">Development</span>
-                        <span class="scatter_word scatter_and" data-word="and" data-line="3">&amp;</span>
-                        <span class="scatter_word scatter_ai" data-word="ai" data-line="3">AI</span> -->
 
                         <span class="scatter_word scatter_messaging" data-word="messaging" data-line="1">메시징부터</span>
                         <span class="scatter_word scatter_design" data-word="design" data-line="1">디자인,</span>
@@ -1707,9 +1691,9 @@
                         </p>
 
                         <div class="footer_policy">
-                            <a href="#">개인정보 처리방침</a>
+                            <a href="#" data-policy-open="privacy">개인정보 처리방침</a>
                             <span>|</span>
-                            <a href="#">이용약관</a>
+                            <a href="#" data-policy-open="terms">이용약관</a>
                             <!-- <span>|</span> -->
                             <!-- <a href="#">법적고지</a> -->
                         </div>
@@ -1849,6 +1833,45 @@
 
         </div>
         <!-- 문의하기 팝업 끝 -->
+
+
+        <!-- 개인정보처리방침 / 이용약관 팝업 -->
+        <div class="policy_popup" id="policy_popup">
+
+            <div class="policy_popup_dim" data-popup-close></div>
+
+            <div class="policy_popup_panel" role="dialog" aria-modal="true" aria-labelledby="policy_popup_title"
+                data-lenis-prevent>
+
+                <div class="policy_popup_head">
+                    <h2 class="policy_popup_title big-shoulders-700" id="policy_popup_title">
+                        개인정보 처리방침
+                    </h2>
+
+                    <button type="button" class="policy_popup_close" data-popup-close aria-label="닫기">
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+
+                <div class="policy_popup_body_wrap">
+
+                    <div class="policy_popup_body" data-policy-panel="privacy">
+                        <!-- TODO: 개인정보 처리방침 실제 내용으로 교체 -->
+                        <p>개인정보 처리방침 내용을 입력해 주세요.</p>
+                    </div>
+
+                    <div class="policy_popup_body" data-policy-panel="terms" hidden>
+                        <!-- TODO: 이용약관 실제 내용으로 교체 -->
+                        <p>이용약관 내용을 입력해 주세요.</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- 개인정보처리방침 / 이용약관 팝업 끝 -->
 
 
 
