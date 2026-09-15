@@ -69,6 +69,14 @@
         position: static;
         width: auto;
         margin: 0;
+        opacity: 0;
+        transform: translateY(2.4rem);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .main_intro_desc.is_visible {
+        opacity: 1;
+        transform: translateY(0);
     }
 
     .main_intro_desc_left,
