@@ -1286,7 +1286,7 @@ section {
 
 /* Solution → WHY SMTNT */
 .curtain_515151 {
-    background: rgb(51, 51, 51);
+    background: #1a1a1a;
 }
 
 .curtain_515151 .stripe_item {
@@ -1314,212 +1314,178 @@ section {
 
 .solution_section {
     position: relative;
-    height: 100vh;
-    padding: 0;
+    padding: 14rem 0;
     overflow: hidden;
-    background: #fff;
+    background-color: #fdfdfb;
+    background-image:
+        radial-gradient(at 12% 82%, rgba(255, 205, 240, 0.5) 0%, transparent 55%),
+        radial-gradient(at 28% 12%, rgba(255, 244, 190, 0.55) 0%, transparent 55%),
+        radial-gradient(at 88% 8%, rgba(200, 250, 220, 0.5) 0%, transparent 55%),
+        radial-gradient(at 90% 88%, rgba(205, 205, 250, 0.5) 0%, transparent 55%);
 }
 
-.solution_inner {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-}
-
-.solution_center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 2;
-    width: 100%;
-    text-align: center;
-    transform: translate(-50%, -50%);
-}
-
-.solution_label {
-    margin-bottom: 7rem;
-    font-size: 1.8rem;
-    font-weight: 500;
-    color: #111;
-}
-
-.solution_words {
+.solution_intro {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 2.4rem;
+    max-width: 70rem;
+    margin: 0 auto 8rem;
+    padding: 0 4rem;
+    text-align: center;
+    color: #1a1a1a;
 }
 
-.solution_word {
-    font-family: "Big Shoulders", sans-serif;
-    font-size: 15rem;
-    line-height: 0.85;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-    color: #3f3f3f;
-    transition: color 0.25s ease;
-}
-
-.solution_word.is_active {
-    color: var(--color-primary) !important;
-}
-
-.solution_desc {
-    margin-top: 8rem;
-    font-size: 1.8rem;
+.solution_label {
+    font-size: 1.6rem;
     font-weight: 500;
-    color: #111;
+    letter-spacing: 0.05em;
+    color: var(--color-primary);
+}
+
+.solution_intro_title {
+    font-family: "Big Shoulders", sans-serif;
+    font-size: 6.4rem;
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.solution_intro_desc {
+    font-size: 1.7rem;
+    line-height: 1.7;
+    color: rgba(26, 26, 26, 0.65);
 }
 
 
-/* Orbit Card */
+/* Stage (scatter → 정렬 → 가로 스크롤) */
 
-.solution_orbit {
-    position: absolute;
-    top: 0;
-    z-index: 3;
-    width: 50%;
+.solution_stage {
+    position: relative;
     height: 100vh;
-    pointer-events: none;
+    overflow: hidden;
+    perspective: 1800px;
 }
 
-.solution_orbit_left {
-    left: 0;
-}
-
-.solution_orbit_right {
-    right: 0;
-}
-
-.solution_card {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+.solution_track {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 4rem;
-    width: 53rem;
-    min-height: 35rem;
-    padding: 4.2rem 5.2rem;
-    border-radius: 2.4rem;
-    background: rgba(0, 0, 0, 0.85);
-    opacity: 0.4;
-    color: #fff;
-    transform: translate(-50%, -50%);
-    will-change: transform, opacity;
-    pointer-events: auto;
-}
-
-.solution_card_text {
-    flex: 1;
-}
-
-.solution_category {
-    margin-bottom: 1.8rem;
-    font-size: 1.3rem;
-    color: #fff;
-    font-weight: 400;
-}
-
-.solution_card h3 {
-    margin-bottom: 3rem;
-    font-size: 2.4rem;
-    line-height: 1.2;
-    font-weight: 600;
-    color: #fff;
-}
-
-.solution_card_text p:last-child {
-    font-size: 1.8rem;
-    line-height: 1.8;
-    color: #fff;
-    font-weight: 100;
-}
-
-.solution_card_text span {
-    display: block;
-    font-size: 1.4rem;
-    line-height: 1.8;
-}
-
-.solution_card_img {
-    width: 18rem;
-    height: 26rem;
-    border-radius: 2rem;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.solution_card_img img {
-    width: 100%;
     height: 100%;
-    object-fit: cover;
-    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.solution_card:hover .solution_card_img img {
-    transform: scale(1.1);
-}
-
-
-.solution_deco {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    overflow: hidden;
-    pointer-events: none;
-}
-
-.solution_deco_item {
-    position: absolute;
+    width: max-content;
+    padding: 0 12vw;
+    gap: 2.4rem;
     will-change: transform;
 }
 
-/* 아주 가까이 떠 있는 요소 */
-.deco_near {
-    width: 30rem;
-    opacity: 1;
-    filter: blur(0);
-    z-index: 3;
+.solution_card {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.6rem;
+    width: 38rem;
+    height: 50rem;
+    padding: 3.2rem 3rem;
+    overflow: hidden;
+    color: #fff;
+    background: #fff;
+    border-radius: 2.4rem;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.25),
+        0 18px 30px -16px rgba(205, 205, 250, 0.5),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -2px 0 rgba(205, 205, 250, 0.5);
+    will-change: transform;
 }
 
-/* 중간 거리 */
-.deco_mid {
-    width: 36rem;
-    opacity: 0.6;
-    filter: blur(1px);
+.solution_card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
     z-index: 2;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 32%, rgba(255, 255, 255, 0) 68%, rgba(0, 0, 0, 0.15) 100%);
+    pointer-events: none;
 }
 
-/* 멀리 있는 요소 */
-.deco_far {
-    width: 20rem;
-    opacity: 0.4;
-    filter: blur(2.5px);
+.solution_card_bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: inherit;
+}
+
+.solution_card_bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.solution_card_dim {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.solution_card_num {
+    position: relative;
     z-index: 1;
+    font-family: "Big Shoulders", sans-serif;
+    font-size: 4rem;
+    line-height: 1;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.8);
 }
 
-.deco_01 {
-    top: 23%;
-    left: 8%;
+.solution_card_body {
+    position: relative;
+    z-index: 1;
+    margin-top: 20rem;
 }
 
-.deco_02 {
-    bottom: 22%;
-    left: 12%;
+.solution_category {
+    margin-bottom: 1.2rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--color-primary);
 }
 
-.deco_03 {
-    top: 38%;
-    right: 7%;
+.solution_card h3 {
+    font-size: 3.2rem;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #333;
 }
 
+.solution_card_desc {
+    position: relative;
+    z-index: 1;
+    font-size: 1.5rem;
+    line-height: 1.7;
+    color: rgba(0, 0, 0, 1);
+}
 
+.solution_card h3 span {
+    margin-top: 0.6rem;
+    padding-left: 1rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 4;
+    color: rgba(255, 255, 255, 1);
+}
 
 
 .solution_mobile {
     display: none;
 }
+
+
+/* 터치 기기: 딤은 기본값 그대로 유지 (커튼 효과 없음) */
 
 
 

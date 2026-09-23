@@ -426,7 +426,7 @@
 
 
     /* =========================
-       Solution
+       Solution (그리드+scatter는 PC 전용, 1199px 이하는 세로 나열)
     ========================= */
 
 
@@ -434,91 +434,41 @@
         display: none;
     }
 
-    .solution_section {
-        position: relative;
+    .solution_intro {
         width: 100%;
-        height: 100lvh;
-        min-height: 72rem;
-        padding: 0;
-        overflow: hidden;
+        max-width: 44rem;
+        padding: 0 4.4rem;
     }
 
-    .solution_inner {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        min-height: inherit;
-        overflow: hidden;
+    .solution_intro_title {
+        font-size: 4.4rem;
     }
 
-    .solution_center {
-        display: block;
-        z-index: 10;
-        pointer-events: none;
-    }
-
-    .solution_orbit,
-    .solution_orbit_left,
-    .solution_orbit_right {
-        display: block;
-    }
-
-    .solution_orbit {
-        position: absolute;
-        inset: 0;
-        z-index: 5;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-    }
-
-    .solution_word {
-        font-size: 10rem;
-    }
-
-    /*
-     * 기존 PC 카드의 색상, 내부 여백, 텍스트 내용은 유지하고
-     * 세로 화면에 맞게 이미지-텍스트 배치만 세로형으로 전환
-     * (마크업 순서는 그대로, column-reverse로 이미지를 위로 올림)
-     */
-    .solution_card {
-        transform-origin: center center;
-        flex-direction: column-reverse;
-        align-items: stretch;
-        gap: 2rem;
-        width: 40rem;
-        padding: 4rem;
-    }
-
-    .solution_card_img {
-        width: 100%;
-        aspect-ratio: 16 / 20;
+    .solution_stage {
         height: auto;
+        overflow: visible;
+        perspective: none;
     }
 
-    .solution_deco {
-        display: block;
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        pointer-events: none;
+    .solution_track {
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+        width: 100%;
+        height: auto;
+        padding: 0 4.4rem;
     }
 
-    .solution_center {
-        z-index: 2;
+    .solution_card {
+        width: 100%;
+        height: 38rem;
+        padding: 3.6rem 3.2rem;
+        transform: none;
     }
 
-    .deco_near {
-        width: 16rem;
-    }
-
-    .deco_mid {
-        width: 19rem;
-    }
-
-    .deco_far {
-        width: 11rem;
-    }
+    .solution_card_body {
+    margin-top: 0rem;
+}
 
 
 
@@ -1571,41 +1521,40 @@
     ========================= */
 
 
-        .solution_section {
-            height: 100lvh;
-            min-height: 100lvh;
+        .solution_intro {
+            width: 100%;
+            max-width: 32rem;
+            padding: 0 3rem;
         }
 
-        .solution_center {
-            padding: 0 1.8rem;
+        .solution_intro_title {
+            font-size: 3.4rem;
+        }
+
+        .solution_intro_desc {
+            font-size: 1.5rem;
+        }
+
+        .solution_track {
+            padding: 0 3rem;
+        }
+
+        .solution_card {
+            width: 100%;
+            height: 32rem;
+            padding: 3rem 2.6rem;
+        }
+
+        .solution_card_num {
+            font-size: 3rem;
         }
 
         .solution_card h3 {
-            margin-bottom: 1.6rem;
-        }
-
-        .solution_label {
             font-size: 1.8rem;
         }
 
-        .solution_word {
-            font-size: 7rem;
-        }
-
-        .solution_desc {
-            font-size: 1.6rem;
-        }
-
-        .deco_near {
-            width: 10rem;
-        }
-
-        .deco_mid {
-            width: 12rem;
-        }
-
-        .deco_far {
-            width: 7rem;
+        .solution_label {
+            font-size: 1.5rem;
         }
 
 
