@@ -939,440 +939,124 @@ initVisionRail();
 
 
 
-/* ── Our Solution Orbit ── */
-/* ── Our Solution Orbit ── */
-function initSolutionOrbit() {
-    var section = document.querySelector(".solution_section");
+/* ── Our Solution : 타이틀 인트로 - 뷰포트 진입/이탈마다 왕복 페이드업 ── */
+function initSolutionIntroReveal() {
+    var intro = document.querySelector(".solution_intro");
+    if (!intro) return;
 
-    var leftCards = gsap.utils.toArray(
-        ".solution_orbit_left .solution_card"
-    );
+    gsap.set(intro, { opacity: 0, y: 50 });
 
-    var rightCards = gsap.utils.toArray(
-        ".solution_orbit_right .solution_card"
-    );
+    gsap.to(intro, {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: "power2.out",
+        scrollTrigger: {
+            trigger: intro,
+            start: "top 85%",
+            toggleActions: "play reverse play reverse"
+        }
+    });
+}
 
-    var words = gsap.utils.toArray(".solution_word");
+initSolutionIntroReveal();
 
-    if (
-        !section ||
-        (!leftCards.length && !rightCards.length) ||
-        !words.length
-    ) {
-        return;
+
+/* ── Our Solution : 카드 9개가 3D로 흩어져 있다가 한 줄로 정렬된 뒤, 이어서 가로로 슬라이드 (PC 전용) ── */
+function initSolutionStage() {
+    var stage = document.querySelector(".solution_stage");
+    var track = document.querySelector(".solution_track");
+    var cards = gsap.utils.toArray(".solution_card");
+
+    if (!stage || !track || !cards.length) {
+        return null;
     }
 
-
-    /* 화면 크기 구분 */
-    var isMobile = window.innerWidth <= 767;
-
-    var isTablet =
-        window.innerWidth >= 768 &&
-        window.innerWidth <= 1199;
-
-    var scrollDistance = 7500;
-
-    if (isMobile) {
-        scrollDistance = 4800;
-    } else if (isTablet) {
-        scrollDistance = 6000;
+    function getScrollAmount() {
+        return track.scrollWidth - window.innerWidth;
     }
 
+    /* 카드별 흩어짐 값 - 레퍼런스 스케일 참고해서 거리 확대 */
+    var scatterPresets = [
+        { x: -420, y: -120, z: 320,  rx: 12,  ry: -18 },
+        { x: 480,  y: -260, z: -260, rx: -10, ry: 20  },
+        { x: -380, y: 320,  z: 160,  rx: 16,  ry: 10  },
+        { x: 160,  y: -420, z: 420,  rx: -14, ry: -8  },
+        { x: -560, y: 100,  z: -320, rx: 8,   ry: 22  },
+        { x: 400,  y: 360,  z: 240,  rx: -18, ry: -14 },
+        { x: -140, y: -480, z: -160, rx: 20,  ry: 6   },
+        { x: 520,  y: 60,   z: 380,  rx: -6,  ry: -20 },
+        { x: -60,  y: 440,  z: -420, rx: 14,  ry: 16  }
+    ];
 
-    /* 중앙 단어 활성화 */
-    function setActiveGroup(group) {
-        words.forEach(function (word) {
-            var isActive =
-                group &&
-                word.dataset.group === group;
-
-            word.classList.toggle(
-                "is_active",
-                Boolean(isActive)
-            );
+    cards.forEach(function (card, i) {
+        var p = scatterPresets[i % scatterPresets.length];
+        gsap.set(card, {
+            x: p.x,
+            y: p.y,
+            z: p.z,
+            rotationX: p.rx,
+            rotationY: p.ry,
+            opacity: 0,
+            transformPerspective: 1800
         });
-    }
-
-
-    /* 카드 궤도 좌표 계산 */
-    function getOrbitValue(side, angle) {
-        var rad = angle * Math.PI / 180;
-
-        var centerOffset = 0.08;
-        var radiusX = window.innerWidth * 0.8;
-        var radiusY = window.innerHeight * 0.72;
-
-        if (isMobile) {
-            centerOffset = 0.18;
-            radiusX = window.innerWidth * 0.78;
-            radiusY = window.innerHeight * 0.42;
-        } else if (isTablet) {
-            centerOffset = 0.12;
-            radiusX = window.innerWidth * 0.8;
-            radiusY = window.innerHeight * 0.65;
-        }
-
-        var centerX;
-
-        if (side === "left") {
-            centerX =
-                window.innerWidth *
-                -centerOffset;
-        } else {
-            centerX =
-                window.innerWidth *
-                (1 + centerOffset);
-        }
-
-        var centerY =
-            window.innerHeight * 0.5;
-
-        return {
-            x: centerX +
-                Math.cos(rad) * radiusX -
-                window.innerWidth / 2,
-
-            y: centerY +
-                Math.sin(rad) * radiusY -
-                window.innerHeight / 2
-        };
-    }
-
-
-    /* 좌우 카드를 번갈아 배열 */
-    var orbitCards = [];
-
-    var maxLength = Math.max(
-        leftCards.length,
-        rightCards.length
-    );
-
-    var i;
-
-    for (i = 0; i < maxLength; i++) {
-        if (leftCards[i]) {
-            orbitCards.push({
-                card: leftCards[i],
-                side: "left"
-            });
-        }
-
-        if (rightCards[i]) {
-            orbitCards.push({
-                card: rightCards[i],
-                side: "right"
-            });
-        }
-    }
-
-
-    /* 카드 초기 상태 */
-    var allCards = orbitCards.map(function (item) {
-        return item.card;
     });
 
-    var cardScale = 1;
-
-    if (window.innerWidth <= 480) {
-        cardScale = 0.8;
-    } else if (window.innerWidth <= 767) {
-        cardScale = 0.9;
-    } else if (window.innerWidth <= 1199) {
-        cardScale = 0.9
-    }
-
-    gsap.set(allCards, {
-        xPercent: -50,
-        yPercent: -50,
-        scale: cardScale,
-        opacity: 0,
-        pointerEvents: "none"
-    });
-
-    setActiveGroup(null);
-
-
-    /* 애니메이션 타이밍 */
-    var invertTime = 0.08;
-    var cardStartTime = 0.1;
-    var cardGap = 0.07; // PC 기본
-    if (isTablet) {
-        cardGap = 0.11;
-    }
-    if (isMobile) {
-        cardGap = 0.2;
-    }
-    var cardDuration = 0.28;
-    var focusDelay = cardDuration * 0.35;
-
-    var totalTime =
-        cardStartTime +
-        orbitCards.length * cardGap +
-        cardDuration;
-
-
-    /* 타임라인 */
     var tl = gsap.timeline({
         scrollTrigger: {
-            trigger: section,
+            trigger: stage,
             start: "top top",
 
             end: function () {
-                return "+=" + scrollDistance;
+                return "+=" + (window.innerHeight * 0.8 + getScrollAmount());
             },
 
             pin: true,
             scrub: true,
             anticipatePin: 1,
-            invalidateOnRefresh: true,
-
-            onUpdate: function () {
-                var time = tl.time();
-
-                if (
-                    time <
-                    cardStartTime + focusDelay
-                ) {
-                    setActiveGroup(null);
-                    return;
-                }
-
-                var activeIndex = Math.floor(
-                    (
-                        time -
-                        cardStartTime -
-                        focusDelay
-                    ) / cardGap
-                );
-
-                if (activeIndex < 0) {
-                    activeIndex = 0;
-                }
-
-                if (
-                    activeIndex >
-                    orbitCards.length - 1
-                ) {
-                    activeIndex =
-                        orbitCards.length - 1;
-                }
-
-                var activeCard =
-                    orbitCards[activeIndex].card;
-
-                setActiveGroup(
-                    activeCard.dataset.group
-                );
-            }
+            invalidateOnRefresh: true
         }
     });
 
+    /* 1단계 : 흩어진 카드가 제자리(한 줄)로 정렬 */
+    tl.to(cards, {
+        x: 0,
+        y: 0,
+        z: 0,
+        rotationX: 0,
+        rotationY: 0,
+        opacity: 1,
+        ease: "none",
+        stagger: 0.04,
+        duration: 1
+    }, 0);
 
-    /* 배경 반전 */
-    tl.set(
-        section, {
-            backgroundColor: "#333333"
+    /* 2단계 : 정렬이 끝난 뒤 이어서 트랙이 가로로 슬라이드 */
+    tl.to(track, {
+        x: function () {
+            return -getScrollAmount();
         },
-        invertTime
-    );
+        ease: "none",
+        duration: 2
+    }, 1);
+
+    return tl;
+}
 
 
-    /* 중앙 글자 색상 */
-    tl.set(
-        [
-            ".solution_label",
-            ".solution_desc",
-            ".solution_word"
-        ], {
-            color: "#000000"
-        },
-        invertTime
-    );
+/* PC(1200px 이상) 전용 - 그 이하는 CSS로 세로 나열, JS 인터랙션 없음 */
+mm.add("(min-width: 1200px)", function () {
+    var tl = initSolutionStage();
 
-
-    /* 카드별 궤도 애니메이션 */
-    orbitCards.forEach(function (item, index) {
-        var card = item.card;
-        var side = item.side;
-
-        var start =
-            cardStartTime +
-            index * cardGap;
-
-        var startAngle;
-        var endAngle;
-
-        if (side === "left") {
-            startAngle = -62;
-            endAngle = 72;
-        } else {
-            startAngle = 242;
-            endAngle = 112;
+    return function () {
+        if (tl) {
+            if (tl.scrollTrigger) tl.scrollTrigger.kill();
+            tl.kill();
         }
-
-        var proxy = {
-            angle: startAngle
-        };
-
-        var initialPosition =
-            getOrbitValue(
-                side,
-                startAngle
-            );
-
-        gsap.set(card, {
-            x: initialPosition.x,
-            y: initialPosition.y
-        });
-
-
-        /* 궤도 이동 */
-        tl.to(
-            proxy, {
-                angle: endAngle,
-                duration: cardDuration,
-                ease: "none",
-
-                onUpdate: function () {
-                    var position =
-                        getOrbitValue(
-                            side,
-                            proxy.angle
-                        );
-
-                    gsap.set(card, {
-                        x: position.x,
-                        y: position.y
-                    });
-                }
-            },
-            start
-        );
-
-
-        /* 카드 나타남 */
-        tl.to(
-            card, {
-                opacity: 1,
-                pointerEvents: "auto",
-                duration: 0.06,
-                ease: "none"
-            },
-            start
-        );
-
-
-        /* 카드 사라짐 */
-        tl.to(
-            card, {
-                opacity: 0,
-                pointerEvents: "none",
-                duration: 0.06,
-                ease: "none"
-            },
-            start + cardDuration - 0.06
-        );
-    });
-
-
-    /* 전체 타임라인 길이 확보 */
-    tl.to({}, {
-            duration: totalTime
-        },
-        0
-    );
-}
-
-
-/* PC / 태블릿 / 모바일 모두 실행 */
-initSolutionOrbit();
-
-
-
-
-
-
-
-
-
-/* ── Our Solution Floating Deco ── */
-function initSolutionFloating() {
-    const section = document.querySelector(".solution_section");
-    const items = gsap.utils.toArray(".solution_deco_item");
-
-    if (!section || !items.length || prefersReducedMotion) return;
-
-    items.forEach((item, index) => {
-        const depth = Number(item.dataset.depth) || 0.5;
-
-        /*
-            depth가 클수록:
-            - 이동 범위가 커짐
-            - 움직임이 조금 더 빠름
-            - 가까이 떠 있는 느낌이 강해짐
-        */
-        const moveX = 18 + depth * 18;
-        const moveY = 22 + depth * 22;
-        const rotateAmount = 2 + depth * 3;
-
-        const durationX = 6.5 + index * 1.1;
-        const durationY = 5.5 + index * 1.3;
-        const durationRotate = 8 + index * 1.4;
-
-        /*
-            처음부터 요소들이 같은 타이밍으로 움직이지 않도록
-            각각 다른 위치에서 시작
-        */
-        gsap.set(item, {
-            x: index % 2 === 0 ? -moveX * 0.4 : moveX * 0.4,
-            y: index % 2 === 0 ? moveY * 0.25 : -moveY * 0.25,
-            rotation: index % 2 === 0 ? -rotateAmount : rotateAmount
-        });
-
-        /*
-            좌우 움직임
-        */
-        gsap.to(item, {
-            x: index % 2 === 0 ? moveX : -moveX,
-            duration: durationX,
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true,
-            delay: index * -1.4
-        });
-
-        /*
-            상하 움직임
-        */
-        gsap.to(item, {
-            y: index % 2 === 0 ? -moveY : moveY,
-            duration: durationY,
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true,
-            delay: index * -1.8
-        });
-
-        /*
-            아주 느린 회전
-        */
-        gsap.to(item, {
-            rotation: index % 2 === 0 ?
-                rotateAmount :
-                -rotateAmount,
-
-            duration: durationRotate,
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true,
-            delay: index * -2
-        });
-    });
-}
-
-/* PC 전용으로 막혀있었으나, 마우스/스크롤에 의존하지 않는
-   가벼운 무한 루프 애니메이션이라 모든 화면에서 실행 */
-initSolutionFloating();
+        gsap.set(".solution_card", { clearProps: "transform,opacity" });
+        gsap.set(".solution_track", { clearProps: "transform" });
+    };
+});
 
 
 
