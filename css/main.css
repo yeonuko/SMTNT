@@ -1285,13 +1285,13 @@ section {
 
 
 /* Solution → WHY SMTNT */
-.curtain_515151 {
+/* .curtain_515151 {
     background: #1a1a1a;
 }
 
 .curtain_515151 .stripe_item {
     background: #fff;
-}
+} */
 
 
 
@@ -1405,7 +1405,7 @@ section {
     inset: 0;
     z-index: 2;
     border-radius: inherit;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 32%, rgba(255, 255, 255, 0) 68%, rgba(0, 0, 0, 0.15) 100%);
+    /* background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 32%, rgba(255, 255, 255, 0) 68%, rgba(0, 0, 0, 0.15) 100%); */
     pointer-events: none;
 }
 
@@ -1418,15 +1418,50 @@ section {
 }
 
 .solution_card_bg img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    position: absolute;
+    top: 4rem;
+    right: 4rem;
+    width: 62%;
+    height: 60%;
+    object-fit: contain;
+    object-position: top right;
 }
 
-.solution_card_dim {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.5);
+
+.solution_card.bg_kakao {
+    background: linear-gradient(180deg, #FAF6F2 0%, #FDFDFB 50%, #FFFFFF 100%);
+}
+
+.solution_card.bg_sms {
+    background: linear-gradient(180deg, #DFF1FD 0%, #DFF1FD 65%, #EEF8FE 100%);
+}
+
+.solution_card.bg_mo {
+    background: linear-gradient(180deg, #F6F7FB 0%, #FBF8F5 50%, #F6F7FB 100%);
+}
+
+.solution_card.bg_web {
+    background: linear-gradient(180deg, #E5EAFE 0%, #E5EAFE 65%, #F1F4FF 100%);
+}
+
+.solution_card.bg_ux {
+    background: linear-gradient(135deg, #EEF4FA 0%, #F5F8F9 35%, #FEFBF6 70%, #FAF9F7 100%);
+}
+
+.solution_card.bg_platform {
+    background: linear-gradient(180deg, #F4F8FE 0%, #F5F8FD 35%, #FDFCFC 60%, #FBFAFB 100%);
+}
+
+.solution_card.bg_si {
+    background: linear-gradient(160deg, #F9F8F5 0%, #FEFBF6 45%, #FBF6F3 100%);
+}
+
+.solution_card.bg_ai_char {
+    background: linear-gradient(180deg, #F6F7FB 0%, #FBF8F5 50%, #F6F7FB 100%);
+}
+
+.solution_card.bg_ai_video {
+    background: linear-gradient(180deg, #FAF6F2 0%, #FDFDFB 50%, #FFFFFF 100%);
 }
 
 .solution_card_num {
@@ -1476,7 +1511,6 @@ section {
     font-size: 1.4rem;
     font-weight: 400;
     line-height: 4;
-    color: rgba(255, 255, 255, 1);
 }
 
 
